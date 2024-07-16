@@ -1,7 +1,3 @@
-# ******************* DO NOT EDIT THIS NOTICE *****************
-# This legal notice is added to every supported source code
-# file at every commit. See the README for more info!                          
-# *************************************************************
 accounts:
   dev:
     id: "339712993254"
@@ -35,7 +31,6 @@ batches:
       src/bootstrap/backend_override.tf: src/templates/terraform-backend-override.hbs
       src/bootstrap/providers.tf: src/templates/terraform-providers.hbs
       src/bootstrap/providers_override.tf: src/templates/terraform-providers-override.hbs
-      src/bootstrap/generated.tf: src/templates/terraform-bootstrap-generated.hbs
       src/bootstrap/terraform.tf: src/templates/terraform.hbs
     path: src/bootstrap
 environments:
