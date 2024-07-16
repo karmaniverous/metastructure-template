@@ -1,0 +1,70 @@
+{
+  "author": "Jason Williscroft",
+  "bugs": {
+    "url": "https://github.com/karmaniverous/metastructure/issues"
+  },
+  "dependencies": {
+    "license-check-and-add": "^4.0.5"
+  },
+  "description": "A configuration-driven AWS Organization infrastructure. Powered by Metastructure.",
+  "devDependencies": {
+    "@karmaniverous/metastructure": "^0.1.0",
+    "@types/node": "^20.14.10",
+    "auto-changelog": "^2.4.0",
+    "knip": "^5.26.0",
+    "lefthook": "^1.7.2",
+    "release-it": "^17.6.0",
+    "typescript": "^5.5.3"
+  },
+  "homepage": "https://github.com/karmaniverous/metastructure#readme",
+  "keywords": [
+    "code-generation",
+    "template",
+    "infrastructure",
+    "aws",
+    "devops",
+    "typescript",
+    "terraform",
+    "sdlc"
+  ],
+  "license": "BSD-3-Clause",
+  "name": "@karmaniverous/metastructure",
+  "publishConfig": {
+    "access": "public"
+  },
+  "release-it": {
+    "git": {
+      "changelog": "nlx auto-changelog --stdout --commit-limit false -u --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
+      "commitMessage": "chore: release v${version}",
+      "requireBranch": "dev"
+    },
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "after:init": [
+        "npm run lint"
+      ],
+      "after:release": [
+        "git switch -c release/${version}",
+        "git push -u origin release/${version}",
+        "git switch ${branchName}"
+      ]
+    },
+    "npm": {
+      "publish": false
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karmaniverous/metastructure.git"
+  },
+  "scripts": {
+    "knip": "knip",
+    "license": "license-check-and-add",
+    "release": "release-it",
+    "release:pre": "release-it --no-git.requireBranch --github.prerelease --preRelease"
+  },
+  "type": "module",
+  "version": "0.0.0"
+}

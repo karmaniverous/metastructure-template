@@ -1,0 +1,8 @@
+name: Scan
+
+on:
+  push:
+
+jobs:
+  scan:
+    uses: ./.github/workflows/_scan.yml
