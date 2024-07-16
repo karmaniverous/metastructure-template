@@ -1,7 +1,7 @@
 pre-commit:
   scripts:
-    # branch-naming-policy:
-    #   runner: bash
+    branch-naming-policy:
+      runner: bash
     legal-notice-headers:
       runner: bash
 prepare-commit-msg:
