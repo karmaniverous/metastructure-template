@@ -1,30 +1,31 @@
 accounts:
   dev:
-    id: "339712993254"
+    id: '339712993254'
     email: jscroft+karma.003.dev@gmail.com
     name: Development Account
     organizational_unit: dev
   master:
-    id: "891377150698"
+    id: '891377150698'
     email: jscroft+karma.003.master@gmail.com
     name: Master Account
   prod:
-    id: "381491905215"
+    id: '381491905215'
     email: jscroft+karma.003.prod@gmail.com
     name: Production Account
     organizational_unit: prod
   test:
-    id: "381491918621"
+    id: '381491918621'
     email: jscroft+karma.003.test@gmail.com
     name: Testing Account
     organizational_unit: test
   shared_services:
-    id: "975050301644"
+    id: '975050301644'
     email: jscroft+karma.003.shared_services@gmail.com
     name: Shared Services Account
     organizational_unit: infrastructure
 batches:
   bootstrap:
+    path: src/bootstrap
     generators:
       src/modules/global/outputs.tf: src/templates/terraform-global-outputs.hbs
       src/bootstrap/backend.tf: src/templates/terraform-backend.hbs
@@ -32,7 +33,6 @@ batches:
       src/bootstrap/providers.tf: src/templates/terraform-providers.hbs
       src/bootstrap/providers_override.tf: src/templates/terraform-providers-override.hbs
       src/bootstrap/terraform.tf: src/templates/terraform.hbs
-    path: src/bootstrap
 environments:
   bali:
     account: dev
@@ -84,14 +84,15 @@ organizational_units:
     name: Workloads OU
 terraform:
   aws_profile: KARMA-INIT
-  aws_version: ">= 5.56.1"
+  aws_version: '>= 5.56.1'
   paths: src
   roles:
     admin: TerraformAdmin
     deployment: TerraformDeployment
     reader: TerraformReader
   state_account: shared_services
-  state_bucket: "{{#if organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state"
+  state_bucket: '{{#if
+    organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
   state_key: terraform.tfstate
   state_lock_table: terraform-state-lock
-  terraform_version: ">= 1.9.0"
+  terraform_version: '>= 1.9.0'
