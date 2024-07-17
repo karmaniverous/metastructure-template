@@ -104,6 +104,37 @@ output "config" {
         name = "Workloads OU"
       }
     }
+    sso = {
+      groups = {
+        TerraformAdmin = {
+          description = "Terraform administrators can create & manage all resources in all accounts."
+          account_permission_sets = [
+            "TerraformAdmin"
+          ]
+        }
+        TerraformDeployment = {
+          description             = "Terraform deployment users can create & manage all unprotected resources in all accounts."
+          account_permission_sets = "TerraformDeployment"
+        }
+      }
+      permission_sets = {
+        TerraformAdmin = {
+          description = "Permits creation & management of all resources."
+          policies    = "AdministratorAccess"
+        }
+        TerraformDeployment = {
+          description = "Permits creation & management of all unprotected resources."
+          policies = [
+            "TerraformDeployment",
+            "TerraformStateWriter"
+          ]
+        }
+      }
+      policy_documents = {
+        TerraformDeployment  = "terraform_deployment"
+        TerraformStateWriter = "terraform_state_writer"
+      }
+    }
     terraform = {
       aws_profile = "KARMA-INIT"
       aws_version = ">= 5.56.1"
