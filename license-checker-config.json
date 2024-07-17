@@ -9,7 +9,6 @@
     ".github/",
     ".lefthook/",
     ".rollup.cache/",
-    "src/",
     "license.txt",
     "*/**/.terraform.lock.hcl",
     "*/**/.terraform/*",
