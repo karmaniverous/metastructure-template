@@ -1,7 +1,8 @@
 # ******************* DO NOT EDIT THIS NOTICE *****************
 # This legal notice is added to every supported source code
-# file at every commit. See the README for more info!                          
+# file at every commit. See the README for more info!
 # *************************************************************
+
 accounts:
   dev:
     id: '339712993254'
@@ -34,6 +35,7 @@ batches:
       src/modules/global/outputs.tf: src/templates/terraform-global-outputs.hbs
       src/bootstrap/backend.tf: src/templates/terraform-backend.hbs
       src/bootstrap/backend_override.tf: src/templates/terraform-backend-override.hbs
+      src/bootstrap/policies.tf: src/templates/terraform-bootstrap-policies.hbs
       src/bootstrap/providers.tf: src/templates/terraform-providers.hbs
       src/bootstrap/providers_override.tf: src/templates/terraform-providers-override.hbs
       src/bootstrap/terraform.tf: src/templates/terraform.hbs
@@ -93,7 +95,7 @@ sso:
         Terraform administrators can create & manage all resources in all
         accounts.
       account_permission_sets: TerraformAdmin
-    TerraformDeployment:
+    TerraformDeployment2:
       description:
         Terraform deployment users can create & manage all unprotected
         resources in all accounts.
@@ -101,15 +103,18 @@ sso:
   permission_sets:
     TerraformAdmin:
       description: Permits creation & management of all resources.
-      policies: AdministratorAccess
+      policies:
+        - AdministratorAccess
+        - TerraformStateWriter
     TerraformDeployment:
       description: Permits creation & management of all unprotected resources.
       policies:
-        - TerraformDeployment
+        - UnprotectedResourceWriter
         - TerraformStateWriter
-  policy_documents:
+  # Maps customer-managed policy name to policy document token.
+  policies:
     # Permits creation & management of unprotected resources.
-    TerraformDeployment: terraform_deployment
+    UnprotectedResourceWriter: unprotected_resource_writer
 
     # Permits writing to the Terraform state bucket & state lock table.
     TerraformStateWriter: terraform_state_writer
@@ -117,13 +122,10 @@ terraform:
   aws_profile: KARMA-INIT
   aws_version: '>= 5.56.1'
   paths: src
-  roles:
-    admin: TerraformAdmin
-    deployment: TerraformDeployment
-    reader: TerraformReader
-  state_account: shared_services
-  state_bucket: '{{#if
-    organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
-  state_key: terraform.tfstate
-  state_lock_table: terraform-state-lock
+  state:
+    account: shared_services
+    bucket: '{{#if
+      organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
+    key: terraform.tfstate
+    lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'

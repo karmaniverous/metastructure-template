@@ -9,12 +9,12 @@
 
 terraform { 
     backend "s3" { 
-        bucket = "{{terraform.state_bucket}}"
-        dynamodb_table = "{{terraform.state_lock_table}}" 
+        bucket = "{{terraform.state.bucket}}"
+        dynamodb_table = "{{terraform.state.lock_table}}" 
         encrypt = true 
-        key = "{{terraform.state_key}}"
+        key = "{{terraform.state.key}}"
         region = "{{organization.aws_region}}" 
-        role_arn = "arn:aws:iam::{{lookup (lookup accounts terraform.state_account) "id"}}:role/{{terraform.admin_role}}"
+        role_arn = "arn:aws:iam::{{lookup (lookup accounts terraform.state.account) "id"}}:role/{{terraform.admin_role}}"
         workspace_key_prefix = "{{params.batch}}" 
     } 
 }

@@ -16,45 +16,21 @@ locals {
 }
 
 ###############################################################################
-# Create a Terraform deployment SSO permission set.
+# Create SSO groups.
 ###############################################################################
-resource "aws_ssoadmin_permission_set" "terraform_deployment" {
-  name         = "TerraformDeployment"
-  instance_arn = local.sso_arn
-}
-
-###############################################################################
-# Create a Terraform deployment SSO group.
-###############################################################################
-resource "aws_identitystore_group" "terraform_deployment" {
+resource "aws_identitystore_group" "groups" {
+  for_each          = module.global.config.sso.groups
+  description       = each.value.description
+  display_name      = each.key
   identity_store_id = local.sso_id
-  display_name      = "TerraformDeployment"
 }
 
 ###############################################################################
-# Assign all accounts to the Terraform admins group & permission set.
+# Create SSO permission sets.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment" {
-  for_each           = aws_organizations_account.accounts
-  instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
-  principal_id       = aws_identitystore_group.terraform_deployment.group_id
-  principal_type     = "GROUP"
-  target_id          = each.value.id
-  target_type        = "AWS_ACCOUNT"
-}
-
-###############################################################################
-# Assign the AdministratorAccess policy to the Terraform deployment permission
-# set.
-###############################################################################
-resource "aws_ssoadmin_managed_policy_attachment" "terraform_deployment_to_terraform_deployment" {
-  # Adding an explicit dependency on the account assignment resource will
-  # allow the managed attachment to be safely destroyed prior to the removal
-  # of the account assignment.
-  depends_on = [aws_ssoadmin_account_assignment.terraform_deployment]
-
-  instance_arn       = local.sso_arn
-  managed_policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
+resource "aws_ssoadmin_permission_set" "permission_sets" {
+  for_each     = module.global.config.sso.permission_sets
+  description  = each.value.description
+  name         = each.key
+  instance_arn = local.sso_arn
 }

@@ -36,7 +36,10 @@
         "iam:TagRole"
       ],
       "Effect": "Allow",
-      "Resource": ["arn:aws:iam::*:role/*"],
+      "Resource": [
+        "arn:aws:iam::*:role/Billing",
+        "arn:aws:iam::*:role/*Terraform*"
+      ],
       "Sid": "AllowRoleManagement"
     },
     {
@@ -47,12 +50,11 @@
         "iam:DeletePolicyVersion",
         "iam:ListPolicyVersions",
         "iam:GetPolicy",
-        "iam:GetPolicyVersion",
-        "iam:TagPolicy"
+        "iam:GetPolicyVersion"
       ],
       "Effect": "Allow",
-      "Resource": ["arn:aws:iam::*:policy/*"],
-      "Sid": "AllowIamCreatePolicy"
+      "Resource": ["arn:aws:iam::*:policy/*Terraform*"],
+      "Sid": "AllowIamCreateTerraformPolicy"
     },
     {
       "Action": [
@@ -63,8 +65,8 @@
         "iam:ListInstanceProfilesForRole"
       ],
       "Effect": "Allow",
-      "Resource": ["arn:aws:iam::*:user/*"],
-      "Sid": "AllowIamAttachPolicy"
+      "Resource": ["arn:aws:iam::*:user/terraform-init"],
+      "Sid": "AllowIamAttachTerraformPolicy"
     },
     {
       "Action": [
@@ -77,12 +79,6 @@
       "Effect": "Allow",
       "Resource": ["*"],
       "Sid": "AllowGuardDutyManagement"
-    },
-    {
-      "Action": ["iam:GetSAMLProvider", "identitystore:*", "sso:*"],
-      "Effect": "Allow",
-      "Resource": ["*"],
-      "Sid": "AllowSSOManagement"
     },
     {
       "Action": [
@@ -109,8 +105,8 @@
     {
       "Action": ["sts:AssumeRole"],
       "Effect": "Allow",
-      "Resource": ["arn:aws:iam::*:role/*"],
-      "Sid": "AllowRoleAssumption"
+      "Resource": ["arn:aws:iam::*:role/OrganizationAccountAccessRole"],
+      "Sid": "AllowRoleAssumptionToOrgAccounts"
     }
   ],
   "Version": "2012-10-17"

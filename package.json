@@ -5,11 +5,11 @@
   },
   "description": "A configuration-driven AWS Organization infrastructure. Powered by Metastructure.",
   "devDependencies": {
-    "@karmaniverous/metastructure": "^0.2.0",
+    "@karmaniverous/metastructure": "^0.3.1",
     "@types/node": "^20.14.11",
     "auto-changelog": "^2.4.0",
     "knip": "^5.26.0",
-    "lefthook": "^1.7.2",
+    "lefthook": "^1.7.3",
     "license-check-and-add": "^4.0.5",
     "release-it": "^17.6.0",
     "typescript": "^5.5.3"

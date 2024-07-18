@@ -88,7 +88,7 @@ import {
 ###############################################################################
 resource "aws_s3_bucket" "terraform_state" {
   provider = aws.terraform_state_account
-  bucket   = module.global.config.terraform.state_bucket
+  bucket   = module.global.config.terraform.state.bucket
 }
 
 ###############################################################################
@@ -96,7 +96,7 @@ resource "aws_s3_bucket" "terraform_state" {
 ###############################################################################
 resource "aws_dynamodb_table" "terraform_state_lock" {
   provider     = aws.terraform_state_account
-  name         = module.global.config.terraform.state_lock_table
+  name         = module.global.config.terraform.state.lock_table
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -104,3 +104,4 @@ resource "aws_dynamodb_table" "terraform_state_lock" {
     type = "S"
   }
 }
+

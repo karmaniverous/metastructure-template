@@ -26,7 +26,7 @@ provider "aws" {
 provider "aws" {
   alias   = "terraform_state_account"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.accounts["{{terraform.state_account}}"].id}:role/OrganizationAccountAccessRole"
+    role_arn = "arn:aws:iam::${aws_organizations_account.accounts["{{terraform.state.account}}"].id}:role/OrganizationAccountAccessRole"
   }
   default_tags {
     tags = {

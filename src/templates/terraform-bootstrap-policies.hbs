@@ -1,0 +1,67 @@
+###############################################################################
+###############################################################################
+####                                                                       ####
+####              THIS FILE WAS GENERATED WITH METASTRUCTURE               ####
+####                       DO NOT EDIT IT MANUALLY!                        ####
+####                                                                       ####
+###############################################################################
+###############################################################################
+
+{{#each sso.account_policies}}
+###############################################################################
+# {{lodash "toUpper" (lookup (lookup ../accounts @key) "name")}} POLICIES
+###############################################################################
+
+{{#each this}}
+###############################################################################
+# Add {{this}} policy to {{lookup (lookup ../../accounts @../key) "name"}}.
+###############################################################################
+resource "aws_iam_policy" "{{@../key}}_{{lookup ../../sso/policies this}}" {
+  name        = "{{this}}"
+  provider    = aws.{{@../key}}
+  description = "Some description."
+  policy      = data.aws_iam_policy_document.{{lookup ../../sso/policies this}}.json
+}
+
+{{/each}}{{/each}}{{#each sso.permission_sets}}
+###############################################################################
+# {{lodash "toUpper" (lodash "startCase" @key)}} PERMISSION SET POLICIES
+###############################################################################
+
+{{#each this.policies}}
+###############################################################################
+# Add {{this}} policy to {{@../key}} permission set.
+###############################################################################
+{{#if (lookup ../../sso/policies this)}}resource "aws_ssoadmin_customer_managed_policy_attachment" "{{lodash "snakeCase" (lodash "startCase" @../key)}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
+  customer_managed_policy_reference {
+    name = "{{this}}"
+  }
+  instance_arn       = local.sso_arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["{{@../key}}"].arn
+}{{else}}resource "aws_ssoadmin_managed_policy_attachment" "{{lodash "snakeCase" (lodash "startCase" @../key)}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
+  managed_policy_arn = "arn:aws:iam::aws:policy/{{this}}"
+  instance_arn       = local.sso_arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["{{@../key}}"].arn
+}{{/if}}
+
+{{/each}}{{/each}}{{#each sso.groups}}
+###############################################################################
+# {{lodash "toUpper" (lodash "startCase" @key)}} GROUP PERMISSION SETS
+###############################################################################
+
+{{#each this.account_permission_sets}}
+###############################################################################
+# Assign permission sets to {{@key}} for the {{@../key}} group.
+###############################################################################
+resource "aws_ssoadmin_account_assignment" "{{lodash "snakeCase" (lodash "startCase" @../key)}}_{{@key}}" {
+  count              = length(module.global.config.sso.groups["{{@../key}}"].account_permission_sets["{{@key}}"])
+  instance_arn       = local.sso_arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["{{@../key}}"].account_permission_sets["{{@key}}"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["{{@../key}}"].group_id
+  principal_type     = "GROUP"
+  target_id          = aws_organizations_account.accounts["{{@key}}"].id
+  target_type        = "AWS_ACCOUNT"
+}
+
+{{/each}}{{/each}}
+
