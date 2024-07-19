@@ -13,9 +13,14 @@ module "global" {
 }
 
 ###############################################################################
-# Get the currently running identity context.
+# Get the current identity context.
 ###############################################################################
 data "aws_caller_identity" "current" {}
+
+###############################################################################
+# Get the current organization.
+###############################################################################
+data "aws_organizations_organization" "org" {}
 
 ###############################################################################
 # Create a new organization.
@@ -37,7 +42,7 @@ resource "aws_organizations_organization" "org" {
 ###############################################################################
 import {
   to = aws_organizations_organization.org
-  id = module.global.config.organization.id
+  id = data.aws_organizations_organization.org.id
 }
 
 ###############################################################################

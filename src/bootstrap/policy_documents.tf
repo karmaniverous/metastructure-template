@@ -35,8 +35,8 @@ data "aws_iam_policy_document" "terraform_state_writer" {
       "s3:PutObject"
     ]
     resources = [
-      "arn::aws::s3:::${module.global.config.terraform.state.bucket}",
-      "arn::aws::s3:::${module.global.config.terraform.state.bucket}/*"
+      "arn:aws:s3:::${module.global.config.terraform.state.bucket}",
+      "arn:aws:s3:::${module.global.config.terraform.state.bucket}/*"
     ]
     condition {
       test     = "StringEquals"
@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "terraform_state_writer" {
       "dynamodb:UpdateItem"
     ]
     resources = [
-      "arn::aws::dynamodb:${module.global.config.organization.aws_region}:${aws_organizations_account.accounts[module.global.config.terraform.state.account].id}:${module.global.config.terraform.state.lock_table}",
+      "arn:aws:dynamodb:${module.global.config.organization.aws_region}:${aws_organizations_account.accounts[module.global.config.terraform.state.account].id}:${module.global.config.terraform.state.lock_table}",
     ]
     condition {
       test     = "StringEquals"

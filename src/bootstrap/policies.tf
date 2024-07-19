@@ -145,7 +145,7 @@ resource "aws_iam_policy" "shared_services_unprotected_resource_writer" {
 resource "aws_ssoadmin_managed_policy_attachment" "terraform_admin_administrator_access" {
   managed_policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["TerraformAdmin"].arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_admin"].arn
 }
 
 ###############################################################################
@@ -156,174 +156,223 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_admin_terr
     name = "TerraformStateWriter"
   }
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["TerraformAdmin"].arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_admin"].arn
+  depends_on = [
+    aws_iam_policy.dev_terraform_state_writer,
+    aws_iam_policy.master_terraform_state_writer,
+    aws_iam_policy.prod_terraform_state_writer,
+    aws_iam_policy.test_terraform_state_writer,
+    aws_iam_policy.shared_services_terraform_state_writer
+  ]
 }
-
 
 ###############################################################################
 # TERRAFORM DEPLOYMENT PERMISSION SET POLICIES
 ###############################################################################
 
 ###############################################################################
-# Add UnprotectedResourceWriter policy to TerraformDeployment permission set.
+# Add UnprotectedResourceWriter policy to terraform_deployment permission set.
 ###############################################################################
 resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment_unprotected_resource_writer" {
   customer_managed_policy_reference {
     name = "UnprotectedResourceWriter"
   }
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["TerraformDeployment"].arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_deployment"].arn
+  depends_on = [
+    aws_iam_policy.dev_unprotected_resource_writer,
+    aws_iam_policy.master_unprotected_resource_writer,
+    aws_iam_policy.prod_unprotected_resource_writer,
+    aws_iam_policy.test_unprotected_resource_writer,
+    aws_iam_policy.shared_services_unprotected_resource_writer
+  ]
 }
 
 ###############################################################################
-# Add TerraformStateWriter policy to TerraformDeployment permission set.
+# Add TerraformStateWriter policy to terraform_deployment permission set.
 ###############################################################################
 resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment_terraform_state_writer" {
   customer_managed_policy_reference {
     name = "TerraformStateWriter"
   }
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["TerraformDeployment"].arn
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_deployment"].arn
+  depends_on = [
+    aws_iam_policy.dev_terraform_state_writer,
+    aws_iam_policy.master_terraform_state_writer,
+    aws_iam_policy.prod_terraform_state_writer,
+    aws_iam_policy.test_terraform_state_writer,
+    aws_iam_policy.shared_services_terraform_state_writer
+  ]
 }
-
 
 ###############################################################################
 # TERRAFORM ADMIN GROUP PERMISSION SETS
 ###############################################################################
 
 ###############################################################################
-# Assign permission sets to dev for the TerraformAdmin group.
+# Assign permission sets to dev for the terraform_admin group.
 ###############################################################################
 resource "aws_ssoadmin_account_assignment" "terraform_admin_dev" {
-  count              = length(module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["dev"])
+  count              = length(module.global.config.sso.groups["terraform_admin"].account_permission_sets["dev"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["dev"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformAdmin"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_admin"].account_permission_sets["dev"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_admin"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["dev"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to master for the TerraformAdmin group.
+# Assign permission sets to master for the terraform_admin group.
 ###############################################################################
 resource "aws_ssoadmin_account_assignment" "terraform_admin_master" {
-  count              = length(module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["master"])
+  count              = length(module.global.config.sso.groups["terraform_admin"].account_permission_sets["master"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["master"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformAdmin"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_admin"].account_permission_sets["master"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_admin"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["master"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to prod for the TerraformAdmin group.
+# Assign permission sets to prod for the terraform_admin group.
 ###############################################################################
 resource "aws_ssoadmin_account_assignment" "terraform_admin_prod" {
-  count              = length(module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["prod"])
+  count              = length(module.global.config.sso.groups["terraform_admin"].account_permission_sets["prod"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["prod"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformAdmin"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_admin"].account_permission_sets["prod"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_admin"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["prod"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to test for the TerraformAdmin group.
+# Assign permission sets to test for the terraform_admin group.
 ###############################################################################
 resource "aws_ssoadmin_account_assignment" "terraform_admin_test" {
-  count              = length(module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["test"])
+  count              = length(module.global.config.sso.groups["terraform_admin"].account_permission_sets["test"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["test"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformAdmin"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_admin"].account_permission_sets["test"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_admin"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["test"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to shared_services for the TerraformAdmin group.
+# Assign permission sets to shared_services for the terraform_admin group.
 ###############################################################################
 resource "aws_ssoadmin_account_assignment" "terraform_admin_shared_services" {
-  count              = length(module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["shared_services"])
+  count              = length(module.global.config.sso.groups["terraform_admin"].account_permission_sets["shared_services"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformAdmin"].account_permission_sets["shared_services"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformAdmin"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_admin"].account_permission_sets["shared_services"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_admin"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["shared_services"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+  ]
 }
 
 
 ###############################################################################
-# TERRAFORM DEPLOYMENT 2 GROUP PERMISSION SETS
+# TERRAFORM DEPLOYMENT GROUP PERMISSION SETS
 ###############################################################################
 
 ###############################################################################
-# Assign permission sets to dev for the TerraformDeployment2 group.
+# Assign permission sets to dev for the terraform_deployment group.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment_2_dev" {
-  count              = length(module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["dev"])
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_dev" {
+  count              = length(module.global.config.sso.groups["terraform_deployment"].account_permission_sets["dev"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["dev"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformDeployment2"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_deployment"].account_permission_sets["dev"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_deployment"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["dev"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to master for the TerraformDeployment2 group.
+# Assign permission sets to master for the terraform_deployment group.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment_2_master" {
-  count              = length(module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["master"])
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_master" {
+  count              = length(module.global.config.sso.groups["terraform_deployment"].account_permission_sets["master"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["master"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformDeployment2"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_deployment"].account_permission_sets["master"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_deployment"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["master"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to prod for the TerraformDeployment2 group.
+# Assign permission sets to prod for the terraform_deployment group.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment_2_prod" {
-  count              = length(module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["prod"])
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_prod" {
+  count              = length(module.global.config.sso.groups["terraform_deployment"].account_permission_sets["prod"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["prod"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformDeployment2"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_deployment"].account_permission_sets["prod"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_deployment"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["prod"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to test for the TerraformDeployment2 group.
+# Assign permission sets to test for the terraform_deployment group.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment_2_test" {
-  count              = length(module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["test"])
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_test" {
+  count              = length(module.global.config.sso.groups["terraform_deployment"].account_permission_sets["test"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["test"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformDeployment2"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_deployment"].account_permission_sets["test"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_deployment"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["test"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+  ]
 }
 
 ###############################################################################
-# Assign permission sets to shared_services for the TerraformDeployment2 group.
+# Assign permission sets to shared_services for the terraform_deployment group.
 ###############################################################################
-resource "aws_ssoadmin_account_assignment" "terraform_deployment_2_shared_services" {
-  count              = length(module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["shared_services"])
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_shared_services" {
+  count              = length(module.global.config.sso.groups["terraform_deployment"].account_permission_sets["shared_services"])
   instance_arn       = local.sso_arn
-  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["TerraformDeployment2"].account_permission_sets["shared_services"][count.index]].arn
-  principal_id       = aws_identitystore_group.groups["TerraformDeployment2"].group_id
+  permission_set_arn = aws_ssoadmin_permission_set.permission_sets[module.global.config.sso.groups["terraform_deployment"].account_permission_sets["shared_services"][count.index]].arn
+  principal_id       = aws_identitystore_group.groups["terraform_deployment"].group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["shared_services"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+  ]
 }
 
 

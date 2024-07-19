@@ -6,27 +6,27 @@
 accounts:
   dev:
     id: '339712993254'
-    email: jscroft+karma.003.dev@gmail.com
     name: Development Account
+    email: jscroft+karma.003.dev@gmail.com
     organizational_unit: dev
   master:
     id: '891377150698'
-    email: jscroft+karma.003.master@gmail.com
     name: Master Account
+    email: jscroft+karma.003.master@gmail.com
   prod:
     id: '381491905215'
-    email: jscroft+karma.003.prod@gmail.com
     name: Production Account
+    email: jscroft+karma.003.prod@gmail.com
     organizational_unit: prod
   test:
     id: '381491918621'
-    email: jscroft+karma.003.test@gmail.com
     name: Testing Account
+    email: jscroft+karma.003.test@gmail.com
     organizational_unit: test
   shared_services:
     id: '975050301644'
-    email: jscroft+karma.003.shared_services@gmail.com
     name: Shared Services Account
+    email: jscroft+karma.003.shared_services@gmail.com
     organizational_unit: infrastructure
 batches:
   bootstrap:
@@ -63,7 +63,6 @@ environments:
 organization:
   aws_region: us-east-1
   github_org: karmaniverous
-  id: o-svqbeydyxo
   master_account: master
   namespace: karma003
 organizational_units:
@@ -90,34 +89,37 @@ organizational_units:
     name: Workloads OU
 sso:
   groups:
-    TerraformAdmin:
+    terraform_admin:
+      name: terraform_admin
       description:
         Terraform administrators can create & manage all resources in all
         accounts.
-      account_permission_sets: TerraformAdmin
-    TerraformDeployment2:
+      account_permission_sets: terraform_admin
+    terraform_deployment:
+      name: TerraformDeployment
       description:
         Terraform deployment users can create & manage all unprotected
         resources in all accounts.
-      account_permission_sets: TerraformDeployment
+      account_permission_sets: terraform_deployment
   permission_sets:
-    TerraformAdmin:
+    terraform_admin:
+      name: TerraformAdmin
       description: Permits creation & management of all resources.
       policies:
         - AdministratorAccess
-        - TerraformStateWriter
-    TerraformDeployment:
+        - terraform_state_writer
+    terraform_deployment:
+      name: terraform_deployment
       description: Permits creation & management of all unprotected resources.
       policies:
-        - UnprotectedResourceWriter
-        - TerraformStateWriter
+        - unprotected_resource_writer
+        - terraform_state_writer
   # Maps customer-managed policy name to policy document token.
   policies:
-    # Permits creation & management of unprotected resources.
-    UnprotectedResourceWriter: unprotected_resource_writer
-
     # Permits writing to the Terraform state bucket & state lock table.
-    TerraformStateWriter: terraform_state_writer
+    terraform_state_writer: TerraformStateWriter
+    # Permits creation & management of unprotected resources.
+    unprotected_resource_writer: UnprotectedResourceWriter
 terraform:
   aws_profile: KARMA-INIT
   aws_version: '>= 5.56.1'
@@ -129,3 +131,4 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
+

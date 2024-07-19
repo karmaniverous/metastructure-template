@@ -7,43 +7,48 @@
 ###############################################################################
 ###############################################################################
 
-{{#each sso.account_policies}}
+{{#each sso.reference.account_policies}}
 ###############################################################################
 # {{lodash "toUpper" (lookup (lookup ../accounts @key) "name")}} POLICIES
 ###############################################################################
 
 {{#each this}}
 ###############################################################################
-# Add {{this}} policy to {{lookup (lookup ../../accounts @../key) "name"}}.
+# Add {{lookup ../../sso/policies this}} policy to {{lookup (lookup ../../accounts @../key) "name"}}.
 ###############################################################################
-resource "aws_iam_policy" "{{@../key}}_{{lookup ../../sso/policies this}}" {
-  name        = "{{this}}"
+resource "aws_iam_policy" "{{@../key}}_{{this}}" {
+  name        = "{{lookup ../../sso/policies this}}"
   provider    = aws.{{@../key}}
   description = "Some description."
-  policy      = data.aws_iam_policy_document.{{lookup ../../sso/policies this}}.json
+  policy      = data.aws_iam_policy_document.{{this}}.json
 }
 
 {{/each}}{{/each}}{{#each sso.permission_sets}}
 ###############################################################################
 # {{lodash "toUpper" (lodash "startCase" @key)}} PERMISSION SET POLICIES
 ###############################################################################
-
-{{#each this.policies}}
+{{#each this.policies}}{{#if (lookup ../../sso/policies this)}}
 ###############################################################################
-# Add {{this}} policy to {{@../key}} permission set.
+# Add {{lookup ../../sso/policies this}} policy to {{lookup (lookup ../../sso/permission_sets @../key) 'name'}} permission set.
 ###############################################################################
-{{#if (lookup ../../sso/policies this)}}resource "aws_ssoadmin_customer_managed_policy_attachment" "{{lodash "snakeCase" (lodash "startCase" @../key)}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
+resource "aws_ssoadmin_customer_managed_policy_attachment" "{{@../key}}_{{this}}" {
   customer_managed_policy_reference {
-    name = "{{this}}"
+    name = "{{lookup ../../sso/policies this}}"
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.permission_sets["{{@../key}}"].arn
-}{{else}}resource "aws_ssoadmin_managed_policy_attachment" "{{lodash "snakeCase" (lodash "startCase" @../key)}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
+  depends_on         = [{{#each (lookup ../../sso/reference/policy_accounts this)}}
+    aws_iam_policy.{{this}}_{{@../this}}{{#unless @last}},{{/unless}}{{/each}}
+  ]
+}{{else}}
+###############################################################################
+# Add {{this}} policy to {{lookup (lookup ../../sso/permission_sets @../key) 'name'}} permission set.
+###############################################################################
+resource "aws_ssoadmin_managed_policy_attachment" "{{@../key}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
   managed_policy_arn = "arn:aws:iam::aws:policy/{{this}}"
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.permission_sets["{{@../key}}"].arn
 }{{/if}}
-
 {{/each}}{{/each}}{{#each sso.groups}}
 ###############################################################################
 # {{lodash "toUpper" (lodash "startCase" @key)}} GROUP PERMISSION SETS
@@ -61,6 +66,9 @@ resource "aws_ssoadmin_account_assignment" "{{lodash "snakeCase" (lodash "startC
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["{{@key}}"].id
   target_type        = "AWS_ACCOUNT"
+  depends_on         = [{{#each (lookup (lookup ../../sso/reference/group_account_permission_set_policies @../key) @key)}}{{#each this}}
+    aws_ssoadmin_customer_managed_policy_attachment.{{ @../key}}_{{this}}{{#unless @last}},{{/unless}}{{/each}}{{#unless @last}},{{/unless}}{{/each}}
+  ]
 }
 
 {{/each}}{{/each}}
