@@ -11,7 +11,7 @@
 # Default provider.
 ###############################################################################
 provider "aws" { 
-    profile = "{{terraform.aws_profile}}" 
+    profile = "{{params.awsProfile}}"
 }
 
 ###############################################################################
@@ -20,7 +20,7 @@ provider "aws" {
 ###############################################################################
 provider "aws" {
     alias   = "terraform_state_account"
-    profile = "{{terraform.aws_profile}}" 
+    profile = "{{params.awsProfile}}" 
 }
 {{#each accounts}}{{#if (logic "not" (lodash "eq" this.action "destroy"))}}
 ###############################################################################
@@ -29,6 +29,6 @@ provider "aws" {
 ###############################################################################
 provider "aws" {
     alias   = "{{@key}}"
-    profile = "{{../terraform.aws_profile}}" 
+    profile = "{{params.awsProfile}}" 
 }
 {{/if}}{{/each}}

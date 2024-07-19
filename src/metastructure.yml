@@ -121,7 +121,6 @@ sso:
     # Permits creation & management of unprotected resources.
     unprotected_resource_writer: UnprotectedResourceWriter
 terraform:
-  aws_profile: KARMA-INIT
   aws_version: '>= 5.56.1'
   paths: src
   state:

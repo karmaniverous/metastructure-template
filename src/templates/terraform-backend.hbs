@@ -7,14 +7,15 @@
 ###############################################################################
 ###############################################################################
 
-terraform { 
+terraform { {{#if params.localState}} 
+    backend "local" {} {{else}}
     backend "s3" { 
         bucket = "{{terraform.state.bucket}}"
         dynamodb_table = "{{terraform.state.lock_table}}" 
         encrypt = true 
         key = "{{terraform.state.key}}"
         region = "{{organization.aws_region}}" 
-        role_arn = "arn:aws:iam::{{lookup (lookup accounts terraform.state.account) "id"}}:role/{{terraform.admin_role}}"
+        role_arn = "arn:aws:iam::{{lookup (lookup accounts terraform.state.account) "id"}}:role/OrganizationAccountAccessRole"
         workspace_key_prefix = "{{params.batch}}" 
-    } 
+    } {{/if}}
 }
