@@ -14,14 +14,16 @@ file at every commit. See the README for more info!
 ###############################################################################
 ###############################################################################
 
-terraform {  
-    backend "s3" { 
-        bucket = "karma003-terraform-state"
-        dynamodb_table = "terraform-state-lock" 
-        encrypt = true 
-        key = "terraform.tfstate"
-        region = "us-east-1" 
-        role_arn = "arn:aws:iam::975050301644:role/OrganizationAccountAccessRole"
-        workspace_key_prefix = "bootstrap" 
+terraform {
+  backend "s3" {
+    assume_role = {
+      role_arn = "arn:aws:iam::975050301644:role/OrganizationAccountAccessRole"
     }
+    bucket               = "karma003-terraform-state"
+    dynamodb_table       = "terraform-state-lock"
+    encrypt              = true
+    key                  = "terraform.tfstate"
+    region               = "us-east-1"
+    workspace_key_prefix = "bootstrap"
+  }
 }

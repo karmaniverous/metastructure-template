@@ -157,7 +157,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_admin_terr
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_admin"].arn
-  depends_on         = [
+  depends_on = [
     aws_iam_policy.dev_terraform_state_writer,
     aws_iam_policy.master_terraform_state_writer,
     aws_iam_policy.prod_terraform_state_writer,
@@ -179,7 +179,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_deployment"].arn
-  depends_on         = [
+  depends_on = [
     aws_iam_policy.dev_unprotected_resource_writer,
     aws_iam_policy.master_unprotected_resource_writer,
     aws_iam_policy.prod_unprotected_resource_writer,
@@ -197,7 +197,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.permission_sets["terraform_deployment"].arn
-  depends_on         = [
+  depends_on = [
     aws_iam_policy.dev_terraform_state_writer,
     aws_iam_policy.master_terraform_state_writer,
     aws_iam_policy.prod_terraform_state_writer,
@@ -221,7 +221,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_dev" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["dev"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
   ]
 }
@@ -237,7 +237,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_master" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["master"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
   ]
 }
@@ -253,7 +253,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_prod" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["prod"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
   ]
 }
@@ -269,7 +269,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_test" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["test"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
   ]
 }
@@ -285,7 +285,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_shared_services" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["shared_services"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
   ]
 }
@@ -306,7 +306,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_dev" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["dev"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
   ]
 }
@@ -322,7 +322,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_master" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["master"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
   ]
 }
@@ -338,7 +338,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_prod" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["prod"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
   ]
 }
@@ -354,7 +354,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_test" {
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["test"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
   ]
 }
@@ -370,7 +370,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_shared_services
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.accounts["shared_services"].id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [
+  depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
   ]
 }
