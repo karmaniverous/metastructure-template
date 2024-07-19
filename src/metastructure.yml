@@ -91,14 +91,12 @@ sso:
   groups:
     terraform_admin:
       name: terraform_admin
-      description:
-        Terraform administrators can create & manage all resources in all
+      description: Terraform administrators can create & manage all resources in all
         accounts.
       account_permission_sets: terraform_admin
     terraform_deployment:
       name: TerraformDeployment
-      description:
-        Terraform deployment users can create & manage all unprotected
+      description: Terraform deployment users can create & manage all unprotected
         resources in all accounts.
       account_permission_sets: terraform_deployment
   permission_sets:
@@ -130,4 +128,3 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
-

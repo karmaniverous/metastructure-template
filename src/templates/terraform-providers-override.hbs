@@ -29,6 +29,6 @@ provider "aws" {
 ###############################################################################
 provider "aws" {
     alias   = "{{@key}}"
-    profile = "{{params.awsProfile}}" 
+    profile = "{{../params.awsProfile}}" 
 }
 {{/if}}{{/each}}
