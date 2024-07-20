@@ -1,0 +1,60 @@
+###############################################################################
+###############################################################################
+####                                                                       ####
+####              THIS FILE WAS GENERATED WITH METASTRUCTURE               ####
+####                       DO NOT EDIT IT MANUALLY!                        ####
+####                                                                       ####
+###############################################################################
+###############################################################################
+
+###############################################################################
+# ORGANIZATIONAL UNITS 
+###############################################################################
+
+{{#each organizational_units}}
+###############################################################################
+# Create {{this.name}}. 
+###############################################################################
+resource "aws_organizations_organizational_unit" "{{@key}}" {
+  name      = "{{this.name}}"
+  parent_id = {{#if this.parent}}aws_organizations_organizational_unit.{{this.parent}}.id{{else}}aws_organizations_organization.org.roots[0].id{{/if}}
+}
+
+{{#if this.id}}
+###############################################################################
+# Import {{this.name}}.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.{{@key}}
+  id = "{{this.id}}"
+}
+
+{{/if}}{{/each}}
+###############################################################################
+# ACCOUNTS 
+###############################################################################
+
+{{#each accounts}}
+###############################################################################
+# Create {{this.name}}.
+###############################################################################
+resource "aws_organizations_account" "{{@key}}" {
+  email    = "{{this.email}}"
+  lifecycle {
+    ignore_changes = [email, name]
+  }
+  name      = "{{this.name}}"
+  parent_id = {{#if this.organizational_unit}}aws_organizations_organizational_unit.{{this.organizational_unit}}.id{{else}}null{{/if}}
+}
+
+{{#if (logic "or" this.id (lodash "eq" @key ../organization/master_account))}}
+###############################################################################
+# Import {{this.name}}.
+###############################################################################
+import {
+  to = aws_organizations_account.{{@key}}
+  id = {{#if (lodash "eq" @key ../organization/master_account)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
+}
+
+{{/if}}{{/each}}
+

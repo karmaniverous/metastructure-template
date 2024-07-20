@@ -15,7 +15,7 @@ module "global" {
 ###############################################################################
 # Get the current identity context.
 ###############################################################################
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "me" {}
 
 ###############################################################################
 # Get the current organization.
@@ -43,49 +43,6 @@ resource "aws_organizations_organization" "org" {
 import {
   to = aws_organizations_organization.org
   id = data.aws_organizations_organization.org.id
-}
-
-###############################################################################
-# Create organizational units. 
-###############################################################################
-resource "aws_organizations_organizational_unit" "organizational_units" {
-  for_each = local.organizational_units
-  name     = each.value.name
-
-  # Keeping the hierarchy flat for now. We'll connect them with their parents 
-  # later.
-  parent_id = aws_organizations_organization.org.roots[0].id
-}
-
-###############################################################################
-# Import organizational units.
-###############################################################################
-import {
-  for_each = local.organizational_units_to_import
-  to       = aws_organizations_organizational_unit.organizational_units[each.key]
-  id       = module.global.config.organizational_units[each.key].id
-}
-
-###############################################################################
-# Create accounts.
-###############################################################################
-resource "aws_organizations_account" "accounts" {
-  for_each = local.accounts
-  email    = each.value.email
-  lifecycle {
-    ignore_changes = [email, name]
-  }
-  name      = each.value.name
-  parent_id = contains(keys(each.value), "organizational_unit") ? aws_organizations_organizational_unit.organizational_units[each.value.organizational_unit].id : null
-}
-
-###############################################################################
-# Import accounts.
-###############################################################################
-import {
-  for_each = local.accounts_to_import
-  to       = aws_organizations_account.accounts[each.key]
-  id       = each.key == module.global.config.organization.master_account ? data.aws_caller_identity.current.account_id : module.global.config.accounts[each.key].id
 }
 
 ###############################################################################
@@ -120,22 +77,3 @@ locals {
   sso_id  = tolist(data.aws_ssoadmin_instances.sso.identity_store_ids)[0]
 }
 
-###############################################################################
-# Create SSO groups.
-###############################################################################
-resource "aws_identitystore_group" "groups" {
-  for_each          = module.global.config.sso.groups
-  description       = each.value.description
-  display_name      = each.key
-  identity_store_id = local.sso_id
-}
-
-###############################################################################
-# Create SSO permission sets.
-###############################################################################
-resource "aws_ssoadmin_permission_set" "permission_sets" {
-  for_each     = module.global.config.sso.permission_sets
-  description  = each.value.description
-  name         = each.key
-  instance_arn = local.sso_arn
-}

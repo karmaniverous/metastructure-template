@@ -7,16 +7,20 @@
 ###############################################################################
 ###############################################################################
 
-terraform {  
-    backend "s3" { 
-        assume_role = {
-          role_arn = "arn:aws:iam::730335248075:role/OrganizationAccountAccessRole"
-        }
-        bucket = "metastructure000-terraform-state"
-        dynamodb_table = "terraform-state-lock" 
-        encrypt = true 
-        key = "terraform.tfstate"
-        region = "us-east-1" 
-        workspace_key_prefix = "bootstrap" 
-    }
+output "accounts" {
+  description = "Map of account ids."
+  value = { {{#each accounts}}
+    {{@key}} = {
+      id = aws_organizations_account.{{@key}}.id 
+    } {{/each}}
+  }
+}
+
+output "organizational_units" {
+  description = "Map of organizational unit ids."
+  value = { {{#each organizational_units}}
+    {{@key}} = {
+      id = aws_organizations_organizational_unit.{{@key}}.id
+    } {{/each}}
+  }
 }

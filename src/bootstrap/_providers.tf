@@ -1,10 +1,3 @@
-/*
-******************* DO NOT EDIT THIS NOTICE *****************
-This legal notice is added to every supported source code
-file at every commit. See the README for more info!                          
-*************************************************************
-*/
-
 ###############################################################################
 ###############################################################################
 ####                                                                       ####
@@ -23,7 +16,7 @@ provider "aws" {
       Terraform = true
     }
   }
-  region = module.global.config.organization.aws_region
+  region  = module.global.config.organization.aws_region
 }
 
 ###############################################################################
@@ -31,9 +24,9 @@ provider "aws" {
 # Terraform state account.
 ###############################################################################
 provider "aws" {
-  alias = "terraform_state_account"
+  alias   = "terraform_state_account"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.accounts["shared_services"].id}:role/OrganizationAccountAccessRole"
+    role_arn = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
   }
   default_tags {
     tags = {
@@ -48,10 +41,10 @@ provider "aws" {
 # "Development Account".
 ###############################################################################
 provider "aws" {
-  alias = "dev"
+  alias   = "dev" 
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.accounts["dev"].id, module.global.config.accounts["dev"].id)}:role/OrganizationAccountAccessRole"
-  }
+    role_arn = "arn:aws:iam::${try(aws_organizations_account.dev.id, module.global.config.accounts["dev"].id)}:role/OrganizationAccountAccessRole"
+  } 
   default_tags {
     tags = {
       Terraform = true
@@ -65,7 +58,7 @@ provider "aws" {
 # "Master Account".
 ###############################################################################
 provider "aws" {
-  alias = "master"
+  alias   = "master" 
   default_tags {
     tags = {
       Terraform = true
@@ -79,10 +72,10 @@ provider "aws" {
 # "Production Account".
 ###############################################################################
 provider "aws" {
-  alias = "prod"
+  alias   = "prod" 
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.accounts["prod"].id, module.global.config.accounts["prod"].id)}:role/OrganizationAccountAccessRole"
-  }
+    role_arn = "arn:aws:iam::${try(aws_organizations_account.prod.id, module.global.config.accounts["prod"].id)}:role/OrganizationAccountAccessRole"
+  } 
   default_tags {
     tags = {
       Terraform = true
@@ -96,10 +89,10 @@ provider "aws" {
 # "Testing Account".
 ###############################################################################
 provider "aws" {
-  alias = "test"
+  alias   = "test" 
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.accounts["test"].id, module.global.config.accounts["test"].id)}:role/OrganizationAccountAccessRole"
-  }
+    role_arn = "arn:aws:iam::${try(aws_organizations_account.test.id, module.global.config.accounts["test"].id)}:role/OrganizationAccountAccessRole"
+  } 
   default_tags {
     tags = {
       Terraform = true
@@ -113,10 +106,10 @@ provider "aws" {
 # "Shared Services Account".
 ###############################################################################
 provider "aws" {
-  alias = "shared_services"
+  alias   = "shared_services" 
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.accounts["shared_services"].id, module.global.config.accounts["shared_services"].id)}:role/OrganizationAccountAccessRole"
-  }
+    role_arn = "arn:aws:iam::${try(aws_organizations_account.shared_services.id, module.global.config.accounts["shared_services"].id)}:role/OrganizationAccountAccessRole"
+  } 
   default_tags {
     tags = {
       Terraform = true

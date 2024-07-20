@@ -5,40 +5,42 @@
 
 accounts:
   dev:
-    id: '339712993254'
     name: Development Account
-    email: jscroft+karma.003.dev@gmail.com
+    email: jscroft+metastructure.000.dev@gmail.com
     organizational_unit: dev
+    id: '637423361006'
   master:
-    id: '891377150698'
     name: Master Account
-    email: jscroft+karma.003.master@gmail.com
+    email: jscroft+metastructure.000.master@gmail.com
+    id: '654654394187'
   prod:
-    id: '381491905215'
     name: Production Account
-    email: jscroft+karma.003.prod@gmail.com
+    email: jscroft+metastructure.000.prod@gmail.com
     organizational_unit: prod
+    id: '211125660719'
   test:
-    id: '381491918621'
     name: Testing Account
-    email: jscroft+karma.003.test@gmail.com
+    email: jscroft+metastructure.000.test@gmail.com
     organizational_unit: test
+    id: '730335315754'
   shared_services:
-    id: '975050301644'
     name: Shared Services Account
-    email: jscroft+karma.003.shared_services@gmail.com
+    email: jscroft+metastructure.000.shared_services@gmail.com
     organizational_unit: infrastructure
+    id: '730335248075'
 batches:
   bootstrap:
     path: src/bootstrap
     generators:
-      src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
+      src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
       src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
       src/bootstrap/_backend_override.tf: src/bootstrap/templates/backend-override.hbs
+      src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
       src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
       src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
       src/bootstrap/_providers_override.tf: src/bootstrap/templates/providers-override.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
+      src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
 environments:
   bali:
     account: dev
@@ -62,31 +64,31 @@ environments:
     gha_on_push_branches: preview/**
 organization:
   aws_region: us-east-1
-  github_org: karmaniverous
+  github_org: metastructureniverous
   master_account: master
-  namespace: karma003
+  namespace: metastructure000
 organizational_units:
   dev:
-    id: ou-u0l7-rgima4c9
     name: Dev Workloads OU
     parent: workloads
+    id: ou-d1r1-57lwd19o
   infrastructure:
-    id: ou-u0l7-10e2pdh1
     name: Infrastructure OU
+    id: ou-d1r1-y8cotbce
   prod:
-    id: ou-u0l7-8z1e5t6g
     name: Prod Workloads OU
     parent: workloads
+    id: ou-d1r1-vzraoavq
   security:
-    id: ou-u0l7-esjkajt6
     name: Security OU
+    id: ou-d1r1-hf0dozrb
   test:
-    id: ou-u0l7-4fmx99nj
     name: Test Workloads OU
     parent: workloads
+    id: ou-d1r1-nah0pbxf
   workloads:
-    id: ou-u0l7-zu0gl8ze
     name: Workloads OU
+    id: ou-d1r1-3nghv48g
 sso:
   groups:
     terraform_admin:

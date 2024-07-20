@@ -116,12 +116,6 @@ This needs to be done manually. Follow these steps:
 
 1. Visit the IAM Identity Center page and enable IAM Identity Center with AWS Organizations (the default choice).
 
-1. On the **Settings > Identity Source** tab, customize your AWS access portal URL (not required but recommended).
+1. In the IAM console (_not_ IAM Identity Center!) create new IAM user `bootstrap-admin`, attaching AWS managed policy `AdministratorAccess`. Once the user is created, attach an additional inline policy using the contents of [`OrgAdminAccessPolicy.json`](./src/bootstrap/OrgAdminAccessPolicy.json). **`bootstrap-admin` now has admin privileges across your entire organization! We'll delete this user at the end of the bootstrapping process.**
 
-1. On the **Settings > Authentication** tab, enable _Send email OTP for users created from API_ and configure Multi-Factor Authentication.
-
-1. In the IAM console (_not_ IAM Identity Center!) create Policy `Terraform-Init` and paste in the contents of [`Terraform-Init-IAM-Policy.json`](./src/bootstrap/Terraform-Init-IAM-Policy.json). **Ignore any warnings! We'll delete this policy at the end of the bootstrapping process.**
-
-1. In the IAM console create new IAM user with `terraform-init` and attach the `Terraform-Init` policy. **We'll delete this user at the end of the bootstrapping process.**
-
-1. From the `terraform-init` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
+1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
