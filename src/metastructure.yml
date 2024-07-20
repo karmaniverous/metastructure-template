@@ -32,13 +32,13 @@ batches:
   bootstrap:
     path: src/bootstrap
     generators:
-      src/modules/global/outputs.tf: src/templates/terraform-global-outputs.hbs
-      src/bootstrap/backend.tf: src/templates/terraform-backend.hbs
-      src/bootstrap/backend_override.tf: src/templates/terraform-backend-override.hbs
-      src/bootstrap/policies.tf: src/templates/terraform-bootstrap-policies.hbs
-      src/bootstrap/providers.tf: src/templates/terraform-providers.hbs
-      src/bootstrap/providers_override.tf: src/templates/terraform-providers-override.hbs
-      src/bootstrap/terraform.tf: src/templates/terraform.hbs
+      src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
+      src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
+      src/bootstrap/_backend_override.tf: src/bootstrap/templates/backend-override.hbs
+      src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
+      src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
+      src/bootstrap/_providers_override.tf: src/bootstrap/templates/providers-override.hbs
+      src/bootstrap/_terraform.tf: src/templates/terraform.hbs
 environments:
   bali:
     account: dev
@@ -91,12 +91,14 @@ sso:
   groups:
     terraform_admin:
       name: terraform_admin
-      description: Terraform administrators can create & manage all resources in all
+      description:
+        Terraform administrators can create & manage all resources in all
         accounts.
       account_permission_sets: terraform_admin
     terraform_deployment:
       name: TerraformDeployment
-      description: Terraform deployment users can create & manage all unprotected
+      description:
+        Terraform deployment users can create & manage all unprotected
         resources in all accounts.
       account_permission_sets: terraform_deployment
   permission_sets:
@@ -128,3 +130,4 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
+
