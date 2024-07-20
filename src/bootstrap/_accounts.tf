@@ -1,3 +1,10 @@
+/*
+******************* DO NOT EDIT THIS NOTICE *****************
+This legal notice is added to every supported source code
+file at every commit. See the README for more info!                          
+*************************************************************
+*/
+
 ###############################################################################
 ###############################################################################
 ####                                                                       ####
@@ -32,7 +39,7 @@ import {
 ###############################################################################
 resource "aws_organizations_organizational_unit" "infrastructure" {
   name      = "Infrastructure OU"
-  parent_id = aws_organizations_organization.org.roots[0].id
+  parent_id = one(aws_organizations_organization.org.roots).id
 }
 
 ###############################################################################
@@ -64,7 +71,7 @@ import {
 ###############################################################################
 resource "aws_organizations_organizational_unit" "security" {
   name      = "Security OU"
-  parent_id = aws_organizations_organization.org.roots[0].id
+  parent_id = one(aws_organizations_organization.org.roots).id
 }
 
 ###############################################################################
@@ -96,7 +103,7 @@ import {
 ###############################################################################
 resource "aws_organizations_organizational_unit" "workloads" {
   name      = "Workloads OU"
-  parent_id = aws_organizations_organization.org.roots[0].id
+  parent_id = one(aws_organizations_organization.org.roots).id
 }
 
 ###############################################################################
@@ -116,13 +123,14 @@ import {
 # Create Development Account.
 ###############################################################################
 resource "aws_organizations_account" "dev" {
-  email    = "jscroft+metastructure.000.dev@gmail.com"
+  email = "jscroft+metastructure.000.dev@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
   name      = "Development Account"
   parent_id = aws_organizations_organizational_unit.dev.id
 }
+
 
 ###############################################################################
 # Import Development Account.
@@ -132,17 +140,19 @@ import {
   id = "637423361006"
 }
 
+
 ###############################################################################
 # Create Master Account.
 ###############################################################################
 resource "aws_organizations_account" "master" {
-  email    = "jscroft+metastructure.000.master@gmail.com"
+  email = "jscroft+metastructure.000.master@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
   name      = "Master Account"
   parent_id = null
 }
+
 
 ###############################################################################
 # Import Master Account.
@@ -152,17 +162,19 @@ import {
   id = data.aws_caller_identity.me.account_id
 }
 
+
 ###############################################################################
 # Create Production Account.
 ###############################################################################
 resource "aws_organizations_account" "prod" {
-  email    = "jscroft+metastructure.000.prod@gmail.com"
+  email = "jscroft+metastructure.000.prod@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
   name      = "Production Account"
   parent_id = aws_organizations_organizational_unit.prod.id
 }
+
 
 ###############################################################################
 # Import Production Account.
@@ -172,11 +184,12 @@ import {
   id = "211125660719"
 }
 
+
 ###############################################################################
 # Create Testing Account.
 ###############################################################################
 resource "aws_organizations_account" "test" {
-  email    = "jscroft+metastructure.000.test@gmail.com"
+  email = "jscroft+metastructure.000.0.test@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -184,25 +197,28 @@ resource "aws_organizations_account" "test" {
   parent_id = aws_organizations_organizational_unit.test.id
 }
 
+
 ###############################################################################
 # Import Testing Account.
 ###############################################################################
 import {
   to = aws_organizations_account.test
-  id = "730335315754"
+  id = "851725577893"
 }
+
 
 ###############################################################################
 # Create Shared Services Account.
 ###############################################################################
 resource "aws_organizations_account" "shared_services" {
-  email    = "jscroft+metastructure.000.shared_services@gmail.com"
+  email = "jscroft+metastructure.000.shared_services@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
   name      = "Shared Services Account"
   parent_id = aws_organizations_organizational_unit.infrastructure.id
 }
+
 
 ###############################################################################
 # Import Shared Services Account.

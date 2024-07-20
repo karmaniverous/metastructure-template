@@ -9,25 +9,40 @@ accounts:
     email: jscroft+metastructure.000.dev@gmail.com
     organizational_unit: dev
     id: '637423361006'
+    permission_set_policies:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_64191101df3cdb82
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_01321b7b4a9c07a0
   master:
     name: Master Account
     email: jscroft+metastructure.000.master@gmail.com
     id: '654654394187'
+    permission_set_policies:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_2ddfbbe9c9cfbdd7
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_98719b4a79a0fea8
   prod:
     name: Production Account
     email: jscroft+metastructure.000.prod@gmail.com
     organizational_unit: prod
     id: '211125660719'
+    permission_set_policies:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_98490783e264dada
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_5003c440964fd4d5
   test:
     name: Testing Account
-    email: jscroft+metastructure.000.test@gmail.com
+    email: jscroft+metastructure.000.0.test@gmail.com
     organizational_unit: test
-    id: '730335315754'
+    id: '851725577893'
+    permission_set_policies:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_7f72f6b45fbc0668
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_f27063b129fdc78d
   shared_services:
     name: Shared Services Account
     email: jscroft+metastructure.000.shared_services@gmail.com
     organizational_unit: infrastructure
     id: '730335248075'
+    permission_set_policies:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_1c44ff89e9d7dfcb
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_453e52335876cfc2
 batches:
   bootstrap:
     path: src/bootstrap
@@ -67,6 +82,7 @@ organization:
   github_org: metastructureniverous
   master_account: master
   namespace: metastructure000
+  id: o-jbn1h63i9j
 organizational_units:
   dev:
     name: Dev Workloads OU
@@ -92,15 +108,13 @@ organizational_units:
 sso:
   groups:
     terraform_admin:
-      name: terraform_admin
-      description:
-        Terraform administrators can create & manage all resources in all
+      name: TerraformAdmin
+      description: Terraform administrators can create & manage all resources in all
         accounts.
       account_permission_sets: terraform_admin
     terraform_deployment:
       name: TerraformDeployment
-      description:
-        Terraform deployment users can create & manage all unprotected
+      description: Terraform deployment users can create & manage all unprotected
         resources in all accounts.
       account_permission_sets: terraform_deployment
   permission_sets:
@@ -111,7 +125,7 @@ sso:
         - AdministratorAccess
         - terraform_state_writer
     terraform_deployment:
-      name: terraform_deployment
+      name: TerraformDeployment
       description: Permits creation & management of all unprotected resources.
       policies:
         - unprotected_resource_writer
@@ -132,4 +146,3 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
-

@@ -7,17 +7,52 @@
 ###############################################################################
 ###############################################################################
 
+###############################################################################
+###############################################################################
+#### LOOKUP ACCOUNT PERMISSION SET ROLES
+###############################################################################
+###############################################################################
+
+{{#each sso.reference.account_permission_sets}}
+###############################################################################
+# ACCOUNT: {{lodash "toUpper" (lookup (lookup ../accounts @key) "name")}} 
+###############################################################################
+
+{{#each this}}
+###############################################################################
+# Permission Set: {{lookup (lookup ../../sso/permission_sets this) "name"}} 
+###############################################################################
+data "aws_iam_roles" "{{@../key}}_{{this}}" {
+  provider = aws.{{@../key}}
+  name_regex = "AWSReservedSSO_{{lookup (lookup ../../sso/permission_sets this) "name"}}_.*"
+}
+
+{{/each}}{{/each}}
+
+###############################################################################
+###############################################################################
+#### GENERATE OUTPUT
+###############################################################################
+###############################################################################
+
 output "accounts" {
-  description = "Map of account ids."
-  value = { {{#each accounts}}
+  value = { {{#each accounts}}{{#unless action}}
     {{@key}} = {
       id = aws_organizations_account.{{@key}}.id 
-    } {{/each}}
+      permission_set_policies = { {{#each (lookup ../sso/reference/account_permission_sets @key)}}
+        {{this}} = one(data.aws_iam_roles.{{@../key}}_{{this}}.names) {{/each}}
+      }
+    } {{/unless}}{{/each}}
+  }
+}
+
+output "organization" {
+  value = { 
+    id = aws_organizations_organization.org.id
   }
 }
 
 output "organizational_units" {
-  description = "Map of organizational unit ids."
   value = { {{#each organizational_units}}
     {{@key}} = {
       id = aws_organizations_organizational_unit.{{@key}}.id

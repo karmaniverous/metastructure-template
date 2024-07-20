@@ -2,7 +2,7 @@
   "Statement": [
     {
       "Sid": "AllowOrgAdminAccess",
-      "Action": ["sts:AssumeRole"],
+      "Action": ["sts:AssumeRole", "sts:TagSession"],
       "Effect": "Allow",
       "Resource": ["arn:aws:iam::*:role/OrganizationAccountAccessRole"]
     }

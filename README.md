@@ -119,3 +119,11 @@ This needs to be done manually. Follow these steps:
 1. In the IAM console (_not_ IAM Identity Center!) create new IAM user `bootstrap-admin`, attaching AWS managed policy `AdministratorAccess`. Once the user is created, attach an additional inline policy using the contents of [`OrgAdminAccessPolicy.json`](./src/bootstrap/OrgAdminAccessPolicy.json). **`bootstrap-admin` now has admin privileges across your entire organization! We'll delete this user at the end of the bootstrapping process.**
 
 1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
+
+## Some Gotchas
+
+### Removing & Destroying Accounts
+
+When you remove or destroy an account hooked into SSO, you also implicitly destroy any Metastructure-managed policies in that account. It takes a few seconds for a policy in an organization account to register that it has been detached from its related SSO permission sets in the master account, so Terraform may throw an error indicating that the policy is still in use, and `terraform apply` may fail. Just wait a few seconds and try again.
+
+Also, before an Organization account can be destroyed, it must be detached from the Organization. This action is subject to some constraints, notably that the account much have a valid payment method configured. If an account to be destroyed violates any of these contraints, Terraform will throw an error identifying the issue. Resolve the issue, then try again.

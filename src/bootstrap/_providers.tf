@@ -1,3 +1,10 @@
+/*
+******************* DO NOT EDIT THIS NOTICE *****************
+This legal notice is added to every supported source code
+file at every commit. See the README for more info!                          
+*************************************************************
+*/
+
 ###############################################################################
 ###############################################################################
 ####                                                                       ####
@@ -11,12 +18,18 @@
 # Default provider.
 ###############################################################################
 provider "aws" {
+  # assume_role {
+  #   tags = {
+  #     Generator = "Terraform"
+  #   }
+  #   transitive_tag_keys = ["Generator"]
+  # }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
-  region  = module.global.config.organization.aws_region
+  region = module.global.config.organization.aws_region
 }
 
 ###############################################################################
@@ -24,95 +37,116 @@ provider "aws" {
 # Terraform state account.
 ###############################################################################
 provider "aws" {
-  alias   = "terraform_state_account"
+  alias = "terraform_state_account"
   assume_role {
     role_arn = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
 }
-
 ###############################################################################
 # Create a provider to assume the OrganizationAccountAccessRole role on account 
 # "Development Account".
 ###############################################################################
 provider "aws" {
-  alias   = "dev" 
+  alias = "dev"
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.dev.id, module.global.config.accounts["dev"].id)}:role/OrganizationAccountAccessRole"
-  } 
+    role_arn = "arn:aws:iam::${aws_organizations_account.dev.id}:role/OrganizationAccountAccessRole"
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
 }
-
 ###############################################################################
 # Create a provider to assume the OrganizationAccountAccessRole role on account 
 # "Master Account".
 ###############################################################################
 provider "aws" {
-  alias   = "master" 
+  alias = "master"
+  assume_role {
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
 }
-
 ###############################################################################
 # Create a provider to assume the OrganizationAccountAccessRole role on account 
 # "Production Account".
 ###############################################################################
 provider "aws" {
-  alias   = "prod" 
+  alias = "prod"
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.prod.id, module.global.config.accounts["prod"].id)}:role/OrganizationAccountAccessRole"
-  } 
+    role_arn = "arn:aws:iam::${aws_organizations_account.prod.id}:role/OrganizationAccountAccessRole"
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
 }
-
 ###############################################################################
 # Create a provider to assume the OrganizationAccountAccessRole role on account 
 # "Testing Account".
 ###############################################################################
 provider "aws" {
-  alias   = "test" 
+  alias = "test"
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.test.id, module.global.config.accounts["test"].id)}:role/OrganizationAccountAccessRole"
-  } 
+    role_arn = "arn:aws:iam::${aws_organizations_account.test.id}:role/OrganizationAccountAccessRole"
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
 }
-
 ###############################################################################
 # Create a provider to assume the OrganizationAccountAccessRole role on account 
 # "Shared Services Account".
 ###############################################################################
 provider "aws" {
-  alias   = "shared_services" 
+  alias = "shared_services"
   assume_role {
-    role_arn = "arn:aws:iam::${try(aws_organizations_account.shared_services.id, module.global.config.accounts["shared_services"].id)}:role/OrganizationAccountAccessRole"
-  } 
+    role_arn = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    # tags = {
+    #   Generator = "Terraform"
+    # }
+    # transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
-      Terraform = true
+      Generator = "Terraform"
     }
   }
   region = module.global.config.organization.aws_region
