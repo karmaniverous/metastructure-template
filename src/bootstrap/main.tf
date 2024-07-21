@@ -77,3 +77,25 @@ locals {
   sso_id  = tolist(data.aws_ssoadmin_instances.sso.identity_store_ids)[0]
 }
 
+###############################################################################
+# Create an sso_admin user & assign to the TerraformAdmin group.
+###############################################################################
+resource "aws_identitystore_user" "sso_admin" {
+  display_name = "SSO Admin"
+  emails {
+    primary = true
+    value   = "jscroft+metastructure.000.sso-admin@gmail.com"
+  }
+  identity_store_id = local.sso_id
+  name {
+    family_name = "Admin"
+    given_name  = "SSO"
+  }
+  user_name = "sso-admin"
+}
+
+resource "aws_identitystore_group_membership" "sso_admin_terraform_admin" {
+  identity_store_id = local.sso_id
+  group_id          = aws_identitystore_group.terraform_admin.group_id
+  member_id         = aws_identitystore_user.sso_admin.user_id
+}

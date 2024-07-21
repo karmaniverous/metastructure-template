@@ -120,6 +120,16 @@ This needs to be done manually. Follow these steps:
 
 1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
 
+## External Identity Providers
+
+Most organizations will want to use some kind of external identity provider as their source for user authentication & accounts. This project is designed to be agnostic to that decision. Once externally-sourced users are assigned to the SSO Groups defined in [`metastructure.yml`](./src/metastructure.yml), they will be able to create AWS profiles and leverage their assigned permissions just like any user.
+
+Here are some references for setting up external identity providers:
+
+- [Setup AWS SSO with Google as an external identity provider](https://ethtool.medium.com/setup-aws-sso-with-google-as-identity-provider-5e0b61d0a1e5)
+
+To faciitate demonstration, this project will create users directly in AWS SSO.
+
 ## Some Gotchas
 
 ### Removing & Destroying Accounts
