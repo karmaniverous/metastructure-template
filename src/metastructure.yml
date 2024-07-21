@@ -9,14 +9,14 @@ accounts:
     email: jscroft+metastructure.000.dev@gmail.com
     organizational_unit: dev
     id: '637423361006'
-    permission_set_policies:
+    permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_64191101df3cdb82
       terraform_deployment: AWSReservedSSO_TerraformDeployment_01321b7b4a9c07a0
   master:
     name: Master Account
     email: jscroft+metastructure.000.master@gmail.com
     id: '654654394187'
-    permission_set_policies:
+    permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_2ddfbbe9c9cfbdd7
       terraform_deployment: AWSReservedSSO_TerraformDeployment_98719b4a79a0fea8
   prod:
@@ -24,7 +24,7 @@ accounts:
     email: jscroft+metastructure.000.prod@gmail.com
     organizational_unit: prod
     id: '211125660719'
-    permission_set_policies:
+    permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_98490783e264dada
       terraform_deployment: AWSReservedSSO_TerraformDeployment_5003c440964fd4d5
   test:
@@ -32,7 +32,7 @@ accounts:
     email: jscroft+metastructure.000.0.test@gmail.com
     organizational_unit: test
     id: '851725577893'
-    permission_set_policies:
+    permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_7f72f6b45fbc0668
       terraform_deployment: AWSReservedSSO_TerraformDeployment_f27063b129fdc78d
   shared_services:
@@ -40,11 +40,16 @@ accounts:
     email: jscroft+metastructure.000.shared_services@gmail.com
     organizational_unit: infrastructure
     id: '730335248075'
-    permission_set_policies:
+    permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_1c44ff89e9d7dfcb
       terraform_deployment: AWSReservedSSO_TerraformDeployment_453e52335876cfc2
 batches:
   bootstrap:
+    cli_defaults:
+      assume_role: OrganizationAccountAccessRole
+      aws_profile: META-BOOTSTRAP
+      use_local_state: true
+    cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     generators:
       src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs

@@ -7,28 +7,28 @@
 ###############################################################################
 ###############################################################################
 
+{{#if params.aws_profile}}
 ###############################################################################
-# Default provider.
+# Apply a local AWS profile to the default provider.
 ###############################################################################
 provider "aws" { 
-    profile = "{{params.awsProfile}}"
+    profile = "{{params.aws_profile}}"
 }
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on the 
-# Terraform state account.
+# Apply a local AWS profile to the Terraform state account provider.
 ###############################################################################
 provider "aws" {
     alias   = "terraform_state_account"
-    profile = "{{params.awsProfile}}" 
+    profile = "{{params.aws_profile}}" 
 }
 {{#each accounts}}
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on the 
-# {{this.name}}.
+# Apply a local AWS profile to the {{this.name}} provider.
 ###############################################################################
 provider "aws" {
     alias   = "{{@key}}"
-    profile = "{{../params.awsProfile}}" 
+    profile = "{{../params.aws_profile}}" 
 }
-{{/each}}
+
+{{/each}}{{/if}}

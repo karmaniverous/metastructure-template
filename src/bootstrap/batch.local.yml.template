@@ -1,0 +1,24 @@
+# ******************* DO NOT EDIT THIS NOTICE *****************
+# This legal notice is added to every supported source code
+# file at every commit. See the README for more info!                          
+# *************************************************************
+# This file configures batch-specific defaults for Metastructure CLI options.
+# They are .gitignored by default, so you can safely store sensitive info
+# here.
+#
+# To use:
+#
+# 1. Copy this file & remove the `template` extension (e.g. `batch.local.yml`).
+#    Be sure to use `'.local` in the filename so the file will be .gitignored!
+#
+# 2. Add the path to this file at batches[batch].cli_defaults_path in your
+#    `metastructure.yml` file.
+#
+# 3. Configure your CLI defaults below. All keys are optional.
+#
+# 4. DO NOT place sensitive info in this template file, as it is NOT
+#    .gitignored!
+
+aws_profile: MY-PROFILE
+sso_permission_set: terraform_admin
+use_local_state: false

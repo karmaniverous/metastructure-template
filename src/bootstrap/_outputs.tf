@@ -132,35 +132,35 @@ output "accounts" {
   value = {
     dev = {
       id = aws_organizations_account.dev.id
-      permission_set_policies = {
+      permission_set_roles = {
         terraform_admin      = one(data.aws_iam_roles.dev_terraform_admin.names)
         terraform_deployment = one(data.aws_iam_roles.dev_terraform_deployment.names)
       }
     }
     master = {
       id = aws_organizations_account.master.id
-      permission_set_policies = {
+      permission_set_roles = {
         terraform_admin      = one(data.aws_iam_roles.master_terraform_admin.names)
         terraform_deployment = one(data.aws_iam_roles.master_terraform_deployment.names)
       }
     }
     prod = {
       id = aws_organizations_account.prod.id
-      permission_set_policies = {
+      permission_set_roles = {
         terraform_admin      = one(data.aws_iam_roles.prod_terraform_admin.names)
         terraform_deployment = one(data.aws_iam_roles.prod_terraform_deployment.names)
       }
     }
     test = {
       id = aws_organizations_account.test.id
-      permission_set_policies = {
+      permission_set_roles = {
         terraform_admin      = one(data.aws_iam_roles.test_terraform_admin.names)
         terraform_deployment = one(data.aws_iam_roles.test_terraform_deployment.names)
       }
     }
     shared_services = {
       id = aws_organizations_account.shared_services.id
-      permission_set_policies = {
+      permission_set_roles = {
         terraform_admin      = one(data.aws_iam_roles.shared_services_terraform_admin.names)
         terraform_deployment = one(data.aws_iam_roles.shared_services_terraform_deployment.names)
       }

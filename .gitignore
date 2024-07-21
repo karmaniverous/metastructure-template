@@ -1,11 +1,13 @@
+*.local
+*.local.*
+!*.template
 .nyc_output/
 .rollup.cache/
 .tsbuildinfo
-*.local
-local/
 coverage/
 dist/
 esm/
+local/
 node_modules/
 
 # Local .terraform directories

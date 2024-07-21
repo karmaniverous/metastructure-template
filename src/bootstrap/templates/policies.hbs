@@ -79,15 +79,15 @@ data "aws_iam_policy_document" "terraform_state_writer" {
 
 {{#each sso.reference.account_policies}}
 ###############################################################################
-# ACCOUNT: {{lodash "toUpper" (lookup (lookup ../accounts @key) "name")}}
+# ACCOUNT: {{lodash "toUpper" (lodash "get" ../accounts (params @key "name"))}}
 ###############################################################################
 
 {{#each this}}
 ###############################################################################
-# Add policy {{lookup ../../sso/policies this}} to account {{lookup (lookup ../../accounts @../key) "name"}}.
+# Add policy {{lodash "get" ../../sso/policies this}} to account {{lodash "get" ../../accounts (params @../key "name")}}.
 ###############################################################################
 resource "aws_iam_policy" "{{@../key}}_{{this}}" {
-  name        = "{{lookup ../../sso/policies this}}"
+  name        = "{{lodash "get" ../../sso/policies this}}"
   provider    = aws.{{@../key}}
   description = "Some description."
   policy      = data.aws_iam_policy_document.{{this}}.json
@@ -113,22 +113,22 @@ resource "aws_ssoadmin_permission_set" "{{@key}}" {
   name         = "{{this.name}}"
   instance_arn = local.sso_arn
 }
-{{#each this.policies}}{{#if (lookup ../../sso/policies this)}}
+{{#each this.policies}}{{#if (lodash "get" ../../sso/policies this)}}
 ###############################################################################
-# Add policy {{lookup ../../sso/policies this}} to permission set {{lookup (lookup ../../sso/permission_sets @../key) 'name'}}.
+# Add policy {{lodash "get" ../../sso/policies this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key "name")}}.
 ###############################################################################
 resource "aws_ssoadmin_customer_managed_policy_attachment" "{{@../key}}_{{this}}" {
   customer_managed_policy_reference {
-    name = "{{lookup ../../sso/policies this}}"
+    name = "{{lodash "get" ../../sso/policies this}}"
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.{{@../key}}.arn
-  depends_on         = [{{#each (lookup ../../sso/reference/policy_accounts this)}}
+  depends_on         = [{{#each (lodash "get" ../../sso/reference/policy_accounts this)}}
     aws_iam_policy.{{this}}_{{@../this}}{{#unless @last}},{{/unless}}{{/each}}
   ]
 }{{else}}
 ###############################################################################
-# Add policy {{this}} to permission set {{lookup (lookup ../../sso/permission_sets @../key) 'name'}}.
+# Add policy {{this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key 'name')}}.
 ###############################################################################
 resource "aws_ssoadmin_managed_policy_attachment" "{{@../key}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
   managed_policy_arn = "arn:aws:iam::aws:policy/{{this}}"
@@ -166,7 +166,7 @@ resource "aws_ssoadmin_account_assignment" "{{@../../key}}_{{@../key}}_{{this}}"
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.{{@../key}}.id
   target_type        = "AWS_ACCOUNT"
-  depends_on         = [{{#each (lookup (lookup ../../sso/reference/group_account_permission_set_policies @../../key) @../key)}}{{#each this}}
+  depends_on         = [{{#each (lodash "get" ../../sso/reference/group_account_permission_set_policies (params @../../key @../key))}}{{#each this}}
     aws_ssoadmin_customer_managed_policy_attachment.{{ @../../../../key}}_{{this}}{{#unless @last}},{{/unless}}{{/each}}{{#unless @last}},{{/unless}}{{/each}}
   ]
 }

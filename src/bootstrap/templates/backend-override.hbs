@@ -7,17 +7,17 @@
 ###############################################################################
 ###############################################################################
 
-terraform { {{#if params.localState}} 
+terraform { {{#if params.use_local_state}} 
     backend "local" {} {{else}}
     backend "s3" { 
         assume_role = {
-          role_arn = "arn:aws:iam::{{lookup (lookup accounts terraform.state.account) "id"}}:role/OrganizationAccountAccessRole"
+          role_arn = "arn:aws:iam::{{lodash "get" accounts (params terraform.state.account "id")}}:role/{{#if params.assume_role}}{{params.assume_role}}{{/if}}{{#if params.sso_permission_set}}{{lodash "get" accounts (params terraform.state.account "permission_set_roles" params.sso_permission_set)}}{{/if}}"
         }
         bucket               = "{{terraform.state.bucket}}"
         dynamodb_table       = "{{terraform.state.lock_table}}" 
         encrypt              = true 
         key                  = "{{terraform.state.key}}"
-        profile              = "{{params.awsProfile}}" 
+        profile              = "{{params.aws_profile}}" 
         region               = "{{organization.aws_region}}" 
         workspace_key_prefix = "{{params.batch}}" 
     } {{/if}}

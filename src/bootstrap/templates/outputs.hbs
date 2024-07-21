@@ -15,16 +15,16 @@
 
 {{#each sso.reference.account_permission_sets}}
 ###############################################################################
-# ACCOUNT: {{lodash "toUpper" (lookup (lookup ../accounts @key) "name")}} 
+# ACCOUNT: {{lodash "toUpper" (lodash "get" ../accounts (params @key "name"))}} 
 ###############################################################################
 
 {{#each this}}
 ###############################################################################
-# Permission Set: {{lookup (lookup ../../sso/permission_sets this) "name"}} 
+# Permission Set: {{lodash "get" ../../sso/permission_sets (params this "name")}} 
 ###############################################################################
 data "aws_iam_roles" "{{@../key}}_{{this}}" {
   provider = aws.{{@../key}}
-  name_regex = "AWSReservedSSO_{{lookup (lookup ../../sso/permission_sets this) "name"}}_.*"
+  name_regex = "AWSReservedSSO_{{lodash "get" ../../sso/permission_sets (params this "name")}}_.*"
 }
 
 {{/each}}{{/each}}
@@ -39,7 +39,7 @@ output "accounts" {
   value = { {{#each accounts}}{{#unless action}}
     {{@key}} = {
       id = aws_organizations_account.{{@key}}.id 
-      permission_set_policies = { {{#each (lookup ../sso/reference/account_permission_sets @key)}}
+      permission_set_roles = { {{#each (lodash "get" ../sso/reference/account_permission_sets @key)}}
         {{this}} = one(data.aws_iam_roles.{{@../key}}_{{this}}.names) {{/each}}
       }
     } {{/unless}}{{/each}}

@@ -33,8 +33,8 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on the 
-# Terraform state account.
+# Create a provider to assume the OrganizationAccountAccessRole role on 
+# the Terraform state account.
 ###############################################################################
 provider "aws" {
   alias = "terraform_state_account"
@@ -53,8 +53,8 @@ provider "aws" {
   region = module.global.config.organization.aws_region
 }
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on account 
-# "Development Account".
+# Create a provider to assume the OrganizationAccountAccessRole role 
+# on account Development Account.
 ###############################################################################
 provider "aws" {
   alias = "dev"
@@ -72,9 +72,9 @@ provider "aws" {
   }
   region = module.global.config.organization.aws_region
 }
+
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on account 
-# "Master Account".
+# Create a provider on account Master Account.
 ###############################################################################
 provider "aws" {
   alias = "master"
@@ -91,9 +91,10 @@ provider "aws" {
   }
   region = module.global.config.organization.aws_region
 }
+
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on account 
-# "Production Account".
+# Create a provider to assume the OrganizationAccountAccessRole role 
+# on account Production Account.
 ###############################################################################
 provider "aws" {
   alias = "prod"
@@ -111,9 +112,10 @@ provider "aws" {
   }
   region = module.global.config.organization.aws_region
 }
+
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on account 
-# "Testing Account".
+# Create a provider to assume the OrganizationAccountAccessRole role 
+# on account Testing Account.
 ###############################################################################
 provider "aws" {
   alias = "test"
@@ -131,9 +133,10 @@ provider "aws" {
   }
   region = module.global.config.organization.aws_region
 }
+
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole role on account 
-# "Shared Services Account".
+# Create a provider to assume the OrganizationAccountAccessRole role 
+# on account Shared Services Account.
 ###############################################################################
 provider "aws" {
   alias = "shared_services"
@@ -151,3 +154,4 @@ provider "aws" {
   }
   region = module.global.config.organization.aws_region
 }
+
