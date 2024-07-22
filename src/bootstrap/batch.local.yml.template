@@ -21,5 +21,5 @@
 
 assume_role: OrganizationAccountAccessRole
 aws_profile: TERRAFORM-ADMIN
-sso_permission_set: terraform_admin
+permission_set: terraform_admin
 use_local_state: true

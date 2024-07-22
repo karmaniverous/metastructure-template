@@ -8,21 +8,41 @@ accounts:
     name: Development Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
+    id: '851725244929'
+    permission_set_roles:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_14c7146d8c9e3f77
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_53db264911201ce3
   master:
     name: Master Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
+    id: '058264094369'
+    permission_set_roles:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_53a8f9a4117a4137
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_da44f492d1e86145
   prod:
     name: Production Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}prod@gmail.com
     organizational_unit: prod
+    id: '339713056709'
+    permission_set_roles:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_1ec326f7d0c74c6d
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_fe84d1e1f233298a
   test:
     name: Testing Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}test@gmail.com
     organizational_unit: test
+    id: '905418424983'
+    permission_set_roles:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_640f3ded95d7dfb2
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_4ff2fe8e3fc41c17
   shared_services:
     name: Shared Services Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
+    id: '058264146029'
+    permission_set_roles:
+      terraform_admin: AWSReservedSSO_TerraformAdmin_b73d775513174968
+      terraform_deployment: AWSReservedSSO_TerraformDeployment_1e4616daf4b4a0a4
 batches:
   bootstrap:
     cli_defaults:
@@ -64,36 +84,38 @@ organization:
   github_org: metastructureniverous
   master_account: master
   namespace: metastructure-001
-  id: o-jbn1h63i9j
+  id: o-6ex7fx1ub8
 organizational_units:
   dev:
     name: Dev Workloads OU
     parent: workloads
+    id: ou-b51u-ogux3wiu
   infrastructure:
     name: Infrastructure OU
+    id: ou-b51u-rdgtk5ev
   prod:
     name: Prod Workloads OU
     parent: workloads
+    id: ou-b51u-znxstv50
   security:
     name: Security OU
+    id: ou-b51u-w4gk5aqc
   test:
     name: Test Workloads OU
     parent: workloads
+    id: ou-b51u-dh5m52xy
   workloads:
     name: Workloads OU
+    id: ou-b51u-tkmay1hb
 sso:
   groups:
     terraform_admin:
       name: TerraformAdmin
-      description:
-        Terraform administrators can create & manage all resources in all
-        accounts.
+      description: Terraform administrators can create & manage all resources in all accounts.
       account_permission_sets: terraform_admin
     terraform_deployment:
       name: TerraformDeployment
-      description:
-        Terraform deployment users can create & manage all unprotected
-        resources in all accounts.
+      description: Terraform deployment users can create & manage all unprotected resources in all accounts.
       account_permission_sets: terraform_deployment
   permission_sets:
     terraform_admin:
@@ -101,17 +123,17 @@ sso:
       description: Permits creation & management of all resources.
       policies:
         - AdministratorAccess
-        - terraform_state_writer
+        - sso_terraform_state_writer
     terraform_deployment:
       name: TerraformDeployment
       description: Permits creation & management of all unprotected resources.
       policies:
         - unprotected_resource_writer
-        - terraform_state_writer
+        - sso_terraform_state_writer
   # Maps customer-managed policy name to policy document token.
   policies:
     # Permits writing to the Terraform state bucket & state lock table.
-    terraform_state_writer: TerraformStateWriter
+    sso_terraform_state_writer: SSOTerraformStateWriter
     # Permits creation & management of unprotected resources.
     unprotected_resource_writer: UnprotectedResourceWriter
 terraform:

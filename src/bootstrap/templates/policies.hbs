@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "unprotected_resource_writer" {
 ###############################################################################
 # Permits writing of Terraform state.
 ###############################################################################
-data "aws_iam_policy_document" "terraform_state_writer" {
+data "aws_iam_policy_document" "sso_terraform_state_writer" {
   statement {
     sid    = "TerraformStateBucketWrite"
     effect = "Allow"

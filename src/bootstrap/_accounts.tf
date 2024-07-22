@@ -27,11 +27,27 @@ resource "aws_organizations_organizational_unit" "dev" {
 }
 
 ###############################################################################
+# Import Dev Workloads OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.dev
+  id = "ou-b51u-ogux3wiu"
+}
+
+###############################################################################
 # Create Infrastructure OU. 
 ###############################################################################
 resource "aws_organizations_organizational_unit" "infrastructure" {
   name      = "Infrastructure OU"
   parent_id = one(aws_organizations_organization.org.roots).id
+}
+
+###############################################################################
+# Import Infrastructure OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.infrastructure
+  id = "ou-b51u-rdgtk5ev"
 }
 
 ###############################################################################
@@ -43,11 +59,27 @@ resource "aws_organizations_organizational_unit" "prod" {
 }
 
 ###############################################################################
+# Import Prod Workloads OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.prod
+  id = "ou-b51u-znxstv50"
+}
+
+###############################################################################
 # Create Security OU. 
 ###############################################################################
 resource "aws_organizations_organizational_unit" "security" {
   name      = "Security OU"
   parent_id = one(aws_organizations_organization.org.roots).id
+}
+
+###############################################################################
+# Import Security OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.security
+  id = "ou-b51u-w4gk5aqc"
 }
 
 ###############################################################################
@@ -59,11 +91,27 @@ resource "aws_organizations_organizational_unit" "test" {
 }
 
 ###############################################################################
+# Import Test Workloads OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.test
+  id = "ou-b51u-dh5m52xy"
+}
+
+###############################################################################
 # Create Workloads OU. 
 ###############################################################################
 resource "aws_organizations_organizational_unit" "workloads" {
   name      = "Workloads OU"
   parent_id = one(aws_organizations_organization.org.roots).id
+}
+
+###############################################################################
+# Import Workloads OU.
+###############################################################################
+import {
+  to = aws_organizations_organizational_unit.workloads
+  id = "ou-b51u-tkmay1hb"
 }
 
 
@@ -81,6 +129,15 @@ resource "aws_organizations_account" "dev" {
   }
   name      = "Development Account"
   parent_id = aws_organizations_organizational_unit.dev.id
+}
+
+
+###############################################################################
+# Import Development Account.
+###############################################################################
+import {
+  to = aws_organizations_account.dev
+  id = "851725244929"
 }
 
 
@@ -120,6 +177,15 @@ resource "aws_organizations_account" "prod" {
 
 
 ###############################################################################
+# Import Production Account.
+###############################################################################
+import {
+  to = aws_organizations_account.prod
+  id = "339713056709"
+}
+
+
+###############################################################################
 # Create Testing Account.
 ###############################################################################
 resource "aws_organizations_account" "test" {
@@ -133,6 +199,15 @@ resource "aws_organizations_account" "test" {
 
 
 ###############################################################################
+# Import Testing Account.
+###############################################################################
+import {
+  to = aws_organizations_account.test
+  id = "905418424983"
+}
+
+
+###############################################################################
 # Create Shared Services Account.
 ###############################################################################
 resource "aws_organizations_account" "shared_services" {
@@ -142,6 +217,15 @@ resource "aws_organizations_account" "shared_services" {
   }
   name      = "Shared Services Account"
   parent_id = aws_organizations_organizational_unit.infrastructure.id
+}
+
+
+###############################################################################
+# Import Shared Services Account.
+###############################################################################
+import {
+  to = aws_organizations_account.shared_services
+  id = "058264146029"
 }
 
 

@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "unprotected_resource_writer" {
 ###############################################################################
 # Permits writing of Terraform state.
 ###############################################################################
-data "aws_iam_policy_document" "terraform_state_writer" {
+data "aws_iam_policy_document" "sso_terraform_state_writer" {
   statement {
     sid    = "TerraformStateBucketWrite"
     effect = "Allow"
@@ -89,13 +89,13 @@ data "aws_iam_policy_document" "terraform_state_writer" {
 ###############################################################################
 
 ###############################################################################
-# Add policy TerraformStateWriter to account Development Account.
+# Add policy SSOTerraformStateWriter to account Development Account.
 ###############################################################################
-resource "aws_iam_policy" "dev_terraform_state_writer" {
-  name        = "TerraformStateWriter"
+resource "aws_iam_policy" "dev_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
   provider    = aws.dev
   description = "Some description."
-  policy      = data.aws_iam_policy_document.terraform_state_writer.json
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
 }
 
 ###############################################################################
@@ -113,13 +113,13 @@ resource "aws_iam_policy" "dev_unprotected_resource_writer" {
 ###############################################################################
 
 ###############################################################################
-# Add policy TerraformStateWriter to account Master Account.
+# Add policy SSOTerraformStateWriter to account Master Account.
 ###############################################################################
-resource "aws_iam_policy" "master_terraform_state_writer" {
-  name        = "TerraformStateWriter"
+resource "aws_iam_policy" "master_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
   provider    = aws.master
   description = "Some description."
-  policy      = data.aws_iam_policy_document.terraform_state_writer.json
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
 }
 
 ###############################################################################
@@ -137,13 +137,13 @@ resource "aws_iam_policy" "master_unprotected_resource_writer" {
 ###############################################################################
 
 ###############################################################################
-# Add policy TerraformStateWriter to account Production Account.
+# Add policy SSOTerraformStateWriter to account Production Account.
 ###############################################################################
-resource "aws_iam_policy" "prod_terraform_state_writer" {
-  name        = "TerraformStateWriter"
+resource "aws_iam_policy" "prod_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
   provider    = aws.prod
   description = "Some description."
-  policy      = data.aws_iam_policy_document.terraform_state_writer.json
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
 }
 
 ###############################################################################
@@ -161,13 +161,13 @@ resource "aws_iam_policy" "prod_unprotected_resource_writer" {
 ###############################################################################
 
 ###############################################################################
-# Add policy TerraformStateWriter to account Testing Account.
+# Add policy SSOTerraformStateWriter to account Testing Account.
 ###############################################################################
-resource "aws_iam_policy" "test_terraform_state_writer" {
-  name        = "TerraformStateWriter"
+resource "aws_iam_policy" "test_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
   provider    = aws.test
   description = "Some description."
-  policy      = data.aws_iam_policy_document.terraform_state_writer.json
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
 }
 
 ###############################################################################
@@ -185,13 +185,13 @@ resource "aws_iam_policy" "test_unprotected_resource_writer" {
 ###############################################################################
 
 ###############################################################################
-# Add policy TerraformStateWriter to account Shared Services Account.
+# Add policy SSOTerraformStateWriter to account Shared Services Account.
 ###############################################################################
-resource "aws_iam_policy" "shared_services_terraform_state_writer" {
-  name        = "TerraformStateWriter"
+resource "aws_iam_policy" "shared_services_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
   provider    = aws.shared_services
   description = "Some description."
-  policy      = data.aws_iam_policy_document.terraform_state_writer.json
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
 }
 
 ###############################################################################
@@ -234,20 +234,20 @@ resource "aws_ssoadmin_managed_policy_attachment" "terraform_admin_administrator
 }
 
 ###############################################################################
-# Add policy TerraformStateWriter to permission set TerraformAdmin.
+# Add policy SSOTerraformStateWriter to permission set TerraformAdmin.
 ###############################################################################
-resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_admin_terraform_state_writer" {
+resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_admin_sso_terraform_state_writer" {
   customer_managed_policy_reference {
-    name = "TerraformStateWriter"
+    name = "SSOTerraformStateWriter"
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.terraform_admin.arn
   depends_on = [
-    aws_iam_policy.dev_terraform_state_writer,
-    aws_iam_policy.master_terraform_state_writer,
-    aws_iam_policy.prod_terraform_state_writer,
-    aws_iam_policy.test_terraform_state_writer,
-    aws_iam_policy.shared_services_terraform_state_writer
+    aws_iam_policy.dev_sso_terraform_state_writer,
+    aws_iam_policy.master_sso_terraform_state_writer,
+    aws_iam_policy.prod_sso_terraform_state_writer,
+    aws_iam_policy.test_sso_terraform_state_writer,
+    aws_iam_policy.shared_services_sso_terraform_state_writer
   ]
 }
 ###############################################################################
@@ -282,20 +282,20 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment
 }
 
 ###############################################################################
-# Add policy TerraformStateWriter to permission set TerraformDeployment.
+# Add policy SSOTerraformStateWriter to permission set TerraformDeployment.
 ###############################################################################
-resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment_terraform_state_writer" {
+resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment_sso_terraform_state_writer" {
   customer_managed_policy_reference {
-    name = "TerraformStateWriter"
+    name = "SSOTerraformStateWriter"
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
   depends_on = [
-    aws_iam_policy.dev_terraform_state_writer,
-    aws_iam_policy.master_terraform_state_writer,
-    aws_iam_policy.prod_terraform_state_writer,
-    aws_iam_policy.test_terraform_state_writer,
-    aws_iam_policy.shared_services_terraform_state_writer
+    aws_iam_policy.dev_sso_terraform_state_writer,
+    aws_iam_policy.master_sso_terraform_state_writer,
+    aws_iam_policy.prod_sso_terraform_state_writer,
+    aws_iam_policy.test_sso_terraform_state_writer,
+    aws_iam_policy.shared_services_sso_terraform_state_writer
   ]
 }
 
@@ -329,7 +329,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_dev_terraform_admin"
   target_id          = aws_organizations_account.dev.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
   ]
 }
 
@@ -344,7 +344,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_master_terraform_adm
   target_id          = aws_organizations_account.master.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
   ]
 }
 
@@ -359,7 +359,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_prod_terraform_admin
   target_id          = aws_organizations_account.prod.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
   ]
 }
 
@@ -374,7 +374,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_test_terraform_admin
   target_id          = aws_organizations_account.test.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
   ]
 }
 
@@ -389,7 +389,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_shared_services_terr
   target_id          = aws_organizations_account.shared_services.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
   ]
 }
 ###############################################################################
@@ -416,7 +416,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_dev_terraform_d
   target_id          = aws_organizations_account.dev.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
   ]
 }
 
@@ -431,7 +431,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_master_terrafor
   target_id          = aws_organizations_account.master.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
   ]
 }
 
@@ -446,7 +446,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_prod_terraform_
   target_id          = aws_organizations_account.prod.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
   ]
 }
 
@@ -461,7 +461,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_test_terraform_
   target_id          = aws_organizations_account.test.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
   ]
 }
 
@@ -476,7 +476,7 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_shared_services
   target_id          = aws_organizations_account.shared_services.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
-    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_terraform_state_writer
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
   ]
 }
 

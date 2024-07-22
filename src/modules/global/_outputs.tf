@@ -19,28 +19,53 @@ output "config" {
   value = {
     accounts = {
       dev = {
+        id                  = "851725244929"
         email               = "jscroft+metastructure-001-dev@gmail.com"
         name                = "Development Account"
         organizational_unit = "dev"
+        permission_set_roles = {
+          terraform_admin      = "AWSReservedSSO_TerraformAdmin_14c7146d8c9e3f77"
+          terraform_deployment = "AWSReservedSSO_TerraformDeployment_53db264911201ce3"
+        }
       }
       master = {
+        id    = "058264094369"
         email = "jscroft+metastructure-001-master@gmail.com"
         name  = "Master Account"
+        permission_set_roles = {
+          terraform_admin      = "AWSReservedSSO_TerraformAdmin_53a8f9a4117a4137"
+          terraform_deployment = "AWSReservedSSO_TerraformDeployment_da44f492d1e86145"
+        }
       }
       prod = {
+        id                  = "339713056709"
         email               = "jscroft+metastructure-001-prod@gmail.com"
         name                = "Production Account"
         organizational_unit = "prod"
+        permission_set_roles = {
+          terraform_admin      = "AWSReservedSSO_TerraformAdmin_1ec326f7d0c74c6d"
+          terraform_deployment = "AWSReservedSSO_TerraformDeployment_fe84d1e1f233298a"
+        }
       }
       test = {
+        id                  = "905418424983"
         email               = "jscroft+metastructure-001-test@gmail.com"
         name                = "Testing Account"
         organizational_unit = "test"
+        permission_set_roles = {
+          terraform_admin      = "AWSReservedSSO_TerraformAdmin_640f3ded95d7dfb2"
+          terraform_deployment = "AWSReservedSSO_TerraformDeployment_4ff2fe8e3fc41c17"
+        }
       }
       shared_services = {
+        id                  = "058264146029"
         email               = "jscroft+metastructure-001-shared_services@gmail.com"
         name                = "Shared Services Account"
         organizational_unit = "infrastructure"
+        permission_set_roles = {
+          terraform_admin      = "AWSReservedSSO_TerraformAdmin_b73d775513174968"
+          terraform_deployment = "AWSReservedSSO_TerraformDeployment_1e4616daf4b4a0a4"
+        }
       }
     }
     environments = {
@@ -73,31 +98,37 @@ output "config" {
     organization = {
       aws_region     = "us-east-1"
       github_org     = "metastructureniverous"
-      id             = "o-jbn1h63i9j"
+      id             = "o-6ex7fx1ub8"
       master_account = "master"
       namespace      = "metastructure-001"
     }
     organizational_units = {
       dev = {
         name   = "Dev Workloads OU"
+        id     = "ou-b51u-ogux3wiu"
         parent = "workloads"
       }
       infrastructure = {
         name = "Infrastructure OU"
+        id   = "ou-b51u-rdgtk5ev"
       }
       prod = {
         name   = "Prod Workloads OU"
+        id     = "ou-b51u-znxstv50"
         parent = "workloads"
       }
       security = {
         name = "Security OU"
+        id   = "ou-b51u-w4gk5aqc"
       }
       test = {
         name   = "Test Workloads OU"
+        id     = "ou-b51u-dh5m52xy"
         parent = "workloads"
       }
       workloads = {
         name = "Workloads OU"
+        id   = "ou-b51u-tkmay1hb"
       }
     }
     sso = {
@@ -151,7 +182,7 @@ output "config" {
           name        = "TerraformAdmin"
           policies = [
             "AdministratorAccess",
-            "terraform_state_writer"
+            "sso_terraform_state_writer"
           ]
         }
         terraform_deployment = {
@@ -159,12 +190,12 @@ output "config" {
           name        = "TerraformDeployment"
           policies = [
             "unprotected_resource_writer",
-            "terraform_state_writer"
+            "sso_terraform_state_writer"
           ]
         }
       }
       policies = {
-        terraform_state_writer      = "TerraformStateWriter"
+        sso_terraform_state_writer  = "SSOTerraformStateWriter"
         unprotected_resource_writer = "UnprotectedResourceWriter"
       }
       reference = {
@@ -192,23 +223,23 @@ output "config" {
         }
         account_policies = {
           dev = [
-            "terraform_state_writer",
+            "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
           master = [
-            "terraform_state_writer",
+            "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
           prod = [
-            "terraform_state_writer",
+            "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
           test = [
-            "terraform_state_writer",
+            "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
           shared_services = [
-            "terraform_state_writer",
+            "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
         }
@@ -216,60 +247,60 @@ output "config" {
           terraform_admin = {
             dev = {
               terraform_admin = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             master = {
               terraform_admin = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             prod = {
               terraform_admin = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             test = {
               terraform_admin = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             shared_services = {
               terraform_admin = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
           }
           terraform_deployment = {
             dev = {
               terraform_deployment = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             master = {
               terraform_deployment = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             prod = {
               terraform_deployment = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             test = {
               terraform_deployment = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
             shared_services = {
               terraform_deployment = [
-                "terraform_state_writer"
+                "sso_terraform_state_writer"
               ]
             }
           }
         }
         policy_accounts = {
-          terraform_state_writer = [
+          sso_terraform_state_writer = [
             "dev",
             "master",
             "prod",

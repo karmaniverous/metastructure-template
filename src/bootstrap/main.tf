@@ -46,25 +46,15 @@ import {
 }
 
 ###############################################################################
-# Create S3 state bucket on the Terraform state account.
+# Create & import user bootstrap-admin.
 ###############################################################################
-resource "aws_s3_bucket" "terraform_state" {
-  provider = aws.terraform_state_account
-  bucket   = module.global.config.terraform.state.bucket
+resource "aws_iam_user" "bootstrap_admin" {
+  name = "bootstrap-admin"
 }
 
-###############################################################################
-# Create DynamoDB state lock table on the Terraform state account.
-###############################################################################
-resource "aws_dynamodb_table" "terraform_state_lock" {
-  provider     = aws.terraform_state_account
-  name         = module.global.config.terraform.state.lock_table
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
+import {
+  to = aws_iam_user.bootstrap_admin
+  id = "bootstrap-admin"
 }
 
 ###############################################################################
@@ -99,3 +89,4 @@ resource "aws_identitystore_group_membership" "sso_admin_terraform_admin" {
   group_id          = aws_identitystore_group.terraform_admin.group_id
   member_id         = aws_identitystore_user.sso_admin.user_id
 }
+

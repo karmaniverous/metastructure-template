@@ -33,7 +33,8 @@ provider "aws" {
 provider "aws" {
   alias = "terraform_state_account"
   assume_role {
-    role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
+    role_arn     = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    session_name = "terraform"
   }
   default_tags {
     tags = {
@@ -49,7 +50,8 @@ provider "aws" {
 provider "aws" {
   alias = "dev"
   assume_role {
-    role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
+    role_arn     = "arn:aws:iam::${aws_organizations_account.dev.id}:role/OrganizationAccountAccessRole"
+    session_name = "terraform"
   }
   default_tags {
     tags = {
@@ -79,7 +81,8 @@ provider "aws" {
 provider "aws" {
   alias = "prod"
   assume_role {
-    role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
+    role_arn     = "arn:aws:iam::${aws_organizations_account.prod.id}:role/OrganizationAccountAccessRole"
+    session_name = "terraform"
   }
   default_tags {
     tags = {
@@ -96,7 +99,8 @@ provider "aws" {
 provider "aws" {
   alias = "test"
   assume_role {
-    role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
+    role_arn     = "arn:aws:iam::${aws_organizations_account.test.id}:role/OrganizationAccountAccessRole"
+    session_name = "terraform"
   }
   default_tags {
     tags = {
@@ -113,7 +117,8 @@ provider "aws" {
 provider "aws" {
   alias = "shared_services"
   assume_role {
-    role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
+    role_arn     = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    session_name = "terraform"
   }
   default_tags {
     tags = {
