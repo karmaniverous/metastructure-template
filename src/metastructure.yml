@@ -47,9 +47,7 @@ accounts:
 batches:
   bootstrap:
     cli_defaults:
-      # assume_role: OrganizationAccountAccessRole
-      aws_profile: META-BOOTSTRAP
-      permission_set: terraform_admin
+      assume_role: OrganizationAccountAccessRole
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     generators:

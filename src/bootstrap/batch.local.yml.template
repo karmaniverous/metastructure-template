@@ -19,6 +19,7 @@
 # 4. DO NOT place sensitive info in this template file, as it is NOT
 #    .gitignored!
 
-aws_profile: MY-PROFILE
+assume_role: OrganizationAccountAccessRole
+aws_profile: TERRAFORM-ADMIN
 sso_permission_set: terraform_admin
-use_local_state: false
+use_local_state: true
