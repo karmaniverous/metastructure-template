@@ -27,6 +27,7 @@ batches:
   bootstrap:
     cli_defaults:
       assume_role: OrganizationAccountAccessRole
+      use_local_state: true
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     generators:
