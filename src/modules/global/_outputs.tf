@@ -198,6 +198,7 @@ output "config" {
         sso_terraform_state_writer  = "SSOTerraformStateWriter"
         unprotected_resource_writer = "UnprotectedResourceWriter"
       }
+      start_url = "https://d-9067ed918c.awsapps.com/start#/"
       reference = {
         account_permission_sets = {
           dev = [

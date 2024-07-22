@@ -9,15 +9,17 @@
 
 terraform { {{#if params.use_local_state}} 
     backend "local" {}{{else}}
-    backend "s3" { {{#if (logic "or" params.permission_set (logic "and" params.assume_role (logic "not" (lodash "eq" terraform.state.account organization.master_account))))}}
+    backend "s3" { {{#if (logic "and" params.assume_role (logic "not" (lodash "eq" terraform.state.account organization.master_account)))}}
         assume_role = { 
           role_arn = "arn:aws:iam::{{lodash "get" accounts (params terraform.state.account "id")}}:role/{{#if params.assume_role}}{{params.assume_role}}{{else}}{{lodash "get" accounts (params terraform.state.account "permission_set_roles" params.permission_set)}}{{/if}}"
         }{{/if}}
         bucket = "{{terraform.state.bucket}}"
         dynamodb_table = "{{terraform.state.lock_table}}" 
         encrypt = true 
-        key = "{{terraform.state.key}}"
-        region = "{{organization.aws_region}}" 
+        key = "{{terraform.state.key}}"{{#if params.permission_set}}
+        profile = "{{terraform.state.account}}"{{/if}}
+        region = "{{organization.aws_region}}" {{#if params.permission_set}}
+  shared_config_files = ["./_shared_config.local"]{{/if}}
         workspace_key_prefix = "{{params.batch}}" 
     }{{/if}}
 }

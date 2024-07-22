@@ -1,0 +1,6 @@
+{{#if params.permission_set}}{{#each accounts}}{{#if this.id}}[profile {{@key}}]
+sso_start_url = {{../sso.start_url}}
+sso_region = {{../organization.aws_region}}
+sso_account_id = {{this.id}}
+sso_role_name = {{lodash "get" ../sso.permission_sets (params ../params.permission_set "name")}}
+{{/if}}{{/each}}{{/if}}

@@ -6,14 +6,17 @@
   },
   "ignore": [
     "*",
+    "**/*.hbs",
+    "**/*.local",
+    "**/*.local.*",
+    "**/*.tfstate",
+    "*/**/.terraform.lock.hcl",
+    "*/**/.terraform/*",
     ".github/",
     ".lefthook/",
     ".rollup.cache/",
-    "license.txt",
-    "*/**/.terraform.lock.hcl",
-    "*/**/.terraform/*",
-    "**/*.hbs",
-    "**/*.tfstate"
+    "_credentials.txt",
+    "license.txt"
   ],
   "ignoreFile": "./.gitignore",
   "license": "src/license.txt",

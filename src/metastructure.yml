@@ -50,12 +50,14 @@ batches:
       use_local_state: true
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
+    shared_config_path: src/bootstrap/_shared_config.local
     generators:
       src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
       src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
       src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
       src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
       src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
+      src/bootstrap/_shared_config.local: src/bootstrap/templates/shared_config.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
 environments:
@@ -108,6 +110,7 @@ organizational_units:
     name: Workloads OU
     id: ou-b51u-tkmay1hb
 sso:
+  start_url: https://d-9067ed918c.awsapps.com/start#/
   groups:
     terraform_admin:
       name: TerraformAdmin
