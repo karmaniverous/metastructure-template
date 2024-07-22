@@ -8,42 +8,22 @@ accounts:
     name: Development Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
-    id: '637423361006'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_64191101df3cdb82
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_01321b7b4a9c07a0
   master:
     name: Master Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
-    id: '654654394187'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_2ddfbbe9c9cfbdd7
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_98719b4a79a0fea8
   prod:
     name: Production Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}prod@gmail.com
     organizational_unit: prod
-    id: '211125660719'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_98490783e264dada
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_5003c440964fd4d5
   test:
     name: Testing Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}test@gmail.com
     organizational_unit: test
-    id: '851725577893'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_7f72f6b45fbc0668
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_f27063b129fdc78d
   shared_services:
     name: Shared Services Account
     email: jscroft+{{#if
       organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
-    id: '730335248075'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_1c44ff89e9d7dfcb
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_453e52335876cfc2
 batches:
   bootstrap:
     cli_defaults:
@@ -89,24 +69,18 @@ organizational_units:
   dev:
     name: Dev Workloads OU
     parent: workloads
-    id: ou-d1r1-57lwd19o
   infrastructure:
     name: Infrastructure OU
-    id: ou-d1r1-y8cotbce
   prod:
     name: Prod Workloads OU
     parent: workloads
-    id: ou-d1r1-vzraoavq
   security:
     name: Security OU
-    id: ou-d1r1-hf0dozrb
   test:
     name: Test Workloads OU
     parent: workloads
-    id: ou-d1r1-nah0pbxf
   workloads:
     name: Workloads OU
-    id: ou-d1r1-3nghv48g
 sso:
   groups:
     terraform_admin:
