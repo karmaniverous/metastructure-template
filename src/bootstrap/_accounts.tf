@@ -1,3 +1,10 @@
+/*
+******************* DO NOT EDIT THIS NOTICE *****************
+This legal notice is added to every supported source code
+file at every commit. See the README for more info!                          
+*************************************************************
+*/
+
 ###############################################################################
 ###############################################################################
 ####                                                                       ####
@@ -116,7 +123,7 @@ import {
 # Create Development Account.
 ###############################################################################
 resource "aws_organizations_account" "dev" {
-  email    = "jscroft+metastructure.000.dev@gmail.com"
+  email = "jscroft+metastructure-001-dev@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -138,7 +145,7 @@ import {
 # Create Master Account.
 ###############################################################################
 resource "aws_organizations_account" "master" {
-  email    = "jscroft+metastructure.000.master@gmail.com"
+  email = "jscroft+metastructure-001-master@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -160,7 +167,7 @@ import {
 # Create Production Account.
 ###############################################################################
 resource "aws_organizations_account" "prod" {
-  email    = "jscroft+metastructure.000.prod@gmail.com"
+  email = "jscroft+metastructure-001-prod@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -182,7 +189,7 @@ import {
 # Create Testing Account.
 ###############################################################################
 resource "aws_organizations_account" "test" {
-  email    = "jscroft+metastructure.000.0.test@gmail.com"
+  email = "jscroft+metastructure-001-test@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -204,7 +211,7 @@ import {
 # Create Shared Services Account.
 ###############################################################################
 resource "aws_organizations_account" "shared_services" {
-  email    = "jscroft+metastructure.000.shared_services@gmail.com"
+  email = "jscroft+metastructure-001-shared_services@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }

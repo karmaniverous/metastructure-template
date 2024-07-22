@@ -6,7 +6,7 @@
 accounts:
   dev:
     name: Development Account
-    email: jscroft+metastructure.000.dev@gmail.com
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
     id: '637423361006'
     permission_set_roles:
@@ -14,14 +14,14 @@ accounts:
       terraform_deployment: AWSReservedSSO_TerraformDeployment_01321b7b4a9c07a0
   master:
     name: Master Account
-    email: jscroft+metastructure.000.master@gmail.com
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
     id: '654654394187'
     permission_set_roles:
       terraform_admin: AWSReservedSSO_TerraformAdmin_2ddfbbe9c9cfbdd7
       terraform_deployment: AWSReservedSSO_TerraformDeployment_98719b4a79a0fea8
   prod:
     name: Production Account
-    email: jscroft+metastructure.000.prod@gmail.com
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}prod@gmail.com
     organizational_unit: prod
     id: '211125660719'
     permission_set_roles:
@@ -29,7 +29,7 @@ accounts:
       terraform_deployment: AWSReservedSSO_TerraformDeployment_5003c440964fd4d5
   test:
     name: Testing Account
-    email: jscroft+metastructure.000.0.test@gmail.com
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}test@gmail.com
     organizational_unit: test
     id: '851725577893'
     permission_set_roles:
@@ -37,7 +37,8 @@ accounts:
       terraform_deployment: AWSReservedSSO_TerraformDeployment_f27063b129fdc78d
   shared_services:
     name: Shared Services Account
-    email: jscroft+metastructure.000.shared_services@gmail.com
+    email: jscroft+{{#if
+      organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
     id: '730335248075'
     permission_set_roles:
@@ -46,18 +47,17 @@ accounts:
 batches:
   bootstrap:
     cli_defaults:
-      assume_role: OrganizationAccountAccessRole
+      # assume_role: OrganizationAccountAccessRole
       aws_profile: META-BOOTSTRAP
+      permission_set: terraform_admin
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     generators:
       src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
       src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
-      src/bootstrap/_backend_override.tf: src/bootstrap/templates/backend-override.hbs
       src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
       src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
       src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
-      src/bootstrap/_providers_override.tf: src/bootstrap/templates/providers-override.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
 environments:
@@ -85,7 +85,7 @@ organization:
   aws_region: us-east-1
   github_org: metastructureniverous
   master_account: master
-  namespace: metastructure000
+  namespace: metastructure-001
   id: o-jbn1h63i9j
 organizational_units:
   dev:
@@ -113,12 +113,14 @@ sso:
   groups:
     terraform_admin:
       name: TerraformAdmin
-      description: Terraform administrators can create & manage all resources in all
+      description:
+        Terraform administrators can create & manage all resources in all
         accounts.
       account_permission_sets: terraform_admin
     terraform_deployment:
       name: TerraformDeployment
-      description: Terraform deployment users can create & manage all unprotected
+      description:
+        Terraform deployment users can create & manage all unprotected
         resources in all accounts.
       account_permission_sets: terraform_deployment
   permission_sets:
@@ -145,8 +147,8 @@ terraform:
   paths: src
   state:
     account: shared_services
-    bucket: '{{#if
-      organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
+    bucket: '{{#if organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
+
