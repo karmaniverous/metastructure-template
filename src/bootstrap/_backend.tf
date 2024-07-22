@@ -17,7 +17,7 @@ file at every commit. See the README for more info!
 terraform {
   backend "s3" {
     assume_role = {
-      role_arn = "arn:aws:iam::730335248075:role/AWSReservedSSO_TerraformAdmin_1c44ff89e9d7dfcb"
+      role_arn = "arn:aws:iam:::role/OrganizationAccountAccessRole"
     }
     bucket               = "metastructure-001-terraform-state"
     dynamodb_table       = "terraform-state-lock"

@@ -19,53 +19,28 @@ output "config" {
   value = {
     accounts = {
       dev = {
-        id                  = "637423361006"
         email               = "jscroft+metastructure-001-dev@gmail.com"
         name                = "Development Account"
         organizational_unit = "dev"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_64191101df3cdb82"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_01321b7b4a9c07a0"
-        }
       }
       master = {
-        id    = "654654394187"
         email = "jscroft+metastructure-001-master@gmail.com"
         name  = "Master Account"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_2ddfbbe9c9cfbdd7"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_98719b4a79a0fea8"
-        }
       }
       prod = {
-        id                  = "211125660719"
         email               = "jscroft+metastructure-001-prod@gmail.com"
         name                = "Production Account"
         organizational_unit = "prod"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_98490783e264dada"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_5003c440964fd4d5"
-        }
       }
       test = {
-        id                  = "851725577893"
         email               = "jscroft+metastructure-001-test@gmail.com"
         name                = "Testing Account"
         organizational_unit = "test"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_7f72f6b45fbc0668"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_f27063b129fdc78d"
-        }
       }
       shared_services = {
-        id                  = "730335248075"
         email               = "jscroft+metastructure-001-shared_services@gmail.com"
         name                = "Shared Services Account"
         organizational_unit = "infrastructure"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_1c44ff89e9d7dfcb"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_453e52335876cfc2"
-        }
       }
     }
     environments = {
@@ -105,30 +80,24 @@ output "config" {
     organizational_units = {
       dev = {
         name   = "Dev Workloads OU"
-        id     = "ou-d1r1-57lwd19o"
         parent = "workloads"
       }
       infrastructure = {
         name = "Infrastructure OU"
-        id   = "ou-d1r1-y8cotbce"
       }
       prod = {
         name   = "Prod Workloads OU"
-        id     = "ou-d1r1-vzraoavq"
         parent = "workloads"
       }
       security = {
         name = "Security OU"
-        id   = "ou-d1r1-hf0dozrb"
       }
       test = {
         name   = "Test Workloads OU"
-        id     = "ou-d1r1-nah0pbxf"
         parent = "workloads"
       }
       workloads = {
         name = "Workloads OU"
-        id   = "ou-d1r1-3nghv48g"
       }
     }
     sso = {
