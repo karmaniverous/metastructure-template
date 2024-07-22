@@ -116,7 +116,7 @@ This needs to be done manually. Follow these steps:
 
 1. Visit the IAM Identity Center page and enable IAM Identity Center with AWS Organizations (the default choice).
 
-1. In the IAM console (_not_ IAM Identity Center!) create new IAM user `bootstrap-admin`, attaching AWS managed policy `AdministratorAccess`. Once the user is created, attach an additional inline policy using the contents of [`OrgAdminAccessPolicy.json`](./src/bootstrap/OrgAdminAccessPolicy.json). **`bootstrap-admin` now has admin privileges across your entire organization! We'll delete this user at the end of the bootstrapping process.**
+1. In the IAM console (_not_ IAM Identity Center!) create new IAM user `bootstrap-admin`, attaching AWS managed policy `AdministratorAccess`. Once the user is created, attach an additional inline policy using the contents of [`BootstrapAdminPolicy.json`](./src/bootstrap/BootstrapAdminPolicy.json). **`bootstrap-admin` now has admin privileges across your entire organization! We'll delete this user at the end of the bootstrapping process.**
 
 1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
 

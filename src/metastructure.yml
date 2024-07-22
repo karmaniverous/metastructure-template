@@ -21,8 +21,7 @@ accounts:
     organizational_unit: test
   shared_services:
     name: Shared Services Account
-    email: jscroft+{{#if
-      organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
 batches:
   bootstrap:
