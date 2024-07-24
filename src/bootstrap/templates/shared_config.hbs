@@ -1,6 +1,6 @@
-{{#if params.permission_set}}{{#each accounts}}{{#if this.id}}[profile {{@key}}]
-sso_start_url = {{../sso.start_url}}
-sso_region = {{../organization.aws_region}}
+{{#if params.permission_set}}{{#each (lodash "get" sso.reference.permission_set_accounts params.permission_set)}}{{#with this as | accountKey |}}{{#with ../. as | root |}}{{#with (lodash "get" root.accounts accountKey) as | account |}}{{#if account.id}}[profile {{accountKey}}]
+sso_start_url = {{root.sso.start_url}}
+sso_region = {{root.organization.aws_region}}
 sso_account_id = {{this.id}}
-sso_role_name = {{lodash "get" ../sso.permission_sets (params ../params.permission_set "name")}}
-{{/if}}{{/each}}{{/if}}
+sso_role_name = {{lodash "get" root.sso.permission_sets (params root.params.permission_set "name")}}
+{{/if}}{{/with}}{{/with}}{{/with}}{{/each}}{{/if}}

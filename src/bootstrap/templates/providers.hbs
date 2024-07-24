@@ -28,7 +28,7 @@ provider "aws" { {{#if params.permission_set}}
 }
 
 ###############################################################################
-# Create a provider to assume the {{#if params.assume_role}}{{params.assume_role}}{{else}}{{lodash "get" accounts (params terraform.state.account "permission_set_roles" params.permission_set)}}{{/if}} 
+# Create a provider to assume the {{#if params.assume_role}}{{params.assume_role}}{{else}}{{lodash "get" sso.permission_sets (params params.permission_set "name")}} permission set{{/if}} 
 # role on the Terraform state account.
 ###############################################################################
 provider "aws" {
@@ -49,16 +49,16 @@ provider "aws" {
   region = module.global.config.organization.aws_region{{#if params.permission_set}}
   shared_config_files = ["./_shared_config.local"]{{/if}}
 }
-{{#each accounts}}
+{{#each (ifelse params.permission_set (lodash "get" sso.reference.permission_set_accounts params.permission_set) (lodash "keys" accounts))}}{{#with this as | accountKey |}}{{#with ../. as | root |}}{{#with (lodash "get" root.accounts accountKey) as | account |}}
 ###############################################################################
-# Create a provider {{#if (logic "or" ../params.permission_set (logic "and" ../params.assume_role (logic "not" (lodash "eq" @key ../organization.master_account))))}}to assume the {{#if ../params.assume_role}}{{../params.assume_role}}{{else}}{{lodash "get" this (params "permission_set_roles" ../params.permission_set)}}{{/if}} 
-# role {{/if}}on account {{this.name}}.
+# Create a provider {{#if (logic "or" root.params.permission_set (logic "and" root.params.assume_role (logic "not" (lodash "eq" this root.organization.master_account))))}}to assume the {{#if root.params.assume_role}}{{root.params.assume_role}}{{else}}{{lodash "get" root.sso.permission_sets (params root.params.permission_set "name")}} permission set{{/if}} 
+# role {{/if}}on account {{account.name}}.
 ###############################################################################
 provider "aws" { 
-  alias   = "{{@key}}"{{#if (logic "or" ../params.permission_set (logic "and" ../params.assume_role (logic "not" (lodash "eq" @key ../organization.master_account))))}}
+  alias   = "{{accountKey}}"{{#if (logic "or" root.params.permission_set (logic "and" root.params.assume_role (logic "not" (lodash "eq" accountKey root.organization.master_account))))}}
   assume_role { {{#if ../params.assume_role}}
-    role_arn = "arn:aws:iam::{{#if this.action}}{{this.id}}{{else}}${aws_organizations_account.{{@key}}.id}{{/if}}:role/{{../params.assume_role}}"{{/if}}
-    {{#if ../params.permission_set}}tags = {
+    role_arn = "arn:aws:iam::{{#if account.action}}{{account.id}}{{else}}${aws_organizations_account.{{accountKey}}.id}{{/if}}:role/{{root.params.assume_role}}"{{/if}}
+    {{#if root.params.permission_set}}tags = {
       Generator = "Terraform"
     }
     transitive_tag_keys = ["Generator"]
@@ -67,10 +67,10 @@ provider "aws" {
     tags = {
       Generator = "Terraform"
     }
-  }{{#if ../params.permission_set}}
-  profile = "{{@key}}"{{/if}}
-  region = module.global.config.organization.aws_region{{#if ../params.permission_set}}
+  }{{#if root.params.permission_set}}
+  profile = "{{accountKey}}"{{/if}}
+  region = module.global.config.organization.aws_region{{#if root.params.permission_set}}
   shared_config_files = ["./_shared_config.local"]{{/if}}
 }
 
-{{/each}}
+{{/with}}{{/with}}{{/with}}{{/each}}

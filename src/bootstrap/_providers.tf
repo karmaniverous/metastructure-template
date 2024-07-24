@@ -35,7 +35,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on the Terraform state account.
 ###############################################################################
 provider "aws" {
@@ -55,8 +55,9 @@ provider "aws" {
   region              = module.global.config.organization.aws_region
   shared_config_files = ["./_shared_config.local"]
 }
+
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Development Account.
 ###############################################################################
 provider "aws" {
@@ -77,8 +78,9 @@ provider "aws" {
   shared_config_files = ["./_shared_config.local"]
 }
 
+
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Master Account.
 ###############################################################################
 provider "aws" {
@@ -99,8 +101,9 @@ provider "aws" {
   shared_config_files = ["./_shared_config.local"]
 }
 
+
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Production Account.
 ###############################################################################
 provider "aws" {
@@ -121,8 +124,9 @@ provider "aws" {
   shared_config_files = ["./_shared_config.local"]
 }
 
+
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Testing Account.
 ###############################################################################
 provider "aws" {
@@ -143,8 +147,9 @@ provider "aws" {
   shared_config_files = ["./_shared_config.local"]
 }
 
+
 ###############################################################################
-# Create a provider to assume the  
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Shared Services Account.
 ###############################################################################
 provider "aws" {

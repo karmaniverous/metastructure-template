@@ -280,6 +280,22 @@ output "config" {
             }
           }
         }
+        permission_set_accounts = {
+          terraform_admin = [
+            "dev",
+            "master",
+            "prod",
+            "test",
+            "shared_services"
+          ]
+          terraform_deployment = [
+            "dev",
+            "master",
+            "prod",
+            "test",
+            "shared_services"
+          ]
+        }
         policy_accounts = {
           sso_terraform_state_writer = [
             "dev",
