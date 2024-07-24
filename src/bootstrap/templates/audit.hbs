@@ -1,0 +1,66 @@
+###############################################################################
+###############################################################################
+####                                                                       ####
+####              THIS FILE WAS GENERATED WITH METASTRUCTURE               ####
+####                       DO NOT EDIT IT MANUALLY!                        ####
+####                                                                       ####
+###############################################################################
+###############################################################################
+
+###############################################################################
+###############################################################################
+#### ACCOUNT S3 ACCESS LOG BUCKETS
+###############################################################################
+###############################################################################
+
+{{#each accounts}}
+###############################################################################
+# {{lodash "toUpper" this.name}} S3 ACCESS LOG BUCKET 
+###############################################################################
+
+###############################################################################
+# Create account {{this.name}} S3 access log bucket. 
+###############################################################################
+resource "aws_s3_bucket" "s3_access_log_{{@key}}" {
+  provider = aws.{{@key}}
+  bucket = "{{../organization.namespace}}-{{namify "s3" @key}}-{{../organization.s3_access_log_token}}"
+}
+
+###############################################################################
+# Configure account {{this.name}} S3 access log bucket SSE. 
+###############################################################################
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3_access_log_{{@key}}" {
+  provider = aws.{{@key}}
+  bucket = aws_s3_bucket.s3_access_log_{{@key}}.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+###############################################################################
+# Configure account {{this.name}} S3 access log bucket policy. 
+###############################################################################
+resource "aws_s3_bucket_policy" "s3_access_log_{{@key}}" {
+  provider = aws.{{@key}}
+  bucket = aws_s3_bucket.s3_access_log_{{@key}}.bucket
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowLogging"
+        Effect = "Allow"
+        Principal = {
+          Service = "logging.s3.amazonaws.com"
+        }
+        Action   = "s3:PutObject"
+        Resource = "${aws_s3_bucket.s3_access_log_{{@key}}.arn}/*"
+      }
+    ]
+  })
+}
+
+{{/each}}
+

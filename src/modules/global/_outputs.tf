@@ -76,11 +76,12 @@ output "config" {
       }
     }
     organization = {
-      aws_region     = "us-east-1"
-      github_org     = "metastructureniverous"
-      id             = "o-6ex7fx1ub8"
-      master_account = "master"
-      namespace      = "metastructure-001"
+      aws_region          = "us-east-1"
+      github_org          = "metastructureniverous"
+      id                  = "o-6ex7fx1ub8"
+      master_account      = "master"
+      namespace           = "metastructure-001"
+      s3_access_log_token = "s3-access-logs"
     }
     organizational_units = {
       dev = {

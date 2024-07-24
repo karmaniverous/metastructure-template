@@ -31,14 +31,15 @@ accounts:
 batches:
   bootstrap:
     cli_defaults:
-      assume_role: null
-      use_local_state: false
       permission_set: terraform_admin
+      assume_role: null
+      aws_profile: META-SSO-ADMIN
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     shared_config_path: src/bootstrap/_shared_config.local
     generators:
       src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
+      src/bootstrap/_audit.tf: src/bootstrap/templates/audit.hbs
       src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
       src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
       src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
@@ -72,6 +73,7 @@ organization:
   github_org: metastructureniverous
   master_account: master
   namespace: metastructure-001
+  s3_access_log_token: s3-access-logs
   id: o-6ex7fx1ub8
 organizational_units:
   dev:
