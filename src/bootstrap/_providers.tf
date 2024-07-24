@@ -35,7 +35,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_b73d775513174968 
+# Create a provider to assume the  
 # role on the Terraform state account.
 ###############################################################################
 provider "aws" {
@@ -56,7 +56,7 @@ provider "aws" {
   shared_config_files = ["./_shared_config.local"]
 }
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_14c7146d8c9e3f77 
+# Create a provider to assume the  
 # role on account Development Account.
 ###############################################################################
 provider "aws" {
@@ -78,7 +78,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_53a8f9a4117a4137 
+# Create a provider to assume the  
 # role on account Master Account.
 ###############################################################################
 provider "aws" {
@@ -100,7 +100,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_1ec326f7d0c74c6d 
+# Create a provider to assume the  
 # role on account Production Account.
 ###############################################################################
 provider "aws" {
@@ -122,7 +122,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_640f3ded95d7dfb2 
+# Create a provider to assume the  
 # role on account Testing Account.
 ###############################################################################
 provider "aws" {
@@ -144,7 +144,7 @@ provider "aws" {
 }
 
 ###############################################################################
-# Create a provider to assume the AWSReservedSSO_TerraformAdmin_b73d775513174968 
+# Create a provider to assume the  
 # role on account Shared Services Account.
 ###############################################################################
 provider "aws" {

@@ -9,45 +9,31 @@ accounts:
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
     id: '851725244929'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_14c7146d8c9e3f77
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_53db264911201ce3
   master:
     name: Master Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
     id: '058264094369'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_53a8f9a4117a4137
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_da44f492d1e86145
   prod:
     name: Production Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}prod@gmail.com
     organizational_unit: prod
     id: '339713056709'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_1ec326f7d0c74c6d
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_fe84d1e1f233298a
   test:
     name: Testing Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}test@gmail.com
     organizational_unit: test
     id: '905418424983'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_640f3ded95d7dfb2
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_4ff2fe8e3fc41c17
   shared_services:
     name: Shared Services Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
     id: '058264146029'
-    permission_set_roles:
-      terraform_admin: AWSReservedSSO_TerraformAdmin_b73d775513174968
-      terraform_deployment: AWSReservedSSO_TerraformDeployment_1e4616daf4b4a0a4
 batches:
   bootstrap:
     cli_defaults:
-      assume_role: OrganizationAccountAccessRole
-      use_local_state: true
+      assume_role: null
+      use_local_state: false
+      permission_set: terraform_admin
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     shared_config_path: src/bootstrap/_shared_config.local
@@ -148,4 +134,3 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
-

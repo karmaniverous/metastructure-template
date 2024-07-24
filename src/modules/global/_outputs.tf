@@ -23,49 +23,29 @@ output "config" {
         email               = "jscroft+metastructure-001-dev@gmail.com"
         name                = "Development Account"
         organizational_unit = "dev"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_14c7146d8c9e3f77"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_53db264911201ce3"
-        }
       }
       master = {
         id    = "058264094369"
         email = "jscroft+metastructure-001-master@gmail.com"
         name  = "Master Account"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_53a8f9a4117a4137"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_da44f492d1e86145"
-        }
       }
       prod = {
         id                  = "339713056709"
         email               = "jscroft+metastructure-001-prod@gmail.com"
         name                = "Production Account"
         organizational_unit = "prod"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_1ec326f7d0c74c6d"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_fe84d1e1f233298a"
-        }
       }
       test = {
         id                  = "905418424983"
         email               = "jscroft+metastructure-001-test@gmail.com"
         name                = "Testing Account"
         organizational_unit = "test"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_640f3ded95d7dfb2"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_4ff2fe8e3fc41c17"
-        }
       }
       shared_services = {
         id                  = "058264146029"
         email               = "jscroft+metastructure-001-shared_services@gmail.com"
         name                = "Shared Services Account"
         organizational_unit = "infrastructure"
-        permission_set_roles = {
-          terraform_admin      = "AWSReservedSSO_TerraformAdmin_b73d775513174968"
-          terraform_deployment = "AWSReservedSSO_TerraformDeployment_1e4616daf4b4a0a4"
-        }
       }
     }
     environments = {
