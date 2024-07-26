@@ -8,18 +8,18 @@
 ###############################################################################
 
 terraform { {{#if cli_params.use_local_state}} 
-    backend "local" {}{{else}}
-    backend "s3" { {{#if (logic "and" cli_params.assume_role (logic "not" (lodash "eq" terraform.state.account organization.master_account)))}}
-        assume_role = { 
-          role_arn = "arn:aws:iam::{{lodash "get" accounts (params terraform.state.account "id")}}:role/{{#if cli_params.assume_role}}{{cli_params.assume_role}}{{else}}{{lodash "get" accounts (params terraform.state.account "permission_set_roles" cli_params.permission_set)}}{{/if}}"
-        }{{/if}}
-        bucket = "{{terraform.state.bucket}}"
-        dynamodb_table = "{{terraform.state.lock_table}}" 
-        encrypt = true 
-        key = "{{terraform.state.key}}"{{#if cli_params.permission_set}}
-        profile = "{{terraform.state.account}}"{{/if}}
-        region = "{{organization.aws_region}}" {{#if cli_params.permission_set}}
-  shared_config_files = ["./_shared_config.local"]{{/if}}
-        workspace_key_prefix = "{{cli_params.batch}}" 
+  backend "local" {}{{else}}
+  backend "s3" { {{#if (logic "and" cli_params.assume_role (logic "not" (lodash "eq" organization.key_accounts.terraform_state organization.key_accounts.master)))}}
+    assume_role = { 
+      role_arn = "arn:aws:iam::{{lodash "get" accounts (params organization.key_accounts.terraform_state "id")}}:role/{{#if cli_params.assume_role}}{{cli_params.assume_role}}{{else}}{{lodash "get" accounts (params organization.key_accounts.terraform_state "permission_set_roles" cli_params.permission_set)}}{{/if}}"
     }{{/if}}
+    bucket = "{{terraform.state.bucket}}"
+    dynamodb_table = "{{terraform.state.lock_table}}" 
+    encrypt = true 
+    key = "{{terraform.state.key}}"{{#if (logic "or" cli_params.permission_set cli_params.aws_profile)}}
+    profile = "{{ifelse cli_params.permission_set organization.key_accounts.terraform_state cli_params.aws_profile}}"{{/if}}
+    region = "{{organization.aws_region}}" {{#if cli_params.permission_set}}
+    shared_config_files = ["./_shared_config.local"]{{/if}}
+    workspace_key_prefix = "{{cli_params.batch}}" 
+  }{{/if}}
 }

@@ -9,6 +9,11 @@ accounts:
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
     id: '851725244929'
+  log_archive:
+    name: Log Archive Account
+    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}log_archive@gmail.com
+    organizational_unit: security
+    id: "010438503788"
   master:
     name: Master Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
@@ -31,9 +36,8 @@ accounts:
 batches:
   bootstrap:
     cli_defaults:
-      permission_set: terraform_admin
-      assume_role: null
-      aws_profile: META-SSO-ADMIN
+      assume_role: OrganizationAccountAccessRole
+      use_local_state: false
     cli_defaults_path: src/bootstrap/batch.local.yml
     path: src/bootstrap
     shared_config_path: src/bootstrap/_shared_config.local
@@ -70,8 +74,10 @@ environments:
     gha_on_push_branches: preview/**
 organization:
   aws_region: us-east-1
-  github_org: metastructureniverous
-  master_account: master
+  key_accounts:
+    log_archive: log_archive
+    master: master
+    terraform_state: shared_services
   namespace: metastructure-001
   s3_access_log_token: s3-access-logs
   id: o-6ex7fx1ub8
@@ -131,7 +137,6 @@ terraform:
   aws_version: '>= 5.56.1'
   paths: src
   state:
-    account: shared_services
     bucket: '{{#if organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
     key: terraform.tfstate
     lock_table: terraform-state-lock

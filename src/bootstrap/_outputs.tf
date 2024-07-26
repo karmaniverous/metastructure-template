@@ -25,6 +25,9 @@ output "accounts" {
     dev = {
       id = aws_organizations_account.dev.id
     }
+    log_archive = {
+      id = aws_organizations_account.log_archive.id
+    }
     master = {
       id = aws_organizations_account.master.id
     }

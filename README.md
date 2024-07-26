@@ -120,6 +120,10 @@ This needs to be done manually. Follow these steps:
 
 1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
 
+## Accounts
+
+https://aws.amazon.com/blogs/mt/best-practices-for-organizational-units-with-aws-organizations/
+
 ## External Identity Providers
 
 Most organizations will want to use some kind of external identity provider as their source for user authentication & accounts. This project is designed to be agnostic to that decision. Once externally-sourced users are assigned to the SSO Groups defined in [`metastructure.yml`](./src/metastructure.yml), they will be able to create AWS profiles and leverage their assigned permissions just like any user.
@@ -131,6 +135,34 @@ Here are some references for setting up external identity providers:
 To faciitate demonstration, this project will create users directly in AWS SSO.
 
 ## Some Gotchas
+
+### Creating Accounts
+
+An AWS SSO profile only provides credentials specific to a given account. Metastructure marshalls these profiles for you so you can easily make changes to multiple accounts, but the underlying accounts must nonetheless EXIST to support operations under an SSO credential.
+
+Therefore, if you make any changes to your `metastructure.yml` that include the creation of a new account and try to apply those changes using an SSO credential, you will see an error in the console like this:
+
+```text
+No account id for new_account_key. Use non-SSO authentication!
+```
+
+To resolve this error, just switch to a non-SSO credential and try again.
+
+If you already applied your changes using a non-SSO credential and don't think you should be seeing this error, remember that in this case Metastructure depends on the account id it receives from the Terraform batch output. When you applied your changes, you may have left off the `-u` flag, so that Metastructure didn't update your config from the Terraform batch output.
+
+To resolve this, just run:
+
+```bash
+metastructure -b <batch> -u`
+```
+
+When applying changes involving account creation, you might see an error like this:
+
+```text
+Your account is not signed up for the S3 service. You must sign up before you can use S3.
+```
+
+Metastructure will want to set up a number of standard resources in a new account, and AWS often confirms account creation to Terraform before the new account is fully provisioned. Just wait a few seconds and try again.
 
 ### Removing & Destroying Accounts
 

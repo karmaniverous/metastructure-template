@@ -142,6 +142,19 @@ import {
 
 
 ###############################################################################
+# Create Log Archive Account.
+###############################################################################
+resource "aws_organizations_account" "log_archive" {
+  email = "jscroft+metastructure-001-log_archive@gmail.com"
+  lifecycle {
+    ignore_changes = [email, name]
+  }
+  name      = "Log Archive Account"
+  parent_id = aws_organizations_organizational_unit.security.id
+}
+
+
+###############################################################################
 # Create Master Account.
 ###############################################################################
 resource "aws_organizations_account" "master" {

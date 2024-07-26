@@ -24,6 +24,11 @@ output "config" {
         name                = "Development Account"
         organizational_unit = "dev"
       }
+      log_archive = {
+        email               = "jscroft+metastructure-001-log_archive@gmail.com"
+        name                = "Log Archive Account"
+        organizational_unit = "security"
+      }
       master = {
         id    = "058264094369"
         email = "jscroft+metastructure-001-master@gmail.com"
@@ -76,10 +81,13 @@ output "config" {
       }
     }
     organization = {
-      aws_region          = "us-east-1"
-      github_org          = "metastructureniverous"
-      id                  = "o-6ex7fx1ub8"
-      master_account      = "master"
+      aws_region = "us-east-1"
+      id         = "o-6ex7fx1ub8"
+      key_accounts = {
+        master          = "master"
+        terraform_state = "shared_services"
+        log_archive     = "log_archive"
+      }
       namespace           = "metastructure-001"
       s3_access_log_token = "s3-access-logs"
     }
@@ -119,6 +127,9 @@ output "config" {
             dev = [
               "terraform_admin"
             ]
+            log_archive = [
+              "terraform_admin"
+            ]
             master = [
               "terraform_admin"
             ]
@@ -138,6 +149,9 @@ output "config" {
         terraform_deployment = {
           account_permission_sets = {
             dev = [
+              "terraform_deployment"
+            ]
+            log_archive = [
               "terraform_deployment"
             ]
             master = [
@@ -186,6 +200,10 @@ output "config" {
             "terraform_admin",
             "terraform_deployment"
           ]
+          log_archive = [
+            "terraform_admin",
+            "terraform_deployment"
+          ]
           master = [
             "terraform_admin",
             "terraform_deployment"
@@ -205,6 +223,10 @@ output "config" {
         }
         account_policies = {
           dev = [
+            "sso_terraform_state_writer",
+            "unprotected_resource_writer"
+          ]
+          log_archive = [
             "sso_terraform_state_writer",
             "unprotected_resource_writer"
           ]
@@ -228,6 +250,11 @@ output "config" {
         group_account_permission_set_policies = {
           terraform_admin = {
             dev = {
+              terraform_admin = [
+                "sso_terraform_state_writer"
+              ]
+            }
+            log_archive = {
               terraform_admin = [
                 "sso_terraform_state_writer"
               ]
@@ -259,6 +286,11 @@ output "config" {
                 "sso_terraform_state_writer"
               ]
             }
+            log_archive = {
+              terraform_deployment = [
+                "sso_terraform_state_writer"
+              ]
+            }
             master = {
               terraform_deployment = [
                 "sso_terraform_state_writer"
@@ -284,6 +316,7 @@ output "config" {
         permission_set_accounts = {
           terraform_admin = [
             "dev",
+            "log_archive",
             "master",
             "prod",
             "test",
@@ -291,6 +324,7 @@ output "config" {
           ]
           terraform_deployment = [
             "dev",
+            "log_archive",
             "master",
             "prod",
             "test",
@@ -300,6 +334,7 @@ output "config" {
         policy_accounts = {
           sso_terraform_state_writer = [
             "dev",
+            "log_archive",
             "master",
             "prod",
             "test",
@@ -307,6 +342,7 @@ output "config" {
           ]
           unprotected_resource_writer = [
             "dev",
+            "log_archive",
             "master",
             "prod",
             "test",
@@ -321,7 +357,6 @@ output "config" {
         "src"
       ]
       state = {
-        account    = "shared_services"
         bucket     = "metastructure-001-terraform-state"
         key        = "terraform.tfstate"
         lock_table = "terraform-state-lock"

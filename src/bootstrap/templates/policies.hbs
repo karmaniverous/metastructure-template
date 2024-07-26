@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "sso_terraform_state_writer" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = [aws_organizations_account.{{terraform.state.account}}.id]
+      values   = [aws_organizations_account.{{organization.key_accounts.terraform_state}}.id]
     }
   }
 
@@ -61,12 +61,12 @@ data "aws_iam_policy_document" "sso_terraform_state_writer" {
       "dynamodb:UpdateItem"
     ]
     resources = [
-      "arn:aws:dynamodb:${aws_organizations_account.{{terraform.state.account}}.id}:{{terraform.state.lock_table}}",
+      "arn:aws:dynamodb:${aws_organizations_account.{{organization.key_accounts.terraform_state}}.id}:{{terraform.state.lock_table}}",
     ]
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = [aws_organizations_account.{{terraform.state.account}}.id]
+      values   = [aws_organizations_account.{{organization.key_accounts.terraform_state}}.id]
     }
   }
 }

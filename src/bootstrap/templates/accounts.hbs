@@ -46,13 +46,13 @@ resource "aws_organizations_account" "{{@key}}" {
   parent_id = {{#if this.organizational_unit}}aws_organizations_organizational_unit.{{this.organizational_unit}}.id{{else}}null{{/if}}
 }
 
-{{/unless}}{{#if (logic "or" this.id (lodash "eq" @key ../organization/master_account))}}{{#unless action}}
+{{/unless}}{{#if (logic "or" this.id (lodash "eq" @key ../organization/key_accounts/master))}}{{#unless action}}
 ###############################################################################
 # Import {{this.name}}.
 ###############################################################################
 import {
   to = aws_organizations_account.{{@key}}
-  id = {{#if (lodash "eq" @key ../organization/master_account)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
+  id = {{#if (lodash "eq" @key ../organization/key_accounts/master)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
 }
 
 {{/unless}}{{/if}}{{#if (lodash "eq" action "remove")}}

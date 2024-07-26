@@ -69,6 +69,54 @@ resource "aws_s3_bucket_policy" "s3_access_log_dev" {
 }
 
 ###############################################################################
+# LOG ARCHIVE ACCOUNT S3 ACCESS LOG BUCKET 
+###############################################################################
+
+###############################################################################
+# Create account Log Archive Account S3 access log bucket. 
+###############################################################################
+resource "aws_s3_bucket" "s3_access_log_log_archive" {
+  provider = aws.log_archive
+  bucket   = "metastructure-001-log-archive-s3-access-logs"
+}
+
+###############################################################################
+# Configure account Log Archive Account S3 access log bucket SSE. 
+###############################################################################
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3_access_log_log_archive" {
+  provider = aws.log_archive
+  bucket   = aws_s3_bucket.s3_access_log_log_archive.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+###############################################################################
+# Configure account Log Archive Account S3 access log bucket policy. 
+###############################################################################
+resource "aws_s3_bucket_policy" "s3_access_log_log_archive" {
+  provider = aws.log_archive
+  bucket   = aws_s3_bucket.s3_access_log_log_archive.bucket
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowLogging"
+        Effect = "Allow"
+        Principal = {
+          Service = "logging.s3.amazonaws.com"
+        }
+        Action   = "s3:PutObject"
+        Resource = "${aws_s3_bucket.s3_access_log_log_archive.arn}/*"
+      }
+    ]
+  })
+}
+
+###############################################################################
 # MASTER ACCOUNT S3 ACCESS LOG BUCKET 
 ###############################################################################
 

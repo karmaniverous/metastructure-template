@@ -109,6 +109,30 @@ resource "aws_iam_policy" "dev_unprotected_resource_writer" {
 }
 
 ###############################################################################
+# ACCOUNT: LOG ARCHIVE ACCOUNT
+###############################################################################
+
+###############################################################################
+# Add policy SSOTerraformStateWriter to account Log Archive Account.
+###############################################################################
+resource "aws_iam_policy" "log_archive_sso_terraform_state_writer" {
+  name        = "SSOTerraformStateWriter"
+  provider    = aws.log_archive
+  description = "Some description."
+  policy      = data.aws_iam_policy_document.sso_terraform_state_writer.json
+}
+
+###############################################################################
+# Add policy UnprotectedResourceWriter to account Log Archive Account.
+###############################################################################
+resource "aws_iam_policy" "log_archive_unprotected_resource_writer" {
+  name        = "UnprotectedResourceWriter"
+  provider    = aws.log_archive
+  description = "Some description."
+  policy      = data.aws_iam_policy_document.unprotected_resource_writer.json
+}
+
+###############################################################################
 # ACCOUNT: MASTER ACCOUNT
 ###############################################################################
 
@@ -244,6 +268,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_admin_sso_
   permission_set_arn = aws_ssoadmin_permission_set.terraform_admin.arn
   depends_on = [
     aws_iam_policy.dev_sso_terraform_state_writer,
+    aws_iam_policy.log_archive_sso_terraform_state_writer,
     aws_iam_policy.master_sso_terraform_state_writer,
     aws_iam_policy.prod_sso_terraform_state_writer,
     aws_iam_policy.test_sso_terraform_state_writer,
@@ -274,6 +299,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment
   permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
   depends_on = [
     aws_iam_policy.dev_unprotected_resource_writer,
+    aws_iam_policy.log_archive_unprotected_resource_writer,
     aws_iam_policy.master_unprotected_resource_writer,
     aws_iam_policy.prod_unprotected_resource_writer,
     aws_iam_policy.test_unprotected_resource_writer,
@@ -292,6 +318,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "terraform_deployment
   permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
   depends_on = [
     aws_iam_policy.dev_sso_terraform_state_writer,
+    aws_iam_policy.log_archive_sso_terraform_state_writer,
     aws_iam_policy.master_sso_terraform_state_writer,
     aws_iam_policy.prod_sso_terraform_state_writer,
     aws_iam_policy.test_sso_terraform_state_writer,
@@ -327,6 +354,21 @@ resource "aws_ssoadmin_account_assignment" "terraform_admin_dev_terraform_admin"
   principal_id       = aws_identitystore_group.terraform_admin.group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.dev.id
+  target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
+  ]
+}
+
+###############################################################################
+# Assign permission set terraform_admin to account log_archive for group terraform_admin.
+###############################################################################
+resource "aws_ssoadmin_account_assignment" "terraform_admin_log_archive_terraform_admin" {
+  instance_arn       = local.sso_arn
+  permission_set_arn = aws_ssoadmin_permission_set.terraform_admin.arn
+  principal_id       = aws_identitystore_group.terraform_admin.group_id
+  principal_type     = "GROUP"
+  target_id          = aws_organizations_account.log_archive.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_admin_sso_terraform_state_writer
@@ -414,6 +456,21 @@ resource "aws_ssoadmin_account_assignment" "terraform_deployment_dev_terraform_d
   principal_id       = aws_identitystore_group.terraform_deployment.group_id
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.dev.id
+  target_type        = "AWS_ACCOUNT"
+  depends_on = [
+    aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
+  ]
+}
+
+###############################################################################
+# Assign permission set terraform_deployment to account log_archive for group terraform_deployment.
+###############################################################################
+resource "aws_ssoadmin_account_assignment" "terraform_deployment_log_archive_terraform_deployment" {
+  instance_arn       = local.sso_arn
+  permission_set_arn = aws_ssoadmin_permission_set.terraform_deployment.arn
+  principal_id       = aws_identitystore_group.terraform_deployment.group_id
+  principal_type     = "GROUP"
+  target_id          = aws_organizations_account.log_archive.id
   target_type        = "AWS_ACCOUNT"
   depends_on = [
     aws_ssoadmin_customer_managed_policy_attachment.terraform_deployment_sso_terraform_state_writer
