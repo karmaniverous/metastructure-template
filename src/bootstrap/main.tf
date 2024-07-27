@@ -74,7 +74,7 @@ resource "aws_identitystore_user" "sso_admin" {
   display_name = "SSO Admin"
   emails {
     primary = true
-    value   = "jscroft+${module.global.config.organization.namespace}-sso-admin@gmail.com"
+    value   = "jscroft+${module.global.config.organization.tokens.namespace}-sso-admin@gmail.com"
   }
   identity_store_id = local.sso_id
   name {

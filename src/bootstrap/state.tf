@@ -30,7 +30,7 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
 ###############################################################################
 data "aws_s3_bucket" "s3_access_log_key_account_terraform_state" {
   provider = aws.key_account_terraform_state
-  bucket   = "${module.global.config.organization.namespace}-${replace(module.global.config.organization.key_accounts.terraform_state, "_", "-")}-${module.global.config.organization.s3_access_log_token}"
+  bucket   = "${module.global.config.organization.tokens.namespace}-${replace(module.global.config.organization.key_accounts.terraform_state, "_", "-")}-${module.global.config.organization.tokens.s3_access_log}"
 }
 
 ###############################################################################

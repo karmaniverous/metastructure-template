@@ -6,31 +6,31 @@
 accounts:
   dev:
     name: Development Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}dev@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}dev@gmail.com
     organizational_unit: dev
     id: '851725244929'
   log_archive:
     name: Log Archive Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}log_archive@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}log_archive@gmail.com
     organizational_unit: security
     id: '010438503788'
   master:
     name: Master Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}master@gmail.com
     id: '058264094369'
   prod:
     name: Production Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}prod@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}prod@gmail.com
     organizational_unit: prod
     id: '339713056709'
   test:
     name: Testing Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}test@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}test@gmail.com
     organizational_unit: test
     id: '905418424983'
   shared_services:
     name: Shared Services Account
-    email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}shared_services@gmail.com
+    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
     id: '058264146029'
 batches:
@@ -78,8 +78,9 @@ organization:
     log_archive: log_archive
     master: master
     terraform_state: shared_services
-  namespace: metastructure-001
-  s3_access_log_token: s3-access-logs
+  tokens:
+    namespace: metastructure-001
+    s3_access_log: s3-access-logs
   id: o-6ex7fx1ub8
 organizational_units:
   dev:
@@ -137,7 +138,7 @@ terraform:
   aws_version: '>= 5.56.1'
   paths: src
   state:
-    bucket: '{{#if organization.namespace}}{{organization.namespace}}-{{/if}}terraform-state'
+    bucket: '{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}terraform-state'
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'

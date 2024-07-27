@@ -89,8 +89,10 @@ output "config" {
         terraform_state = "shared_services"
         log_archive     = "log_archive"
       }
-      namespace           = "metastructure-001"
-      s3_access_log_token = "s3-access-logs"
+      tokens = {
+        namespace     = "metastructure-001"
+        s3_access_log = "s3-access-logs"
+      }
     }
     organizational_units = {
       dev = {
@@ -144,8 +146,8 @@ output "config" {
               "terraform_admin"
             ]
           }
-          description = "Terraform administrators can create & manage all resources in all accounts."
           name        = "TerraformAdmin"
+          description = "Terraform administrators can create & manage all resources in all accounts."
         }
         terraform_deployment = {
           account_permission_sets = {
@@ -168,26 +170,26 @@ output "config" {
               "terraform_deployment"
             ]
           }
-          description = "Terraform deployment users can create & manage all unprotected resources in all accounts."
           name        = "TerraformDeployment"
+          description = "Terraform deployment users can create & manage all unprotected resources in all accounts."
         }
       }
       permission_sets = {
         terraform_admin = {
-          description = "Permits creation & management of all resources."
-          name        = "TerraformAdmin"
+          name = "TerraformAdmin"
           policies = [
             "AdministratorAccess",
             "sso_terraform_state_writer"
           ]
+          description = "Permits creation & management of all resources."
         }
         terraform_deployment = {
-          description = "Permits creation & management of all unprotected resources."
-          name        = "TerraformDeployment"
+          name = "TerraformDeployment"
           policies = [
             "unprotected_resource_writer",
             "sso_terraform_state_writer"
           ]
+          description = "Permits creation & management of all unprotected resources."
         }
       }
       policies = {

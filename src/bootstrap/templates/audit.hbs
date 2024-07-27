@@ -23,7 +23,7 @@
 ###############################################################################
 resource "aws_s3_bucket" "s3_access_log_{{@key}}" {
   provider = aws.{{@key}}
-  bucket = "{{../organization.namespace}}-{{namify "s3" @key}}-{{../organization.s3_access_log_token}}"
+  bucket = "{{../organization.tokens.namespace}}-{{namify "s3" @key}}-{{../organization.tokens.s3_access_log}}"
 }
 
 ###############################################################################
