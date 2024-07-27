@@ -20,6 +20,6 @@ terraform { {{#if cli_params.use_local_state}}
     profile = "{{ifelse cli_params.permission_set organization.key_accounts.terraform_state cli_params.aws_profile}}"{{/if}}
     region = "{{organization.aws_region}}" {{#if cli_params.permission_set}}
     shared_config_files = ["./_shared_config.local"]{{/if}}
-    workspace_key_prefix = "{{cli_params.batch}}" 
+    workspace_key_prefix = "workspaces" 
   }{{/if}}
 }

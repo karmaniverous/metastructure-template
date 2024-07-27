@@ -148,12 +148,12 @@ No account id for new_account_key. Use non-SSO authentication!
 
 To resolve this error, just switch to a non-SSO credential and try again.
 
-If you already applied your changes using a non-SSO credential and don't think you should be seeing this error, remember that in this case Metastructure depends on the account id it receives from the Terraform batch output. When you applied your changes, you may have left off the `-u` flag, so that Metastructure didn't update your config from the Terraform batch output.
+If you already applied your changes using a non-SSO credential and don't think you should be seeing this error, remember that in this case Metastructure depends on the account id it receives from the Terraform workspace output. When you applied your changes, you may have left off the `-u` flag, so that Metastructure didn't update your config from the Terraform workspace output.
 
 To resolve this, just run:
 
 ```bash
-metastructure -b <batch> -u`
+metastructure -b <workspace> -u`
 ```
 
 When applying changes involving account creation, you might see an error like this:

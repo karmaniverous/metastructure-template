@@ -33,24 +33,6 @@ accounts:
     email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
     id: '058264146029'
-batches:
-  bootstrap:
-    cli_defaults:
-      assume_role: OrganizationAccountAccessRole
-      use_local_state: false
-    cli_defaults_path: src/bootstrap/batch.local.yml
-    path: src/bootstrap
-    shared_config_path: src/bootstrap/_shared_config.local
-    generators:
-      src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
-      src/bootstrap/_audit.tf: src/bootstrap/templates/audit.hbs
-      src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
-      src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
-      src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
-      src/bootstrap/_shared_config.local: src/bootstrap/templates/shared_config.hbs
-      src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
-      src/bootstrap/_terraform.tf: src/templates/terraform.hbs
-      src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
 environments:
   bali:
     account: dev
@@ -142,3 +124,21 @@ terraform:
     key: terraform.tfstate
     lock_table: terraform-state-lock
   terraform_version: '>= 1.9.0'
+workspaces:
+  bootstrap:
+    cli_defaults:
+      assume_role: OrganizationAccountAccessRole
+      use_local_state: false
+    cli_defaults_path: src/bootstrap/workspace.local.yml
+    path: src/bootstrap
+    shared_config_path: src/bootstrap/_shared_config.local
+    generators:
+      src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
+      src/bootstrap/_audit.tf: src/bootstrap/templates/audit.hbs
+      src/bootstrap/_backend.tf: src/templates/backend.hbs
+      src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
+      src/bootstrap/_providers.tf: src/templates/providers.hbs
+      src/bootstrap/_shared_config.local: src/templates/shared_config.hbs
+      src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
+      src/bootstrap/_terraform.tf: src/templates/terraform.hbs
+      src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
