@@ -6,7 +6,7 @@ file at every commit. See the README for more info!
 */
 
 ###############################################################################
-# Create S3 state bucket at the key account assigned to Terraform state.
+# Create Terraform state bucket at the key account assigned to Terraform state.
 ###############################################################################
 resource "aws_s3_bucket" "terraform_state" {
   provider = aws.key_account_terraform_state
@@ -14,8 +14,8 @@ resource "aws_s3_bucket" "terraform_state" {
 }
 
 ###############################################################################
-# Enable versioning on the S3 state bucket at the key account assigned to 
-# Terraform state.
+# Enable versioning on the Terraform state bucket at the key account assigned 
+# to Terraform state.
 ###############################################################################
 resource "aws_s3_bucket_versioning" "terraform_state" {
   provider = aws.key_account_terraform_state
@@ -26,22 +26,14 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
 }
 
 ###############################################################################
-# Find S3 access log bucket at the key account assigned to Terraform state.
-###############################################################################
-data "aws_s3_bucket" "s3_access_log_key_account_terraform_state" {
-  provider = aws.key_account_terraform_state
-  bucket   = "${module.global.config.organization.tokens.namespace}-${replace(module.global.config.organization.key_accounts.terraform_state, "_", "-")}-${module.global.config.organization.tokens.s3_access_log}"
-}
-
-###############################################################################
-# Enable logging on the S3 state bucket at the key account assigned to 
-# Terraform state.
+# Enable access logging on the Terraform state bucket at the key account 
+# assigned to Terraform state.
 ###############################################################################
 resource "aws_s3_bucket_logging" "terraform_state" {
   provider      = aws.key_account_terraform_state
   bucket        = aws_s3_bucket.terraform_state.id
   target_bucket = data.aws_s3_bucket.s3_access_log_key_account_terraform_state.id
-  target_prefix = "${module.global.config.terraform.state.bucket}/"
+  target_prefix = aws_s3_bucket.terraform_state.bucket
 }
 
 ###############################################################################

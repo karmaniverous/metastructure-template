@@ -19,11 +19,18 @@
 ###############################################################################
 
 ###############################################################################
+# Create account {{this.name}} S3 access log bucket name. 
+###############################################################################
+locals {
+  s3_access_log_bucket_{{@key}} = "{{../organization.tokens.namespace}}-{{namify "s3" @key}}-{{../organization.tokens.s3_access_log}}"
+}
+
+###############################################################################
 # Create account {{this.name}} S3 access log bucket. 
 ###############################################################################
 resource "aws_s3_bucket" "s3_access_log_{{@key}}" {
   provider = aws.{{@key}}
-  bucket = "{{../organization.tokens.namespace}}-{{namify "s3" @key}}-{{../organization.tokens.s3_access_log}}"
+  bucket = local.s3_access_log_bucket_{{@key}}
 }
 
 ###############################################################################
@@ -61,6 +68,15 @@ resource "aws_s3_bucket_policy" "s3_access_log_{{@key}}" {
     ]
   })
 }
+{{#each ../organization/key_accounts}}{{#if (lodash "eq" this @../key)}}
+###############################################################################
+# Create {{@key}} access point to account {{../this.name}} 
+# S3 access log bucket.
+###############################################################################
+data "aws_s3_bucket" "s3_access_log_key_account_{{@key}}" {
+  provider = aws.{{@../key}}
+  bucket   = local.s3_access_log_bucket_{{@../key}}
+}
 
-{{/each}}
+{{/if}}{{/each}}{{/each}}
 

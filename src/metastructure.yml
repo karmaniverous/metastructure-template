@@ -62,6 +62,7 @@ organization:
     terraform_state: shared_services
   tokens:
     namespace: metastructure-001
+    audit_log: audit-logs
     s3_access_log: s3-access-logs
   id: o-6ex7fx1ub8
 organizational_units:
@@ -134,11 +135,11 @@ workspaces:
     shared_config_path: src/bootstrap/_shared_config.local
     generators:
       src/bootstrap/_accounts.tf: src/bootstrap/templates/accounts.hbs
-      src/bootstrap/_audit.tf: src/bootstrap/templates/audit.hbs
       src/bootstrap/_backend.tf: src/templates/backend.hbs
       src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
       src/bootstrap/_providers.tf: src/templates/providers.hbs
       src/bootstrap/_shared_config.local: src/templates/shared_config.hbs
+      src/bootstrap/_s3_access_logs.tf: src/bootstrap/templates/s3_access_logs.hbs
       src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs

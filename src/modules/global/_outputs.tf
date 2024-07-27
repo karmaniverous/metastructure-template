@@ -91,6 +91,7 @@ output "config" {
       }
       tokens = {
         namespace     = "metastructure-001"
+        audit_log     = "audit-logs"
         s3_access_log = "s3-access-logs"
       }
     }
