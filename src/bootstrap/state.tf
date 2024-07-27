@@ -26,13 +26,21 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
 }
 
 ###############################################################################
+# Find S3 access log bucket at the key account assigned to Terraform state.
+###############################################################################
+data "aws_s3_bucket" "s3_access_log_key_account_terraform_state" {
+  provider = aws.key_account_terraform_state
+  bucket   = "${module.global.config.organization.namespace}-${replace(module.global.config.organization.key_accounts.terraform_state, "_", "-")}-${module.global.config.organization.s3_access_log_token}"
+}
+
+###############################################################################
 # Enable logging on the S3 state bucket at the key account assigned to 
 # Terraform state.
 ###############################################################################
 resource "aws_s3_bucket_logging" "terraform_state" {
   provider      = aws.key_account_terraform_state
   bucket        = aws_s3_bucket.terraform_state.id
-  target_bucket = aws_s3_bucket.s3_access_log_shared_services.id
+  target_bucket = data.aws_s3_bucket.s3_access_log_key_account_terraform_state.id
   target_prefix = "${module.global.config.terraform.state.bucket}/"
 }
 

@@ -25,6 +25,7 @@ output "config" {
         organizational_unit = "dev"
       }
       log_archive = {
+        id                  = "010438503788"
         email               = "jscroft+metastructure-001-log_archive@gmail.com"
         name                = "Log Archive Account"
         organizational_unit = "security"

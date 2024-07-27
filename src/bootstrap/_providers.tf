@@ -18,158 +18,200 @@ file at every commit. See the README for more info!
 # Default provider.
 ###############################################################################
 provider "aws" {
+  assume_role {
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "master"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role at the key account assigned to log archive.
 ###############################################################################
 provider "aws" {
   alias = "key_account_log_archive"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.log_archive.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "log_archive"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role at the key account assigned to Terraform state.
 ###############################################################################
 provider "aws" {
   alias = "key_account_terraform_state"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "shared_services"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Development Account.
 ###############################################################################
 provider "aws" {
   alias = "dev"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.dev.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "dev"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Log Archive Account.
 ###############################################################################
 provider "aws" {
   alias = "log_archive"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.log_archive.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "log_archive"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Master Account.
 ###############################################################################
 provider "aws" {
   alias = "master"
+  assume_role {
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
+  }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "master"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Production Account.
 ###############################################################################
 provider "aws" {
   alias = "prod"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.prod.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "prod"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Testing Account.
 ###############################################################################
 provider "aws" {
   alias = "test"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.test.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "test"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 
 
 ###############################################################################
-# Create a provider to assume the OrganizationAccountAccessRole 
+# Create a provider to assume the TerraformAdmin permission set 
 # role on account Shared Services Account.
 ###############################################################################
 provider "aws" {
   alias = "shared_services"
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.shared_services.id}:role/OrganizationAccountAccessRole"
+    tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
   }
   default_tags {
     tags = {
       Generator = "Terraform"
     }
   }
-  profile = "META-BOOTSTRAP"
-  region  = module.global.config.organization.aws_region
+  profile             = "shared_services"
+  region              = module.global.config.organization.aws_region
+  shared_config_files = ["./_shared_config.local"]
 }
 

@@ -16,15 +16,13 @@ file at every commit. See the README for more info!
 
 terraform {
   backend "s3" {
-    assume_role = {
-      role_arn = "arn:aws:iam::058264146029:role/OrganizationAccountAccessRole"
-    }
     bucket               = "metastructure-001-terraform-state"
     dynamodb_table       = "terraform-state-lock"
     encrypt              = true
     key                  = "terraform.tfstate"
-    profile              = "META-BOOTSTRAP"
+    profile              = "shared_services"
     region               = "us-east-1"
+    shared_config_files  = ["./_shared_config.local"]
     workspace_key_prefix = "bootstrap"
   }
 }
