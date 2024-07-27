@@ -13,7 +13,7 @@ accounts:
     name: Log Archive Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}log_archive@gmail.com
     organizational_unit: security
-    id: "010438503788"
+    id: '010438503788'
   master:
     name: Master Account
     email: jscroft+{{#if organization.namespace}}{{organization.namespace}}-{{/if}}master@gmail.com
@@ -46,9 +46,9 @@ batches:
       src/bootstrap/_audit.tf: src/bootstrap/templates/audit.hbs
       src/bootstrap/_backend.tf: src/bootstrap/templates/backend.hbs
       src/bootstrap/_outputs.tf: src/bootstrap/templates/outputs.hbs
-      src/bootstrap/_policies.tf: src/bootstrap/templates/policies.hbs
       src/bootstrap/_providers.tf: src/bootstrap/templates/providers.hbs
       src/bootstrap/_shared_config.local: src/bootstrap/templates/shared_config.hbs
+      src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
 environments:
