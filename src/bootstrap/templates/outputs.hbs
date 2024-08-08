@@ -8,11 +8,28 @@
 ###############################################################################
 
 ###############################################################################
+# Organization
 ###############################################################################
-#### GENERATE OUTPUT
-###############################################################################
-###############################################################################
+output "organization" {
+  value = { 
+    id = aws_organizations_organization.org.id
+  }
+}
 
+###############################################################################
+# Organizational Units
+###############################################################################
+output "organizational_units" {
+  value = { {{#each organizational_units}}
+    {{@key}} = {
+      id = aws_organizations_organizational_unit.{{@key}}.id
+    } {{/each}}
+  }
+}
+
+###############################################################################
+# Accounts
+###############################################################################
 output "accounts" {
   value = { {{#each accounts}}{{#unless action}}
     {{@key}} = {
@@ -21,16 +38,3 @@ output "accounts" {
   }
 }
 
-output "organization" {
-  value = { 
-    id = aws_organizations_organization.org.id
-  }
-}
-
-output "organizational_units" {
-  value = { {{#each organizational_units}}
-    {{@key}} = {
-      id = aws_organizations_organizational_unit.{{@key}}.id
-    } {{/each}}
-  }
-}

@@ -15,9 +15,7 @@ file at every commit. See the README for more info!
 ###############################################################################
 
 ###############################################################################
-###############################################################################
 #### ACCOUNT S3 ACCESS LOG BUCKETS
-###############################################################################
 ###############################################################################
 
 ###############################################################################
@@ -130,7 +128,7 @@ resource "aws_s3_bucket_policy" "s3_access_log_log_archive" {
 }
 
 ###############################################################################
-# Create log_archive access point to account Log Archive Account 
+# Create log_archive data source for account Log Archive Account 
 # S3 access log bucket.
 ###############################################################################
 data "aws_s3_bucket" "s3_access_log_key_account_log_archive" {
@@ -194,7 +192,7 @@ resource "aws_s3_bucket_policy" "s3_access_log_master" {
 }
 
 ###############################################################################
-# Create master access point to account Master Account 
+# Create master data source for account Master Account 
 # S3 access log bucket.
 ###############################################################################
 data "aws_s3_bucket" "s3_access_log_key_account_master" {
@@ -366,7 +364,7 @@ resource "aws_s3_bucket_policy" "s3_access_log_shared_services" {
 }
 
 ###############################################################################
-# Create terraform_state access point to account Shared Services Account 
+# Create terraform_state data source for account Shared Services Account 
 # S3 access log bucket.
 ###############################################################################
 data "aws_s3_bucket" "s3_access_log_key_account_terraform_state" {

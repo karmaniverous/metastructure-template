@@ -15,11 +15,43 @@ file at every commit. See the README for more info!
 ###############################################################################
 
 ###############################################################################
+# Organization
 ###############################################################################
-#### GENERATE OUTPUT
-###############################################################################
-###############################################################################
+output "organization" {
+  value = {
+    id = aws_organizations_organization.org.id
+  }
+}
 
+###############################################################################
+# Organizational Units
+###############################################################################
+output "organizational_units" {
+  value = {
+    dev = {
+      id = aws_organizations_organizational_unit.dev.id
+    }
+    infrastructure = {
+      id = aws_organizations_organizational_unit.infrastructure.id
+    }
+    prod = {
+      id = aws_organizations_organizational_unit.prod.id
+    }
+    security = {
+      id = aws_organizations_organizational_unit.security.id
+    }
+    test = {
+      id = aws_organizations_organizational_unit.test.id
+    }
+    workloads = {
+      id = aws_organizations_organizational_unit.workloads.id
+    }
+  }
+}
+
+###############################################################################
+# Accounts
+###############################################################################
 output "accounts" {
   value = {
     dev = {
@@ -43,31 +75,3 @@ output "accounts" {
   }
 }
 
-output "organization" {
-  value = {
-    id = aws_organizations_organization.org.id
-  }
-}
-
-output "organizational_units" {
-  value = {
-    dev = {
-      id = aws_organizations_organizational_unit.dev.id
-    }
-    infrastructure = {
-      id = aws_organizations_organizational_unit.infrastructure.id
-    }
-    prod = {
-      id = aws_organizations_organizational_unit.prod.id
-    }
-    security = {
-      id = aws_organizations_organizational_unit.security.id
-    }
-    test = {
-      id = aws_organizations_organizational_unit.test.id
-    }
-    workloads = {
-      id = aws_organizations_organizational_unit.workloads.id
-    }
-  }
-}
