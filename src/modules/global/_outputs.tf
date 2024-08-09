@@ -54,31 +54,25 @@ output "config" {
         organizational_unit = "infrastructure"
       }
     }
-    environments = {
-      bali = {
-        account                = "dev"
-        cognito_user_pool_name = "api-user-v0-bali"
-        gha_on_push_branches   = "preview/**"
-      }
-      dev = {
-        account                = "dev"
-        cognito_user_pool_name = "api-user-v0-dev"
-        gha_on_push_branches   = "dev"
-      }
-      prod = {
-        account                = "prod"
-        cognito_user_pool_name = "api-user-v0-prod"
-        gha_on_push_branches   = "main"
-      }
-      release = {
-        account                = "test"
-        cognito_user_pool_name = "api-user-v0-release"
-        gha_on_push_branches   = "release/**"
-      }
-      seattle = {
-        account                = "dev"
-        cognito_user_pool_name = "api-user-v0-seattle"
-        gha_on_push_branches   = "preview/**"
+    applications = {
+      api = {
+        environments = {
+          bali = {
+            account = "dev"
+          }
+          dev = {
+            account = "dev"
+          }
+          prod = {
+            account = "prod"
+          }
+          release = {
+            account = "test"
+          }
+          seattle = {
+            account = "dev"
+          }
+        }
       }
     }
     organization = {

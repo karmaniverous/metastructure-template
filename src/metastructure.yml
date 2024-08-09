@@ -3,6 +3,17 @@
 # file at every commit. See the README for more info!
 # *************************************************************
 
+organization:
+  aws_region: us-east-1
+  key_accounts:
+    log_archive: log_archive
+    master: master
+    terraform_state: shared_services
+  tokens:
+    namespace: metastructure-001
+    audit_log: audit-logs
+    s3_access_log: s3-access-logs
+  id: o-6ex7fx1ub8
 accounts:
   dev:
     name: Development Account
@@ -33,38 +44,6 @@ accounts:
     email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com
     organizational_unit: infrastructure
     id: '058264146029'
-environments:
-  bali:
-    account: dev
-    cognito_user_pool_name: api-user-v0-bali
-    gha_on_push_branches: preview/**
-  dev:
-    account: dev
-    cognito_user_pool_name: api-user-v0-dev
-    gha_on_push_branches: dev
-  prod:
-    account: prod
-    cognito_user_pool_name: api-user-v0-prod
-    gha_on_push_branches: main
-  release:
-    account: test
-    cognito_user_pool_name: api-user-v0-release
-    gha_on_push_branches: release/**
-  seattle:
-    account: dev
-    cognito_user_pool_name: api-user-v0-seattle
-    gha_on_push_branches: preview/**
-organization:
-  aws_region: us-east-1
-  key_accounts:
-    log_archive: log_archive
-    master: master
-    terraform_state: shared_services
-  tokens:
-    namespace: metastructure-001
-    audit_log: audit-logs
-    s3_access_log: s3-access-logs
-  id: o-6ex7fx1ub8
 organizational_units:
   dev:
     name: Dev Workloads OU
@@ -117,6 +96,19 @@ sso:
     sso_terraform_state_writer: SSOTerraformStateWriter
     # Permits creation & management of unprotected resources.
     unprotected_resource_writer: UnprotectedResourceWriter
+applications:
+  api:
+    environments:
+      bali:
+        account: dev
+      dev:
+        account: dev
+      prod:
+        account: prod
+      release:
+        account: test
+      seattle:
+        account: dev
 terraform:
   aws_version: '>= 5.56.1'
   paths: src
@@ -143,3 +135,4 @@ workspaces:
       src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
+
