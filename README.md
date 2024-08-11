@@ -1,171 +1,40 @@
-# AWS Metastructure
+> **_Where other tools use special syntax & structure to ENCAPSULATE Terraform code, Metastructure uses a powerful template engine to GENERATE Terraform code._**
 
-This project is a demo of [Metastructure](https://github.com/karmaniverous/metastructure), a command-line tool than can generate & manage a complex enterprise infrastructure with a YAML config file and a handful of Handlebars templates.
+# Metastructure Template
 
-Early days here, so take everything you see with a grain of salt!
+[Metastructure](https://github.com/karmaniverous/metastructure) is a command-line tool that works in conjunction with [Terraform](https://www.terraform.io/) and all the other things to generate & manage a complex AWS infrastructure.
 
-## Why?
+With Metastructure you can...
 
-A typical enterprise needs something that looks like:
+- **_Write a true global configuration._** Manage your entire enterprise from a single YAML file.
 
-- A collection of back-end services that talk to one another and the world through a secure API layer.
+- **_Actually use SSO in Terraform._** Zero credentials management, ever.
 
-- A performant, responsive, well-architected front-end application that consumes this back end across a reusable data layer.
+- **_Integrate all the things._** Your configuration goes where Terraform can't.
 
-- A PCI-compliant serverless infrastructure-as-code that supports a robust SDLC and offers heavily automated DevOps right out of the box.
+- **_DRY up your code base._** Because close doesn't count.
 
-Applicable technologies:
+Metastructure leverages the tools you already use to do the things you already do... just faster, smaller, and safer.
 
-- TypeScript
-- Serverless Framework (AWS Lambda, API Gateway, DynamoDB, S3, CloudFront, etc.)
-- Next.js (AWS Amplify)
-- Terraform
+---
 
-This repo addresses the infrastructure corner of this triangle and is a VERY early work in progress, which I am developing as a template to support other ongoing work.
+This repository is template for an enterprise-grade AWS infrastructure that follows the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected) and leverages the capabilities of Metastructure.
 
-For a preview of the back-end corner, see [this repository](https://github.com/karmaniverous/aws-api-template). It will soon be experiencing a MAJOR facelift, including a complete TS refactor, a ton of config automation, and a couple years' worth of new patters and lessons learned.
+In its current state, this template generates the following assets:
 
-For a preview of the front end, see [this repository](https://github.com/karmaniverous/nextjs-template). Same story: big update on the way.
+- A multi-account AWS infrastructure with a single master account and multiple organization accounts. Accounts are configurably assigned to a tree of Organizational Units.
 
-You will note that many of the key dependencies are my own, as along the way I've had to think through some VERY important problems (how DO we do configurable entity management in DynamoDB at scale?) and engineer generic solutions to the same. This project has a single architect and a single developer with 40 years of coding experience under his belt, and I hope it shows.
+- Configurable support for Terraform workspaces and both local & remote backend state management via S3 & DynamoDB.
 
-At the end of the day, what I hope to offer is a truly configuration-driven, fully open-sourced, enterprise-grade application template that can be spun up in a matter of minutes and customized to meet the needs of any serious organization.
+- Robust IAM Security Center single sign-on (SSO) support, with configurable Group, Permission Sets & Policy assignments. Metastructure transparently integrates SSO with Terraform, supporting cross-account `terraform apply` with NO manual credential management.
 
-Stay tuned.
+- S3 bucket access logs in every account with appropriate permissions.
 
-## About This Repo
+The goal is to provide a complete, secure, and scalable AWS infrastructure that can be spun up in minutes and customized to meet the needs of any serious organization.
 
-This repository contains the Infrastructure-as-Code (IaC) source code and deployment machinery for the Application platform.
+See the [Metastructure Wiki](https://github.com/karmaniverous/metastructure/wiki) for MUCH more information on how to use this template, and stay tuned for future developments!
 
-The infrastructure is managed using Terraform, and all Terraform configuration code is located in the [`infrastructure`](./src/) directory.
+---
 
-This repository also features extensive tooling to facilitate configuration and (soon) bootstrapping. The code driving this functionality is located in the [`src`](./src/) directory and should not be changed without careful consideration.
-
-The Application's Serverless Framework and Next.js repos create their own AWS resources. The goal of this repo is to provide the opinionated security & DevOps frameworks within which those other repos operate, probably across mutiple `dev`, `test` & `prod` environments spread across several AWS accounts.
-
-## Repo Structure
-
-All Terraform code is contained in the [`infrastructure`](./src/) directory, which features the following key elements:
-
-- The [`env`](./src/env/) directory contains ENVIRONMENT-specific configurations. There may be more than one environment associated with a given AWS account. Each environment has its own Terraform workspace within this directory. Enter `terraform workspace list` to see the current list, and note that the `default` workspace is not used.
-
-- The [`acct`](./src/env/) directory contains ACCOUNT-specific configurations. Each AWS account has its own Terraform workspace within this directory. Enter `terraform workspace list` to see the current list, and note that the `default` workspace is not used.
-
-- The [`global`](./src/global/) directory is a Terraform module that exports configuration values common to all Terraform code.
-
-- [`config.yml`](./src/config.yml) is the configuration file that drives project setup via the `nr init` script. In addition to global configs applicable to all contexts, this file captures key info about AWS accounts, application environments, GitHub branches, and the relationships between them.
-
-- [`license.txt`](./src/license.txt) contains the license text that is added to the header of all supported source code files.
-
-## Configuring Your Development Environment
-
-Working with this repository in your local environment requires the following tools. Follow the links for installation instructions:
-
-- [Git](https://git-scm.com/download)
-- [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-- [TFLint](https://github.com/terraform-linters/tflint)
-- [AWS CLI](https://aws.amazon.com/cli/)
-- [Node.js (v20 LTS)](https://nodejs.org/en/download/package-manager) or MUCH BETTER install it with [NVM](https://github.com/coreybutler/nvm-windows)!
-- [Visual Studio Code](https://code.visualstudio.com/Download) — Not _strictly_ required but these instructions assume you are working inside VS Code!
-
-Install globally:
-
-- [@antfu/ni](https://www.npmjs.com/package/@antfu/ni) — Ensures cross-platform shell script compatibility.
-
-Once you've got all this installed, clone this repo & open it in VS Code. VS Code will ask you if you'd like to install recommended extensions. Do so. If you miss this step, you can install them manually by clicking on the Extensions icon in the sidebar and searching for "Recommended".
-
-### Connecting AWS
-
-Still working on bootstrapping SSO. Stay tuned.
-
-### Initializing the Project
-
-Open a terminal in VS Code and run the following commands:
-
-```bash
-# Install project dependencies.
-ni
-
-# Initialize local repository.
-nr init
-```
-
-The initialization script consumes `config.yml` to generate a bunch of key Terraform & GitHub Actions configurations. More on this later.
-
-## Bootstrapping AWS
-
-The initial assumption here is that we are starting from zero.
-
-Much of what follows is adamped from [AWS Multi-account Multi-region Bootstrapping with Terraform](https://levelup.gitconnected.com/aws-multi-account-multi-region-bootstrapping-with-terraform-39aeed097ad2). Please review that very excellent reference for a deeper dive.
-
-Some key differences between that reference & this repo:
-
-- Our version control & DevOps machine is based on GitHub & GitHub Actions rather than AWS CodeCommit & CodePipeline.
-
-- Our local automation is articulated in TypeScript rather than shell script.
-
-- The bootstrap process laid out in the reference provisions a specially-permissioned IAM user to complete the bootstrap process, then destroy the user. However, PCI 3.2.1 requires that S3 buckets containing audit logs require MFA for object deletion. This is a permission than can ONLY be activated by the root user. So we're going to bootstrap our accounts with the root user, then disable it.
-
-### Create the Master Account
-
-This needs to be done manually. Follow these steps:
-
-1. [Sign up for a new AWS account](https://signin.aws.amazon.com/signup?request_type=register). Use a unique email; you won't be able to use it again to create another account.
-
-1. Sign into the new account as the root user and choose your desired home region in the upper right corner of the AWS Console.
-
-1. Visit the IAM Identity Center page and enable IAM Identity Center with AWS Organizations (the default choice).
-
-1. In the IAM console (_not_ IAM Identity Center!) create new IAM user `bootstrap-admin`, attaching AWS managed policy `AdministratorAccess`. Once the user is created, attach an additional inline policy using the contents of [`BootstrapAdminPolicy.json`](./src/bootstrap/BootstrapAdminPolicy.json). **`bootstrap-admin` now has admin privileges across your entire organization! We'll delete this user at the end of the bootstrapping process.**
-
-1. From the `bootstrap-admin` user page **Security Credentials** tab, create an access key and secret key (choose the _Other_ use case or AWS will hassle you with alternatives). Save these in a secure location.
-
-## Accounts
-
-https://aws.amazon.com/blogs/mt/best-practices-for-organizational-units-with-aws-organizations/
-
-## External Identity Providers
-
-Most organizations will want to use some kind of external identity provider as their source for user authentication & accounts. This project is designed to be agnostic to that decision. Once externally-sourced users are assigned to the SSO Groups defined in [`metastructure.yml`](./src/metastructure.yml), they will be able to create AWS profiles and leverage their assigned permissions just like any user.
-
-Here are some references for setting up external identity providers:
-
-- [Setup AWS SSO with Google as an external identity provider](https://ethtool.medium.com/setup-aws-sso-with-google-as-identity-provider-5e0b61d0a1e5)
-
-To faciitate demonstration, this project will create users directly in AWS SSO.
-
-## Some Gotchas
-
-### Creating Accounts
-
-An AWS SSO profile only provides credentials specific to a given account. Metastructure marshalls these profiles for you so you can easily make changes to multiple accounts, but the underlying accounts must nonetheless EXIST to support operations under an SSO credential.
-
-Therefore, if you make any changes to your `metastructure.yml` that include the creation of a new account and try to apply those changes using an SSO credential, you will see an error in the console like this:
-
-```text
-No account id for new_account_key. Use non-SSO authentication!
-```
-
-To resolve this error, just switch to a non-SSO credential and try again.
-
-If you already applied your changes using a non-SSO credential and don't think you should be seeing this error, remember that in this case Metastructure depends on the account id it receives from the Terraform workspace output. When you applied your changes, you may have left off the `-u` flag, so that Metastructure didn't update your config from the Terraform workspace output.
-
-To resolve this, just run:
-
-```bash
-metastructure -b <workspace> -u`
-```
-
-When applying changes involving account creation, you might see an error like this:
-
-```text
-Your account is not signed up for the S3 service. You must sign up before you can use S3.
-```
-
-Metastructure will want to set up a number of standard resources in a new account, and AWS often confirms account creation to Terraform before the new account is fully provisioned. Just wait a few seconds and try again.
-
-### Removing & Destroying Accounts
-
-When you remove or destroy an account hooked into SSO, you also implicitly destroy any Metastructure-managed policies in that account. It takes a few seconds for a policy in an organization account to register that it has been detached from its related SSO permission sets in the master account, so Terraform may throw an error indicating that the policy is still in use, and `terraform apply` may fail. Just wait a few seconds and try again.
-
-Also, before an Organization account can be destroyed, it must be detached from the Organization. This action is subject to some constraints, notably that the account much have a valid payment method configured. If an account to be destroyed violates any of these contraints, Terraform will throw an error identifying the issue. Resolve the issue, then try again.
+Made with ❤️ on Bali. See more great templates and other tools on
+[my GitHub Profile](https://github.com/karmaniverous)!
