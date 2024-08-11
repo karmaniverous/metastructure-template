@@ -2,9 +2,9 @@
 
 # Metastructure Template
 
-[Metastructure](https://github.com/karmaniverous/metastructure) is a command-line tool that works in conjunction with [Terraform](https://www.terraform.io/) and all the other things to generate & manage a complex AWS infrastructure.
+[**Metastructure**](https://github.com/karmaniverous/metastructure) is a command-line tool that works in conjunction with [Terraform](https://www.terraform.io/) and all the other things to generate & manage a complex AWS infrastructure.
 
-With Metastructure you can...
+With **Metastructure** you can...
 
 - **_Write a true global configuration._** Manage your entire enterprise from a single YAML file.
 
@@ -14,11 +14,11 @@ With Metastructure you can...
 
 - **_DRY up your code base._** Because close doesn't count.
 
-Metastructure leverages the tools you already use to do the things you already do... just faster, smaller, and safer.
+**Metastructure** leverages the tools you already use to do the things you already do... just faster, smaller, and safer.
 
 ---
 
-This repository is template for an enterprise-grade AWS infrastructure that follows the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected) and leverages the capabilities of Metastructure.
+This repository is template for an enterprise-grade AWS infrastructure that follows the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected) and leverages the capabilities of **Metastructure**.
 
 In its current state, this template generates the following assets:
 
@@ -26,7 +26,7 @@ In its current state, this template generates the following assets:
 
 - Configurable support for Terraform workspaces and both local & remote backend state management via S3 & DynamoDB.
 
-- Robust IAM Security Center single sign-on (SSO) support, with configurable Group, Permission Sets & Policy assignments. Metastructure transparently integrates SSO with Terraform, supporting cross-account `terraform apply` with NO manual credential management.
+- Robust IAM Security Center single sign-on (SSO) support, with configurable Group, Permission Sets & Policy assignments. **Metastructure** transparently integrates SSO with Terraform, supporting cross-account `terraform apply` with NO manual credential management.
 
 - S3 bucket access logs in every account with appropriate permissions.
 
