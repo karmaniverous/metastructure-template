@@ -18,7 +18,7 @@ With **Metastructure** you can...
 
 ---
 
-This repository is template for an enterprise-grade AWS infrastructure that follows the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected) and leverages the capabilities of **Metastructure**.
+This repository is a template for an enterprise-grade AWS infrastructure that follows the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected) and leverages the capabilities of **Metastructure**.
 
 In its current state, this template generates the following assets:
 

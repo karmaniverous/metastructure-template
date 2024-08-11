@@ -122,8 +122,10 @@ workspaces:
   bootstrap:
     cli_defaults:
       assume_role: OrganizationAccountAccessRole
-      use_local_state: false
-    cli_defaults_path: src/bootstrap/workspace.local.yml
+      aws_profile: META-BOOTSTRAP
+      use_local_state: true
+    # Uncomment once you've created a local defaults file.
+    # cli_defaults_path: src/bootstrap/workspace.local.yml
     path: src/bootstrap
     shared_config_path: src/bootstrap/_shared_config.local
     generators:
