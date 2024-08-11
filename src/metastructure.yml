@@ -13,35 +13,36 @@ organization:
     namespace: metastructure-001
     audit_log: audit-logs
     s3_access_log: s3-access-logs
+    owner: me
   id: o-6ex7fx1ub8
 accounts:
   dev:
     name: Development Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}dev@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}dev@gmail.com'
     organizational_unit: dev
     id: '851725244929'
   log_archive:
     name: Log Archive Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}log_archive@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}log_archive@gmail.com'
     organizational_unit: security
     id: '010438503788'
   master:
     name: Master Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}master@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}master@gmail.com'
     id: '058264094369'
   prod:
     name: Production Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}prod@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}prod@gmail.com'
     organizational_unit: prod
     id: '339713056709'
   test:
     name: Testing Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}test@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}test@gmail.com'
     organizational_unit: test
     id: '905418424983'
   shared_services:
     name: Shared Services Account
-    email: jscroft+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com
+    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com'
     organizational_unit: infrastructure
     id: '058264146029'
 organizational_units:

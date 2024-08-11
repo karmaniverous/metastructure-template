@@ -20,36 +20,36 @@ output "config" {
     accounts = {
       dev = {
         id                  = "851725244929"
-        email               = "jscroft+metastructure-001-dev@gmail.com"
+        email               = "me+metastructure-001-dev@gmail.com"
         name                = "Development Account"
         organizational_unit = "dev"
       }
       log_archive = {
         id                  = "010438503788"
-        email               = "jscroft+metastructure-001-log_archive@gmail.com"
+        email               = "me+metastructure-001-log_archive@gmail.com"
         name                = "Log Archive Account"
         organizational_unit = "security"
       }
       master = {
         id    = "058264094369"
-        email = "jscroft+metastructure-001-master@gmail.com"
+        email = "me+metastructure-001-master@gmail.com"
         name  = "Master Account"
       }
       prod = {
         id                  = "339713056709"
-        email               = "jscroft+metastructure-001-prod@gmail.com"
+        email               = "me+metastructure-001-prod@gmail.com"
         name                = "Production Account"
         organizational_unit = "prod"
       }
       test = {
         id                  = "905418424983"
-        email               = "jscroft+metastructure-001-test@gmail.com"
+        email               = "me+metastructure-001-test@gmail.com"
         name                = "Testing Account"
         organizational_unit = "test"
       }
       shared_services = {
         id                  = "058264146029"
-        email               = "jscroft+metastructure-001-shared_services@gmail.com"
+        email               = "me+metastructure-001-shared_services@gmail.com"
         name                = "Shared Services Account"
         organizational_unit = "infrastructure"
       }
@@ -87,6 +87,7 @@ output "config" {
         namespace     = "metastructure-001"
         audit_log     = "audit-logs"
         s3_access_log = "s3-access-logs"
+        owner         = "me"
       }
     }
     organizational_units = {
