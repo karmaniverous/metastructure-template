@@ -32,7 +32,9 @@ In its current state, this template generates the following assets:
 
 The goal is to provide a complete, secure, and scalable AWS infrastructure that can be spun up in minutes and customized to meet the needs of any serious organization.
 
-See the [Metastructure Wiki](https://github.com/karmaniverous/metastructure/wiki) for MUCH more information on how to use this template, and stay tuned for future developments!
+See the [Metastructure Wiki](https://github.com/karmaniverous/metastructure/wiki) for MUCH more information on how to use this template.
+
+Got questions? [Start a discussion](https://github.com/karmaniverous/metastructure/discussions) and I'll help!
 
 ---
 
