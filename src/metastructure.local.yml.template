@@ -1,0 +1,23 @@
+
+# This file configures global overrides to your project configuration. They are 
+# .gitignored by default, so you can safely store sensitive info here.
+#
+# To use:
+#
+# 1. Copy this file & remove the `template` extension (e.g. to 
+#    'infrastructure.local.yml'). Be sure to use the '.local' extension or
+#    place the '.local.' token somewherein the filename so the file will be 
+#    gitignored!
+#
+# 2. Add the path to this file at config_override_path in your project config 
+#    file.
+#
+# 3. Configure your overrides below. They will be deep-merged with your project 
+#    config on load. All keys are optional.
+#
+# 4. DO NOT place sensitive info in this template file, as it is NOT
+#    .gitignored!
+
+organization:
+  tokens:
+    owner: email

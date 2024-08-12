@@ -20,36 +20,36 @@ output "config" {
     accounts = {
       dev = {
         id                  = "851725244929"
-        email               = "me+metastructure-001-dev@gmail.com"
+        email               = "jscroft+metastructure-001-dev@gmail.com"
         name                = "Development Account"
         organizational_unit = "dev"
       }
       log_archive = {
         id                  = "010438503788"
-        email               = "me+metastructure-001-log_archive@gmail.com"
+        email               = "jscroft+metastructure-001-log_archive@gmail.com"
         name                = "Log Archive Account"
         organizational_unit = "security"
       }
       master = {
         id    = "058264094369"
-        email = "me+metastructure-001-master@gmail.com"
+        email = "jscroft+metastructure-001-master@gmail.com"
         name  = "Master Account"
       }
       prod = {
         id                  = "339713056709"
-        email               = "me+metastructure-001-prod@gmail.com"
+        email               = "jscroft+metastructure-001-prod@gmail.com"
         name                = "Production Account"
         organizational_unit = "prod"
       }
       test = {
         id                  = "905418424983"
-        email               = "me+metastructure-001-test@gmail.com"
+        email               = "jscroft+metastructure-001-test@gmail.com"
         name                = "Testing Account"
         organizational_unit = "test"
       }
       shared_services = {
         id                  = "058264146029"
-        email               = "me+metastructure-001-shared_services@gmail.com"
+        email               = "jscroft+metastructure-001-shared_services@gmail.com"
         name                = "Shared Services Account"
         organizational_unit = "infrastructure"
       }
@@ -75,19 +75,20 @@ output "config" {
         }
       }
     }
+    config_override_path = "src/metastructure.local.yml"
     organization = {
-      aws_region = "us-east-1"
-      id         = "o-6ex7fx1ub8"
+      id = "o-6ex7fx1ub8"
       key_accounts = {
         master          = "master"
         terraform_state = "shared_services"
         log_archive     = "log_archive"
       }
+      aws_region = "us-east-1"
       tokens = {
         namespace     = "metastructure-001"
         audit_log     = "audit-logs"
         s3_access_log = "s3-access-logs"
-        owner         = "me"
+        owner         = "jscroft"
       }
     }
     organizational_units = {

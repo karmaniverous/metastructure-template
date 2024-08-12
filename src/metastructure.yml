@@ -3,6 +3,7 @@
 # file at every commit. See the README for more info!
 # *************************************************************
 
+config_override_path: src/metastructure.local.yml
 organization:
   aws_region: us-east-1
   key_accounts:

@@ -123,7 +123,7 @@ import {
 # Create Development Account.
 ###############################################################################
 resource "aws_organizations_account" "dev" {
-  email = "me+metastructure-001-dev@gmail.com"
+  email = "jscroft+metastructure-001-dev@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -145,7 +145,7 @@ import {
 # Create Log Archive Account.
 ###############################################################################
 resource "aws_organizations_account" "log_archive" {
-  email = "me+metastructure-001-log_archive@gmail.com"
+  email = "jscroft+metastructure-001-log_archive@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -167,7 +167,7 @@ import {
 # Create Master Account.
 ###############################################################################
 resource "aws_organizations_account" "master" {
-  email = "me+metastructure-001-master@gmail.com"
+  email = "jscroft+metastructure-001-master@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -189,7 +189,7 @@ import {
 # Create Production Account.
 ###############################################################################
 resource "aws_organizations_account" "prod" {
-  email = "me+metastructure-001-prod@gmail.com"
+  email = "jscroft+metastructure-001-prod@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -211,7 +211,7 @@ import {
 # Create Testing Account.
 ###############################################################################
 resource "aws_organizations_account" "test" {
-  email = "me+metastructure-001-test@gmail.com"
+  email = "jscroft+metastructure-001-test@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
@@ -233,7 +233,7 @@ import {
 # Create Shared Services Account.
 ###############################################################################
 resource "aws_organizations_account" "shared_services" {
-  email = "me+metastructure-001-shared_services@gmail.com"
+  email = "jscroft+metastructure-001-shared_services@gmail.com"
   lifecycle {
     ignore_changes = [email, name]
   }
