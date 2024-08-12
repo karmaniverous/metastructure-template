@@ -9,7 +9,7 @@
     "auto-changelog": "^2.4.0",
     "lefthook": "^1.7.12",
     "license-check-and-add": "^4.0.5",
-    "metastructure": "^0.6.0",
+    "metastructure": "^0.7.0",
     "release-it": "^17.6.0"
   },
   "homepage": "https://github.com/karmaniverous/metastructure#readme",
