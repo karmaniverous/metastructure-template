@@ -1,12 +1,13 @@
-
 # This file configures global overrides to your project configuration. They are 
-# .gitignored by default, so you can safely store sensitive info here.
+# gitignored by default, so you can safely store sensitive info here. You 
+# should use this template if you wish to develop new features or patterns for
+# this template repo.
 #
-# To use:
+# To use this template:
 #
 # 1. Copy this file & remove the `template` extension (e.g. to 
 #    'infrastructure.local.yml'). Be sure to use the '.local' extension or
-#    place the '.local.' token somewherein the filename so the file will be 
+#    place the '.local.' token somewhere in the filename so the file will be 
 #    gitignored!
 #
 # 2. Add the path to this file at config_override_path in your project config 
@@ -17,7 +18,14 @@
 #
 # 4. DO NOT place sensitive info in this template file, as it is NOT
 #    .gitignored!
+#
+# The entries below are the minimum required to begin developing in TEMPLATE
+# mode. For more info visit https://github.com/karmaniverous/metastructure/wiki/Setting-Up-Your-Dev-Environment#template-vs-project-mode
 
 organization:
+  id: my-organization-id
   tokens:
-    owner: email
+    namespace: namespace-000
+    owner: my-email
+sso:
+  start_url: https://my-sso-domain.awsapps.com/start#/

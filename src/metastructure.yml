@@ -5,18 +5,17 @@
 
 config_override_path: src/metastructure.local.yml
 organization:
+  id: my-organization-id
   aws_region: us-east-1
   key_accounts:
     log_archive: log_archive
     master: master
     terraform_state: shared_services
   tokens:
-    namespace: metastructure-001
+    owner: my-email
+    namespace: namespace-000
     audit_log: audit-logs
     s3_access_log: s3-access-logs
-    owner: jscroft
-  # Add your organization id here!
-  id:
 accounts:
   dev:
     name: Development Account
@@ -58,7 +57,7 @@ organizational_units:
   workloads:
     name: Workloads OU
 sso:
-  start_url: https://d-9067ed918c.awsapps.com/start#/
+  start_url: https://my-sso-domain.awsapps.com/start#/
   groups:
     terraform_admin:
       name: TerraformAdmin
