@@ -11,7 +11,7 @@ organization:
     master: master
     terraform_state: shared_services
   tokens:
-    namespace: metastructure-001
+    namespace: my-namespace-000
     audit_log: audit-logs
     s3_access_log: s3-access-logs
     owner: me
