@@ -74,6 +74,7 @@ resource "aws_s3_bucket_policy" "s3_access_log_{{@key}}" {
 data "aws_s3_bucket" "s3_access_log_key_account_{{@key}}" {
   provider = aws.{{@../key}}
   bucket   = local.s3_access_log_bucket_{{@../key}}
+  depends_on = [ aws_s3_bucket.s3_access_log_{{@../key}} ]
 }
 
 {{/if}}{{/each}}{{/each}}
