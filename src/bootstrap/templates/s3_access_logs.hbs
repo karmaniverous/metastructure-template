@@ -66,7 +66,9 @@ resource "aws_s3_bucket_policy" "s3_access_log_{{@key}}" {
     ]
   })
 }
-{{#each ../organization/key_accounts}}{{#if (lodash "eq" this @../key)}}
+
+  {{#each ../organization/key_accounts}}
+    {{#if (lodash "eq" this @../key)}}
 ###############################################################################
 # Create {{@key}} data source for account {{../this.name}} 
 # S3 access log bucket.
@@ -77,5 +79,7 @@ data "aws_s3_bucket" "s3_access_log_key_account_{{@key}}" {
   depends_on = [ aws_s3_bucket.s3_access_log_{{@../key}} ]
 }
 
-{{/if}}{{/each}}{{/each}}
+    {{/if}}
+  {{/each}}
+{{/each}}
 
