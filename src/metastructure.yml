@@ -12,6 +12,7 @@ organization:
     master: master
     terraform_state: shared_services
   tokens:
+    domain: gmail.com
     owner: my-email
     namespace: namespace-000
     audit_log: audit-logs
@@ -19,26 +20,26 @@ organization:
 accounts:
   dev:
     name: Development Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}dev@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-dev@{{organization.tokens.domain}}'
     organizational_unit: dev
   log_archive:
     name: Log Archive Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}log_archive@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-log_archive@{{organization.tokens.domain}}'
     organizational_unit: security
   master:
     name: Master Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}master@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-master@{{organization.tokens.domain}}'
   prod:
     name: Production Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}prod@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-prod@{{organization.tokens.domain}}'
     organizational_unit: prod
   test:
     name: Testing Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}test@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-test@{{organization.tokens.domain}}'
     organizational_unit: test
   shared_services:
     name: Shared Services Account
-    email: '{{organization.tokens.owner}}+{{#if organization.tokens.namespace}}{{organization.tokens.namespace}}-{{/if}}shared_services@gmail.com'
+    email: '{{organization.tokens.owner}}+{{organization.tokens.namespace}}-shared_services@{{organization.tokens.domain}}'
     organizational_unit: infrastructure
 organizational_units:
   dev:
@@ -86,6 +87,14 @@ sso:
     sso_terraform_state_writer: SSOTerraformStateWriter
     # Permits creation & management of unprotected resources.
     unprotected_resource_writer: UnprotectedResourceWriter
+  users:
+    jscroft:
+      email: '{{organization.tokens.owner}}@gmail.com'
+      display_name: Test User
+      groups: terraform_admin
+      name:
+        given_name: Test
+        family_name: User
 applications:
   api:
     environments:
@@ -110,8 +119,14 @@ terraform:
 workspaces:
   bootstrap:
     cli_defaults:
+      # Remove assume_role & aws_profile (or override them with null) to enable SSO.
       assume_role: OrganizationAccountAccessRole
-      aws_profile: META-BOOTSTRAP
+      aws_profile: META-000-BOOTSTRAP
+
+      # Uncomment permission_set (or override it elsewhere) to enable SSO.
+      # permission_set: terraform_admin
+
+      # Remove use_local state (or override it with false) to migrate to remote state.
       use_local_state: true
     cli_defaults_path: src/bootstrap/workspace.local.yml
     path: src/bootstrap

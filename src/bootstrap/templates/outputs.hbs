@@ -17,24 +17,38 @@ output "organization" {
 }
 
 ###############################################################################
-# Organizational Units
-###############################################################################
-output "organizational_units" {
-  value = { {{#each organizational_units}}
-    {{@key}} = {
-      id = aws_organizations_organizational_unit.{{@key}}.id
-    } {{/each}}
-  }
-}
-
-###############################################################################
 # Accounts
 ###############################################################################
 output "accounts" {
-  value = { {{#each accounts}}{{#unless action}}
+  value = { {{#each accounts}}{{#unless this.action}}
     {{@key}} = {
       id = aws_organizations_account.{{@key}}.id 
     } {{/unless}}{{/each}}
   }
 }
 
+###############################################################################
+# Organizational Units
+###############################################################################
+output "organizational_units" {
+  value = { {{#each organizational_units}}{{#unless this.action}}
+    {{@key}} = {
+      id = aws_organizations_organizational_unit.{{@key}}.id
+    } {{/unless}}{{/each}}
+  }
+}
+
+{{#if (lodash "size" sso.users)}}
+###############################################################################
+# SSO
+###############################################################################
+output "sso" {
+  value = { 
+    users = { {{#each sso.users}}{{#unless this.action}}
+      {{@key}} = {
+        id = aws_identitystore_user.{{@key}}.id
+      } {{/unless}}{{/each}}
+    }
+  }
+}
+{{/if}}

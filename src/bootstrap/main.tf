@@ -6,6 +6,18 @@ file at every commit. See the README for more info!
 */
 
 ###############################################################################
+# Create & import user bootstrap-admin.
+###############################################################################
+resource "aws_iam_user" "bootstrap_admin" {
+  name = "bootstrap-admin"
+}
+
+import {
+  to = aws_iam_user.bootstrap_admin
+  id = "bootstrap-admin"
+}
+
+###############################################################################
 # Import global config.
 ###############################################################################
 module "global" {
@@ -43,18 +55,6 @@ resource "aws_organizations_organization" "org" {
 import {
   to = aws_organizations_organization.org
   id = data.aws_organizations_organization.org.id
-}
-
-###############################################################################
-# Create & import user bootstrap-admin.
-###############################################################################
-resource "aws_iam_user" "bootstrap_admin" {
-  name = "bootstrap-admin"
-}
-
-import {
-  to = aws_iam_user.bootstrap_admin
-  id = "bootstrap-admin"
 }
 
 ###############################################################################

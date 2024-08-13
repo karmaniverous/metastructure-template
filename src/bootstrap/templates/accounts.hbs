@@ -20,7 +20,7 @@ resource "aws_organizations_organizational_unit" "{{@key}}" {
   parent_id = {{#if this.parent}}aws_organizations_organizational_unit.{{this.parent}}.id{{else}}one(aws_organizations_organization.org.roots).id{{/if}}
 }
 
-{{#if this.id}}
+  {{#if this.id}}
 ###############################################################################
 # Import {{this.name}}.
 ###############################################################################
@@ -28,12 +28,14 @@ import {
   to = aws_organizations_organizational_unit.{{@key}}
   id = "{{this.id}}"
 }
+  {{/if}}
+{{/each}}
 
-{{/if}}{{/each}}
 ###############################################################################
 # ACCOUNTS 
 ###############################################################################
-{{#each accounts}}{{#unless action}}
+{{#each accounts}}
+  {{#unless this.action}}
 ###############################################################################
 # Create {{this.name}}.
 ###############################################################################
@@ -46,7 +48,7 @@ resource "aws_organizations_account" "{{@key}}" {
   parent_id = {{#if this.organizational_unit}}aws_organizations_organizational_unit.{{this.organizational_unit}}.id{{else}}null{{/if}}
 }
 
-{{/unless}}{{#if (logic "or" this.id (lodash "eq" @key ../organization/key_accounts/master))}}{{#unless action}}
+    {{#if (logic "or" this.id (lodash "eq" @key ../organization/key_accounts/master))}}
 ###############################################################################
 # Import {{this.name}}.
 ###############################################################################
@@ -54,8 +56,10 @@ import {
   to = aws_organizations_account.{{@key}}
   id = {{#if (lodash "eq" @key ../organization/key_accounts/master)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
 }
+    {{/if}}
+  {{/unless}}
 
-{{/unless}}{{/if}}{{#if (lodash "eq" action "remove")}}
+  {{#if (lodash "eq" action "remove")}}
 ###############################################################################
 # Remove {{this.name}}.
 ###############################################################################
@@ -65,6 +69,6 @@ removed {
     destroy = false
   }
 }
-
-{{/if}}{{/each}}
+  {{/if}}
+{{/each}}
 
