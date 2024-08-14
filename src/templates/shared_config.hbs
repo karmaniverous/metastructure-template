@@ -1,5 +1,7 @@
 {{! Creates SSO authentication profiles. }}
 
+{{> header_generated}}
+
 {{~#if cli_params.permission_set ~}}
     {{~#each (lodash "get" sso.reference.permission_set_accounts cli_params.permission_set) ~}}
         {{~#with this as | accountKey | ~}}
