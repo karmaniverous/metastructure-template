@@ -7,19 +7,37 @@
 ###############################################################################
 ###############################################################################
 
-terraform { {{#if cli_params.use_local_state}} 
-  backend "local" {}{{else}}
-  backend "s3" { {{#if (logic "and" cli_params.assume_role (logic "not" (lodash "eq" organization.key_accounts.terraform_state organization.key_accounts.master)))}}
+terraform { 
+  {{! Local backend. }}
+  {{#if cli_params.use_local_state~}} 
+  backend "local" {}
+  
+  {{! S3 backend. }}
+  {{~else}}
+  backend "s3" { 
+    {{! Assume role if not using SSO. }}
+    {{~#if (logic "and" cli_params.assume_role (logic "not" (lodash "eq" organization.key_accounts.terraform_state organization.key_accounts.master)))}}
     assume_role = { 
       role_arn = "arn:aws:iam::{{lodash "get" accounts (params organization.key_accounts.terraform_state "id")}}:role/{{#if cli_params.assume_role}}{{cli_params.assume_role}}{{else}}{{lodash "get" accounts (params organization.key_accounts.terraform_state "permission_set_roles" cli_params.permission_set)}}{{/if}}"
-    }{{/if}}
+    } {{/if}}
+
+    {{! Either use the given credentials profile or use the Terraform state SSO profile. }}
+    {{#if (logic "or" cli_params.permission_set cli_params.aws_profile)}}
+    profile = "{{ifelse cli_params.permission_set organization.key_accounts.terraform_state cli_params.aws_profile}}"
+    {{/if}}
+
+    {{! Identify the shared config file if using SSO. }}
+    {{! https://github.com/karmaniverous/metastructure/issues/6 }}
+    {{#if cli_params.permission_set}}
+    shared_config_files = ["./_shared_config.local"]
+    {{/if}}
+
+    {{! Remaining S3 backend configuration }}
     bucket = "{{terraform.state.bucket}}"
     dynamodb_table = "{{terraform.state.lock_table}}" 
     encrypt = true 
-    key = "{{terraform.state.key}}"{{#if (logic "or" cli_params.permission_set cli_params.aws_profile)}}
-    profile = "{{ifelse cli_params.permission_set organization.key_accounts.terraform_state cli_params.aws_profile}}"{{/if}}
-    region = "{{organization.aws_region}}" {{#if cli_params.permission_set}}
-    shared_config_files = ["./_shared_config.local"]{{/if}}
+    key = "{{terraform.state.key}}"
+    region = "{{organization.aws_region}}" 
     workspace_key_prefix = "workspaces" 
-  }{{/if}}
+  } {{~/if}}
 }

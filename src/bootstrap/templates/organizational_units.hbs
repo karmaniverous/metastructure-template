@@ -7,46 +7,40 @@
 ###############################################################################
 ###############################################################################
 
-{{! Iterate across accounts without 'destroy' action. }}
-{{#each accounts}}
-  {{#unless (lodash "eq" this.action 'destroy')}}
+{{! Iterate across organizational units. }}
+{{#each organizational_units}}
 
-    {{! If account has 'remove' action, remove it from state. }}
-    {{#if (lodash "eq" this.action "remove")}}
+  {{! If organizational unit has 'remove' action, remove it from state. }}
+  {{#if (lodash "eq" this.action "remove")}}
 ###############################################################################
-# Remove account {{this.name}}.
+# Remove organizational unit {{this.name}}.
 ###############################################################################
 removed {
-  from = aws_organizations_account.{{@key}}
+  from = aws_organizations_organizational_unit.{{@key}}
   lifecycle {
     destroy = false
   }
 }
-    {{! If account doesn't have 'remove' action, create it. }}
-    {{else}}
+  {{! If organizational unit doesn't have 'remove' action, create it. }}
+  {{else}}
 ###############################################################################
-# Create account {{this.name}}.
+# Create organizational unit {{this.name}}. 
 ###############################################################################
-resource "aws_organizations_account" "{{@key}}" {
-  email    = "{{this.email}}"
-  lifecycle {
-    ignore_changes = [email, name]
-  }
+resource "aws_organizations_organizational_unit" "{{@key}}" {
   name      = "{{this.name}}"
-  parent_id = {{#if this.organizational_unit}}aws_organizations_organizational_unit.{{this.organizational_unit}}.id{{else}}null{{/if}}
+  parent_id = {{#if this.parent}}aws_organizations_organizational_unit.{{this.parent}}.id{{else}}one(aws_organizations_organization.org.roots).id{{/if}}
 }
 
-      {{! If account already exists, import it. }}
-      {{! Master account exists even if we don't have its id yet, we can get the id from caller identity. }}
-      {{#if (logic "or" this.id (lodash "eq" @key ../organization/key_accounts/master))}}
+    {{! If organizational unit already exists, import it. }}
+    {{#if this.id}}
 ###############################################################################
-# Import account {{this.name}}.
+# Import organizational unit {{this.name}}.
 ###############################################################################
 import {
-  to = aws_organizations_account.{{@key}}
-  id = {{#if (lodash "eq" @key ../organization/key_accounts/master)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
+  to = aws_organizations_organizational_unit.{{@key}}
+  id = "{{this.id}}"
 }
-      {{/if}}
     {{/if}}
-  {{/unless}}
+  {{/if}}
 {{/each}}
+
