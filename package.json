@@ -5,11 +5,11 @@
   },
   "description": "A configuration-driven AWS Organization reference infrastructure. Powered by Metastructure.",
   "devDependencies": {
-    "@types/node": "^22.2.0",
+    "@types/node": "^22.3.0",
     "auto-changelog": "^2.4.0",
     "lefthook": "^1.7.12",
     "license-check-and-add": "^4.0.5",
-    "metastructure": "^0.8.0",
+    "metastructure": "^0.10.0",
     "release-it": "^17.6.0"
   },
   "homepage": "https://github.com/karmaniverous/metastructure-template#readme",

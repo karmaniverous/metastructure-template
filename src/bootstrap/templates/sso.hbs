@@ -24,12 +24,12 @@
 
         {{! Create SSO policy at account.}}
 ###############################################################################
-# Create policy {{policy}} at account {{account.name}}.
+# Create policy {{policy.name}} at account {{account.name}}.
 ###############################################################################
 resource "aws_iam_policy" "{{@../key}}_{{../this}}" {
-  name        = "{{policy}}"
+  name        = "{{policy.name}}"
   provider    = aws.{{@../key}}
-  description = "Some description."
+  description = "{{policy.description}}"
   policy      = data.aws_iam_policy_document.{{../this}}.json
 }
 
@@ -60,31 +60,31 @@ resource "aws_ssoadmin_permission_set" "{{@key}}" {
   {{! Iterate across permission set policies. }}
   {{#each this.policies}}
     {{! Attach customer managed policy to permission set. }}
-    {{#if (lodash "get" ../../sso/policies this)}}
+    {{#with (lodash "get" ../../sso/policies this) as | policy |}}
 ###############################################################################
-# Add policy {{lodash "get" ../../sso/policies this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key "name")}}.
+# Add policy {{policy.name}} to permission set {{lodash "get" ../../this "name"}}.
 ###############################################################################
-resource "aws_ssoadmin_customer_managed_policy_attachment" "{{@../key}}_{{this}}" {
+resource "aws_ssoadmin_customer_managed_policy_attachment" "{{@../key}}_{{../this}}" {
   customer_managed_policy_reference {
-    name = "{{lodash "get" ../../sso/policies this}}"
+    name = "{{policy.name}}"
   }
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.{{@../key}}.arn
-  depends_on         = [{{#each (lodash "get" ../../sso/reference/policy_accounts this)}}
-    aws_iam_policy.{{this}}_{{@../this}}{{#unless @last}},{{/unless}}{{/each}}
+  depends_on         = [{{#each (lodash "get" ../../../sso/reference/policy_accounts ../this)}}
+    aws_iam_policy.{{this}}_{{../../this}}{{#unless @last}},{{/unless}}{{/each}}
   ]
 }
     {{! Attach AWS managed policy to permission set. }}
     {{else}}
 ###############################################################################
-# Add policy {{this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key 'name')}}.
+# Add policy {{this}} to permission set {{lodash "get" ../this "name"}}.
 ###############################################################################
 resource "aws_ssoadmin_managed_policy_attachment" "{{@../key}}_{{lodash "snakeCase" (lodash "startCase" this)}}" {
   managed_policy_arn = "arn:aws:iam::aws:policy/{{this}}"
   instance_arn       = local.sso_arn
   permission_set_arn = aws_ssoadmin_permission_set.{{@../key}}.arn
 }
-    {{/if}}
+    {{/with}}
   {{/each}}
 {{/each}}
 
