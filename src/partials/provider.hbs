@@ -1,0 +1,34 @@
+{{!
+Generates a provider block.
+
+PARAMETERS
+- accountKey: The account key.
+- config: The config object.
+- [keyAccount]: The key account dereferencing key.
+}}
+
+{{! Create a provider to assume the permission set role on the account. }}
+{{#with (lodash "get" config.accounts accountKey) as | account |}}
+###############################################################################
+# Create a provider {{#if (logic "or" ../config.cli_params.permission_set (logic "and" ../config.cli_params.assume_role (logic "not" (lodash "eq" this ../config.organization.key_accounts.master))))}}to assume the {{#if ../config.cli_params.assume_role}}{{../config.cli_params.assume_role}}{{else}}{{lodash "get" ../config.sso.permission_sets (params ../config.cli_params.permission_set "name")}} permission set{{/if}} 
+# role {{/if}}on {{#if ../keyAccount}}the {{../keyAccount}} key account{{else}}account {{account.name}}{{/if}}.
+###############################################################################
+provider "aws" { 
+  alias   = "{{#if ../keyAccount}}key_account_{{../keyAccount}}{{else}}{{../accountKey}}{{/if}}"{{#if (logic "or" ../config.cli_params.permission_set (logic "and" ../config.cli_params.assume_role (logic "not" (lodash "eq" ../accountKey ../config.organization.key_accounts.master))))}}
+  assume_role { {{#if ../config.cli_params.assume_role}}
+    role_arn = "arn:aws:iam::{{#if account.action}}{{account.id}}{{else}}${aws_organizations_account.{{../accountKey}}.id}{{/if}}:role/{{../config.cli_params.assume_role}}"{{/if}}
+    {{#if ../config.cli_params.permission_set}}tags = {
+      Generator = "Terraform"
+    }
+    transitive_tag_keys = ["Generator"]
+  {{/if}} }{{/if}}
+  default_tags {
+    tags = {
+      Generator = "Terraform"
+    }
+  }{{#if (logic "or" ../config.cli_params.permission_set ../config.cli_params.aws_profile)}}
+  profile = "{{ifelse ../config.cli_params.permission_set ../accountKey ../config.cli_params.aws_profile}}"{{/if}}
+  region = module.global.config.organization.aws_region{{#if ../config.cli_params.permission_set}}
+  shared_config_files = ["./_shared_config.local"]{{/if}}
+}
+{{/with}}

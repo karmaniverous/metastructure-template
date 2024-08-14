@@ -146,3 +146,6 @@ workspaces:
       src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
+partials:
+  header_generated: src/partials/header_generated.hbs
+  provider: src/partials/provider.hbs
