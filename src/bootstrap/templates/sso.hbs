@@ -11,33 +11,44 @@
 #### ACCOUNT POLICIES
 ###############################################################################
 
+{{! Iterate across accounts with SSO policies. }}
+{{! When generated these do not include accounts with 'remove' or 'destroy' actions }}
 {{#each sso.reference.account_policies}}
+  {{#with (lodash "get" ../accounts @key) as | account |}}
 ###############################################################################
-# ACCOUNT: {{lodash "toUpper" (lodash "get" ../accounts (params @key "name"))}}
+# ACCOUNT: {{lodash "toUpper" account.name}}
 ###############################################################################
+    {{! Iterate across SSO policies associated with account. }}
+    {{#each ../this}}
+      {{#with (lodash "get" ../../../sso/policies this) as | policy |}}
 
-  {{#each this}}
+        {{! Create SSO policy at account.}}
 ###############################################################################
-# Add policy {{lodash "get" ../../sso/policies this}} to account {{lodash "get" ../../accounts (params @../key "name")}}.
+# Create policy {{policy}} at account {{account.name}}.
 ###############################################################################
-resource "aws_iam_policy" "{{@../key}}_{{this}}" {
-  name        = "{{lodash "get" ../../sso/policies this}}"
+resource "aws_iam_policy" "{{@../key}}_{{../this}}" {
+  name        = "{{policy}}"
   provider    = aws.{{@../key}}
   description = "Some description."
-  policy      = data.aws_iam_policy_document.{{this}}.json
+  policy      = data.aws_iam_policy_document.{{../this}}.json
 }
-  {{/each}}
+
+      {{/with}}
+    {{/each}}      
+  {{/with}}
 {{/each}}
 
 ###############################################################################
 #### SSO PERMISSION SETS
 ###############################################################################
 
+{{! Iterate across SSO permission sets. }}
 {{#each sso.permission_sets}}
 ###############################################################################
 # PERMISSION SET: {{lodash "toUpper" (lodash "startCase" @key)}} 
 ###############################################################################
 
+  {{! Create permission set.}}
 ###############################################################################
 # Create permission set {{this.name}}.
 ###############################################################################
@@ -46,7 +57,9 @@ resource "aws_ssoadmin_permission_set" "{{@key}}" {
   name         = "{{this.name}}"
   instance_arn = local.sso_arn
 }
+  {{! Iterate across permission set policies. }}
   {{#each this.policies}}
+    {{! Attach customer managed policy to permission set. }}
     {{#if (lodash "get" ../../sso/policies this)}}
 ###############################################################################
 # Add policy {{lodash "get" ../../sso/policies this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key "name")}}.
@@ -61,6 +74,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "{{@../key}}_{{this}}
     aws_iam_policy.{{this}}_{{@../this}}{{#unless @last}},{{/unless}}{{/each}}
   ]
 }
+    {{! Attach AWS managed policy to permission set. }}
     {{else}}
 ###############################################################################
 # Add policy {{this}} to permission set {{lodash "get" ../../sso/permission_sets (params @../key 'name')}}.
@@ -78,7 +92,10 @@ resource "aws_ssoadmin_managed_policy_attachment" "{{@../key}}_{{lodash "snakeCa
 #### SSO GROUPS
 ###############################################################################
 
+{{! Iterate across SSO groups. }}
 {{#each sso.groups}}
+
+{{! Create group. }}
 ###############################################################################
 # Create group {{this.name}}.
 ###############################################################################
@@ -92,9 +109,13 @@ resource "aws_identitystore_group" "{{@key}}" {
 # GROUP {{lodash "toUpper" (lodash "startCase" @key)}} ACCOUNT PERMISSION SETS
 ###############################################################################
   
+  {{! Iterate across accounts assigned to group unless they have an action specified.}}
   {{#each this.account_permission_sets}}
-    {{#each this}}
+    {{#unless (lodash "get" ../../accounts (params @key "action"))}}
+      {{! Iterate across permission sets assigned to account. }}
+      {{#each this}}
 
+        {{! Assign permission set to account for group. }}
 ###############################################################################
 # Assign permission set {{this}} to account {{@../key}} for group {{@../../key}}.
 ###############################################################################
@@ -105,11 +126,13 @@ resource "aws_ssoadmin_account_assignment" "{{@../../key}}_{{@../key}}_{{this}}"
   principal_type     = "GROUP"
   target_id          = aws_organizations_account.{{@../key}}.id
   target_type        = "AWS_ACCOUNT"
+  {{! Ensure permission set policies are created in all accounts before making assignment. }}
   depends_on         = [{{#each (lodash "get" ../../sso/reference/group_account_permission_set_policies (params @../../key @../key))}}{{#each this}}
     aws_ssoadmin_customer_managed_policy_attachment.{{ @../../../../key}}_{{this}}{{#unless @last}},{{/unless}}{{/each}}{{#unless @last}},{{/unless}}{{/each}}
   ]
 }
-    {{/each}}
+      {{/each}}
+    {{/unless}}
   {{/each}}
 {{/each}}
 
@@ -117,6 +140,7 @@ resource "aws_ssoadmin_account_assignment" "{{@../../key}}_{{@../key}}_{{this}}"
 #### SSO USERS
 ###############################################################################
 
+{{! Iterate across SSO users without assigned actions. }}
 {{#each sso.users}}
   {{#unless this.action}}
 
@@ -124,6 +148,35 @@ resource "aws_ssoadmin_account_assignment" "{{@../../key}}_{{@../key}}_{{this}}"
 # USER {{lodash "toUpper" @key}}
 ###############################################################################
 
+    {{! If user has 'remove' action, remove resources from state. }}
+    {{#if (lodash "eq" this.action "remove")}}
+      {{! Remove user from state.}}
+###############################################################################
+# Remove user {{@key}} from state.
+###############################################################################
+removed {
+  from = aws_identitystore_user.{{@key}}
+  lifecycle {
+    destroy = false
+  }
+}
+
+      {{! Iterate across user groups.}}
+      {{#each this.groups}}
+        {{! Remove user group membership from state.}}
+###############################################################################
+# Remove user {{@../key}} group {{this}} membership from state.
+###############################################################################
+removed {
+  from = aws_identitystore_group_membership."{{@../key}}_{{this}}"
+  lifecycle {
+    destroy = false
+  }
+}
+      {{/each}}
+    {{! If account doesn't have 'remove' action, create resources. }}
+    {{else}}
+      {{! Create user.}}
 ###############################################################################
 # Create user {{@key}}.
 ###############################################################################
@@ -140,7 +193,8 @@ resource "aws_identitystore_user" "{{@key}}" {
   user_name         = "{{@key}}"
 }
 
-    {{#if this.id}}
+      {{! If user already exists, import it. }}
+      {{#if this.id}}
 ###############################################################################
 # Import user {{@key}}.
 ###############################################################################
@@ -148,10 +202,11 @@ import {
   to = aws_identitystore_user.{{@key}}
   id = "{{this.id}}"
 }
-    {{/if}}
+      {{/if}}
 
-    {{#each this.groups}}
-
+      {{! Iterate across user groups.}}
+      {{#each this.groups}}
+        {{! Assign user to group.}}
 ###############################################################################
 # Assign user {{@../key}} to group {{this}}.
 ###############################################################################
@@ -160,19 +215,8 @@ resource "aws_identitystore_group_membership" "{{@../key}}_{{this}}" {
   group_id          = aws_identitystore_group.{{this}}.group_id
   member_id         = aws_identitystore_user.{{@../key}}.user_id
 }
-    {{/each}}
+      {{/each}}
+    {{/if}}
   {{/unless}}
-
-  {{#if (lodash "eq" this.action "remove")}}
-###############################################################################
-# Remove user {{@key}}.
-###############################################################################
-removed {
-  from = aws_identitystore_user.{{@key}}
-  lifecycle {
-    destroy = false
-  }
-}
-  {{/if}}
 {{/each}}
 

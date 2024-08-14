@@ -11,18 +11,57 @@
 #### ACCOUNT S3 ACCESS LOG BUCKETS
 ###############################################################################
 
+{{! Iterate across accounts without 'destroy' action. }}
 {{#each accounts}}
+  {{#unless (lodash "eq" this.action "destroy")}}
 ###############################################################################
 # {{lodash "toUpper" this.name}} S3 ACCESS LOG BUCKET 
 ###############################################################################
 
+  {{! Create local variable for account S3 access log bucket name. }}
 ###############################################################################
 # Create account {{this.name}} S3 access log bucket name. 
 ###############################################################################
 locals {
   s3_access_log_bucket_{{@key}} = "{{../organization.tokens.namespace}}-{{namify "s3" @key}}-{{../organization.tokens.s3_access_log}}"
 }
+    {{! If account has 'remove' action, remove resources from state. }}
+    {{#if (lodash "eq" this.action "remove")}}
+      {{! Remove account S3 access log bucket from state. }}
+###############################################################################
+# Remove account {{this.name}} S3 access log bucket. 
+###############################################################################
+removed {
+  from = aws_s3_bucket.s3_access_log_{{@key}}
+  lifecycle {
+    destroy = false
+  }
+}
 
+      {{! Remove account S3 access log bucket SSE configuration from state. }}
+###############################################################################
+# Remove account {{this.name}} S3 access log bucket SSE. 
+###############################################################################
+removed {
+  from = aws_s3_bucket_server_side_encryption_configuration.s3_access_log_{{@key}}
+  lifecycle {
+    destroy = false
+  }
+}
+
+      {{! Remove account S3 access log bucket policy from state. }}
+###############################################################################
+# Remove account {{this.name}} S3 access log bucket policy. 
+###############################################################################
+removed {
+  from = aws_s3_bucket_policy.s3_access_log_{{@key}}
+  lifecycle {
+    destroy = false
+  }
+}
+    {{! If account doesn't have 'remove' action, create resources. }}
+    {{else}}
+      {{! Create account S3 access log bucket. }}
 ###############################################################################
 # Create account {{this.name}} S3 access log bucket. 
 ###############################################################################
@@ -31,6 +70,7 @@ resource "aws_s3_bucket" "s3_access_log_{{@key}}" {
   bucket = local.s3_access_log_bucket_{{@key}}
 }
 
+      {{! Create account S3 access log bucket SSE configuration. }}
 ###############################################################################
 # Configure account {{this.name}} S3 access log bucket SSE. 
 ###############################################################################
@@ -45,6 +85,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_access_log_{{@
   }
 }
 
+      {{! Create account S3 access log bucket policy. }}
 ###############################################################################
 # Configure account {{this.name}} S3 access log bucket policy. 
 ###############################################################################
@@ -66,20 +107,25 @@ resource "aws_s3_bucket_policy" "s3_access_log_{{@key}}" {
     ]
   })
 }
+    {{/if}}
+  {{/unless}}
+{{/each}}
 
-  {{#each ../organization/key_accounts}}
-    {{#if (lodash "eq" this @../key)}}
 ###############################################################################
-# Create {{@key}} data source for account {{../this.name}} 
+#### KEY ACCOUNT S3 ACCESS LOG BUCKET DATA SOURCES
+###############################################################################
+
+{{! Iterate across organization key accounts. }}
+{{#each organization/key_accounts}}
+  {{! Create a data source to dereference the key account's S3 access log bucket. }}
+###############################################################################
+# Create {{@key}} data source for account {{lodash "get" ../accounts (params this "name")}} 
 # S3 access log bucket.
 ###############################################################################
 data "aws_s3_bucket" "s3_access_log_key_account_{{@key}}" {
-  provider = aws.{{@../key}}
-  bucket   = local.s3_access_log_bucket_{{@../key}}
-  depends_on = [ aws_s3_bucket.s3_access_log_{{@../key}} ]
+  provider = aws.{{this}}
+  bucket   = local.s3_access_log_bucket_{{this}}
+  depends_on = [ aws_s3_bucket.s3_access_log_{{this}} ]
 }
 
-    {{/if}}
-  {{/each}}
 {{/each}}
-
