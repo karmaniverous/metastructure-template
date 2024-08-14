@@ -90,8 +90,8 @@ sso:
       name: UnprotectedResourceWriter
       description: Permits creation & management of unprotected resources.
   users:
-    jscroft:
-      email: '{{organization.tokens.owner}}@gmail.com'
+    test:
+      email: '{{organization.tokens.owner}}@{{organization.tokens.domain}}'
       display_name: Test User
       groups: terraform_admin
       name:
