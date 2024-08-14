@@ -31,13 +31,13 @@ resource "aws_organizations_account" "{{@key}}" {
 
       {{! If account already exists, import it. }}
       {{! Master account exists even if we don't have its id yet, we can get the id from caller identity. }}
-      {{#if (logic "or" this.id (lodash "eq" @key ../organization/key_accounts/master))}}
+      {{#if (logic "or" this.id (lodash "eq" @key ../organization.key_accounts.master))}}
 ###############################################################################
 # Import account {{this.name}}.
 ###############################################################################
 import {
   to = aws_organizations_account.{{@key}}
-  id = {{#if (lodash "eq" @key ../organization/key_accounts/master)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
+  id = {{#if (lodash "eq" @key ../organization.key_accounts.master)}}data.aws_caller_identity.me.account_id{{else}}"{{this.id}}"{{/if}}
 }
       {{/if}}
     {{/if}}
