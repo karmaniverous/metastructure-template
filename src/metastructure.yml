@@ -83,10 +83,12 @@ sso:
         - sso_terraform_state_writer
   # Maps customer-managed policy name to policy document token.
   policies:
-    # Permits writing to the Terraform state bucket & state lock table.
-    sso_terraform_state_writer: SSOTerraformStateWriter
-    # Permits creation & management of unprotected resources.
-    unprotected_resource_writer: UnprotectedResourceWriter
+    sso_terraform_state_writer:
+      name: SSOTerraformStateWriter
+      description: Permits writing to the Terraform state bucket & state lock table.
+    unprotected_resource_writer:
+      name: UnprotectedResourceWriter
+      description: Permits creation & management of unprotected resources.
   users:
     jscroft:
       email: '{{organization.tokens.owner}}@gmail.com'
