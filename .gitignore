@@ -9,6 +9,7 @@ dist/
 esm/
 local/
 node_modules/
+.VSCodeCounter/
 
 # Local .terraform directories
 **/.terraform/
