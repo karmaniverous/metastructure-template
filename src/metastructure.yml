@@ -120,6 +120,7 @@ terraform:
   terraform_version: '>= 1.9.0'
 workspaces:
   bootstrap:
+    # For info on overriding CLI defaults, see https://github.com/karmaniverous/metastructure/wiki/Running-Metastructure#cli-overrides
     cli_defaults:
       # Remove assume_role & aws_profile (or override them with null) to enable SSO.
       assume_role: OrganizationAccountAccessRole
