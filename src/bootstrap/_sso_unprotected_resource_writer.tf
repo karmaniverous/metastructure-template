@@ -14,7 +14,7 @@ file at every commit. See the README for more info!
 ###############################################################################
 ###############################################################################
 
-data "aws_iam_policy_document" "unprotected_resource_writer" {
+data "aws_iam_policy_document" "sso_unprotected_resource_writer" {
   statement {
     sid       = "AllowUnprotectedResourceManagement"
     effect    = "Allow"
