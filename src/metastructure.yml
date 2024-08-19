@@ -143,7 +143,7 @@ workspaces:
       src/bootstrap/_s3_access_logs.tf: src/bootstrap/templates/s3_access_logs.hbs
       src/bootstrap/_shared_config.local: src/templates/shared_config.hbs
       src/bootstrap/_sso_terraform_state_writer.tf: src/bootstrap/templates/sso_policies/terraform_state_writer.hbs
-      src/bootstrap/_policies/unprotected_resource_writer.tf: src/bootstrap/templates/sso_policies/unprotected_resource_writer.hbs
+      src/bootstrap/_sso_unprotected_resource_writer.tf: src/bootstrap/templates/sso_policies/unprotected_resource_writer.hbs
       src/bootstrap/_sso.tf: src/bootstrap/templates/sso.hbs
       src/bootstrap/_terraform.tf: src/templates/terraform.hbs
       src/modules/global/_outputs.tf: src/modules/global/outputs.hbs
